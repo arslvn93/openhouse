@@ -175,6 +175,14 @@
         footer .copyright a { color: var(--primary-color); opacity: 0.8; }
         footer .copyright a:hover { color: #fff2d8; opacity: 1; }
 
+        @media (max-width: 767px) { /* Target typical mobile device widths */
+            #signInForm input[type="text"],
+            #signInForm input[type="email"],
+            #signInForm input[type="tel"] {
+                font-size: 16px !important; /* Force 16px font size on mobile */
+            }
+        }
+
     </style>
 </head>
 <body>
