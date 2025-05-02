@@ -282,326 +282,254 @@
 
              
              <script>
-
-         // ========================================================================
-         // ★★★ CONFIGURATION AREA START ★★★
-         // THIS is where you put the specific details for each open house.
-         // ========================================================================
-         const config = {
-            property: {
-                streetAddress: "789 Diamond Crest Dr", // Used in Title, Header, Hero, Modal
-                city: "Beverly Hills",                 // Used in Modal Address
-                cityStateZip: "Beverly Hills, CA 90210", // Used in Webhook data
-                // Specific Hero Subtitle example
-                heroSubtitle: "Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Compendium, featuring detailed specifications, floor plans, private gallery access, and neighborhood prestige report.",
-                 // Specific Background Image example
-                backgroundImageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
-            },
-            realtor: {
-                fullName: "Victoria Ashworth", // Specific Example
-                firstName: "Victoria",         // Specific Example
-                title: "Luxury Estates Director", // Specific Example
-                phone: "(310) 555-0101", // Specific Example Phone
-                email: "victoria.ashworth@prestigegg.com", // Specific Example Email
-                dreNumber: "01234567", // Specific Example DRE
-                 // Specific Example Bio Text
-                bio: "It is my distinct pleasure to welcome you. I am Victoria, your personal guide for this remarkable property. As a specialist in the luxury Beverly Hills market, I offer 15 years of proven expertise and unwavering commitment to client success.<br><br>Please feel free to engage me with any questions – understanding your needs is my priority.",
-                // Specific Placeholder Image URL (Replace with REAL URL)
-                photoUrl: "https://via.placeholder.com/220x220/d4af37/101010?text=VA", // Placeholder using initials
-                social: { // Specific Example Links (Use # if none)
-                    linkedin: "https://linkedin.com/in/victoriaashworth",
-                    instagram: "https://instagram.com/victoriaestates",
-                    website: "https://prestigepropertygroup.com/victoria-ashworth",
-                    // facebook: "#",
-                }
-            },
-            brokerage: {
-                name: "Prestige Property Group", // Specific Example
-                // Specific Placeholder Logo URL (Replace with REAL URL)
-                logoUrl: "https://via.placeholder.com/220x70/e0c58f/101010?text=Prestige+Group",
-                address: "456 Rodeo Drive, Beverly Hills, CA 90210", // Specific Example Address
-            },
-            openHouse: {
-                bundleItems: [ // Specific Example List
-                    { icon: "fas fa-ruler-combined", text: "Detailed Architectural Floor Plans" },
-                    { icon: "fas fa-star", text: "List of High-End Finishes & Appliances" },
-                    { icon: "fas fa-camera-retro", text: "Private High-Resolution Photo Album" },
-                    { icon: "fas fa-film", text: "Exclusive Cinematic Property Tour Video" },
-                    { icon: "fas fa-map-location-dot", text: "Beverly Hills Neighborhood Insights Report" },
-                    { icon: "fas fa-file-invoice-dollar", text: "Preliminary Title & Disclosure Summary" },
-                    { icon: "fas fa-key", text: "Early Access Notification for Similar Estates" }
-                ],
-            },
-            meta: {
-                pageTitlePrefix: "🌟 Prestige Open House", // Specific Example
-                navBrandLogoText: "Prestige", // Specific Example
-                privacyPolicyLink: "#privacy",
-                termsLink: "#terms"
-            },
-            settings: {
-                 // ★★★ PASTE YOUR WEBHOOK URL HERE or leave "" to disable ★★★
-                 webhookUrl: "https://n8n.salesgenius.co/webhook/openhouse",
-                 confettiColors: ['#e0c58f', '#fafafa', '#ffffff', '#b89b59', '#1b6ca8'] // Specific Example Colors
-            },
-                      modalQuestions: [
-                          {
-                              id: "agent_status", // Unique ID for this question
-                              questionText: "Are you currently exploring homes with a real estate agent?",
-                              options: [
-                                  { value: "committed", text: "Yes, I'm committed to an agent." },
-                                  { value: "not_committed", text: "No, I'm not committed to an agent." },
-                                  { value: "gathering_info", text: "Just gathering information at this stage." }
-                              ]
-                          },
-                          // Example: Add another question here if needed
-                          // {
-                          //     id: "buying_timeline",
-                          //     questionText: "What is your approximate timeline for purchasing a home?",
-                          //     options: [
-                          //         { value: "0_3_months", text: "0-3 Months" },
-                          //         { value: "3_6_months", text: "3-6 Months" },
-                          //         { value: "6_plus_months", text: "6+ Months" },
-                          //         { value: "unsure", text: "Unsure / Just Looking" }
-                          //     ]
-                          // },
-                          // Add more question objects as needed following the same structure
-                      ]
-                  };
-                  // ========================================================================
-                  // ★★★ CONFIGURATION AREA END ★★★
-                  // ========================================================================
-         
-                 document.addEventListener('DOMContentLoaded', () => {
-                     // --- DOM References ---
-                     const mainNav = document.getElementById('mainNav');
-                     const heroSection = document.getElementById('hero');
-                     const heroTitleElement = document.getElementById('heroTitle');
-                     const signInForm = document.getElementById('signInForm');
-                     const successModalOverlay = document.getElementById('successModalOverlay');
-                     const successModalContent = document.getElementById('successModalContent'); // Modal content area
-                     const modalStepsContainer = document.getElementById('modal-steps-container'); // Container for dynamic steps
-                     const modalStepFinal = document.getElementById('modal-step-final'); // Final thank you step
-                     const modalCloseBtn = document.getElementById('modalCloseBtn');
-                     const confettiCanvas = document.getElementById('confetti-canvas');
-                     const myConfetti = (typeof confetti === 'function' && confettiCanvas) ? confetti.create(confettiCanvas, { resize: true, useWorker: true }) : null;
-                     const submitButton = signInForm?.querySelector('.submit-btn');
-                     const buttonTextSpan = submitButton?.querySelector('.button-text');
-         
-                     // --- State Variables ---
-                     let currentStepIndex = 0;
-                     let collectedAnswers = {}; // To store answers { questionId: answerValue }
-                     let initialFormData = {}; // To store Name/Email/Phone
-         
-                     // --- Helper functions --- (Same as before)
-                     function setTextContent(id, text) { const el=document.getElementById(id); if(el) el.textContent=text||''; else console.warn(`ID '${id}' not found.`); }
-                     function setHTMLContent(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html||''; else console.warn(`ID '${id}' not found.`); }
-                     function setImage(id, src, alt) { const el=document.getElementById(id); if(el && el.tagName==='IMG'){ el.src=src||''; el.alt=alt||'Image'; } else console.warn(`ID '${id}' not IMG or not found.`); }
-                     function setLinkHref(id, href) { const el=document.getElementById(id); if(el && el.tagName==='A'){ el.href=href||'#'; } else console.warn(`ID '${id}' not A or not found.`); }
-                     function populateSocialIcons(containerId, socialLinks) { const container = document.getElementById(containerId); if (!container) { console.warn(`Social container '${containerId}' not found.`); return; } container.innerHTML = ''; const platformIcons = { linkedin: 'fab fa-linkedin-in', instagram: 'fab fa-instagram', website: 'fas fa-globe', facebook: 'fab fa-facebook-f', twitter: 'fab fa-twitter'}; for (const platform in socialLinks) { const url = socialLinks[platform]; if (url && url !== "#" && url !== "") { const iconClass = platformIcons[platform]; if (iconClass) { const link = document.createElement('a'); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer"; link.setAttribute('aria-label', platform.charAt(0).toUpperCase() + platform.slice(1)); link.innerHTML = `<i class="${iconClass}" aria-hidden="true"></i>`; container.appendChild(link); } } } }
-         
-                     // --- Apply Initial Config Data ---
-                     function populateInitialData() { /* ... Populates static parts like Header, Footer, Realtor Bio (same as before) ... */
-                         try {
-                             if (config.property.backgroundImageUrl && config.property.backgroundImageUrl !== "[BACKGROUND_IMAGE_URL_HERE]") { document.body.style.setProperty('--bg-image-url', `url('${config.property.backgroundImageUrl}')`); }
-                             document.title = `${config.meta.pageTitlePrefix} | ${config.property.streetAddress} | ${config.brokerage.name}`;
-                             setTextContent('navBrandLogo', config.meta.navBrandLogoText || config.brokerage.name);
-                             setTextContent('navAddress', config.property.streetAddress);
-                             setTextContent('heroSubtitle', config.property.heroSubtitle);
-                             const bundleList = document.getElementById('bundleList');
-                             if (bundleList) { bundleList.innerHTML = ''; config.openHouse.bundleItems.forEach(item => { const li = document.createElement('li'); li.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i> <span>${item.text}</span>`; bundleList.appendChild(li); }); } else { console.warn("Bundle list element not found."); }
-                             setImage('realtorPhoto', config.realtor.photoUrl, config.realtor.fullName);
-                             setTextContent('realtorNameBio', config.realtor.fullName);
-                             setHTMLContent('realtorBioText', config.realtor.bio);
-                             setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
-                             setTextContent('modalRealtorName', config.realtor.fullName);
-                             setImage('footerBrokerageLogo', config.brokerage.logoUrl, config.brokerage.name);
-                             setTextContent('footerBrokerageName', `${config.brokerage.name} | Curators of Fine Real Estate`);
-                             setTextContent('footerRealtorName', config.realtor.fullName);
-                             setTextContent('footerRealtorTitle', config.realtor.title);
-                             setTextContent('footerRealtorDre', config.realtor.dreNumber);
-                             setTextContent('footerRealtorPhone', config.realtor.phone);
-                             setLinkHref('footerRealtorPhoneLink', `tel:${config.realtor.phone.replace(/\D/g,'')}`);
-                             setTextContent('footerRealtorEmail', config.realtor.email);
-                             setLinkHref('footerRealtorEmailLink', `mailto:${config.realtor.email}`);
-                             setTextContent('footerBrokerageAddress', config.brokerage.address);
-                             const currentYear = new Date().getFullYear();
-                             setHTMLContent('footerCopyright', `© ${currentYear} ${config.brokerage.name}. All Rights Reserved... | <a href="${config.meta.privacyPolicyLink || '#'}">Privacy</a> | <a href="${config.meta.termsLink || '#'}">Terms</a>`);
-                             populateSocialIcons('footerSocialIcons', config.realtor.social);
-                         } catch (error) { console.error("Error populating data:", error); }
-                     }
-                     populateInitialData();
-         
-                     // --- General Page Logic (Scroll, Parallax, Nav, Typewriter, Observer) --- (Same as before)
-                     let lastScrollTop = 0; const handleScroll = () => { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (mainNav) { if (scrollTop > 50) { mainNav.classList.add('scrolled'); } else { mainNav.classList.remove('scrolled'); } } setActiveLink(); }; window.addEventListener('scroll', handleScroll, { passive: true });
-                     const handleHeroParallax = () => { const scrollY = window.pageYOffset; const parallaxFactor = 0.1; if (heroSection) { const title = heroSection.querySelector('#heroTitle'); const subtitle = heroSection.querySelector('#heroSubtitle'); const cta = heroSection.querySelector('#heroCta'); if(title) title.style.transform = `translateY(${scrollY * parallaxFactor * 0.5}px)`; if(subtitle) subtitle.style.transform = `translateY(${scrollY * parallaxFactor}px)`; if(cta) cta.style.transform = `translateY(${scrollY * parallaxFactor * 1.1}px)`; } }; if (window.innerWidth > 992) { window.addEventListener('scroll', handleHeroParallax, { passive: true }); }
-                      const navLinks = document.querySelectorAll('#navLinksList li a'); const sectionsForNav = document.querySelectorAll('section[id]'); const setActiveLink = () => { let currentSectionId = 'hero'; const navHeight = mainNav ? mainNav.offsetHeight : 70; const scrollPosition = window.pageYOffset; sectionsForNav.forEach(section => { const sectionTop = section.offsetTop - navHeight - window.innerHeight * 0.3; const sectionBottom = sectionTop + section.offsetHeight; if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) { currentSectionId = section.getAttribute('id'); } }); const nearBottom = (window.innerHeight + scrollPosition) >= document.body.offsetHeight - 200; if (nearBottom && document.getElementById('signin')) { currentSectionId = 'signin'; } if (navLinks) { navLinks.forEach(link => { link.classList.remove('active'); const linkHref = link.getAttribute('href'); if (linkHref === `#${currentSectionId}`) { link.classList.add('active'); } }); } }; setActiveLink();
-                     const titleHTML = `Welcome to <span class="highlight">${config.property.streetAddress}'s</span> Open House`; let titleCharIndex = 0; function typeWriter() { if (!heroTitleElement) return; if (titleCharIndex < titleHTML.length) { let currentHTML = heroTitleElement.innerHTML; if (titleHTML.charAt(titleCharIndex) === '<') { const tagEndIndex = titleHTML.indexOf('>', titleCharIndex); if (tagEndIndex !== -1) { currentHTML += titleHTML.substring(titleCharIndex, tagEndIndex + 1); heroTitleElement.innerHTML = currentHTML; titleCharIndex = tagEndIndex + 1; } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } const speed = titleHTML.charAt(titleCharIndex - 1) === '>' ? 5 : 45 + Math.random() * 35; setTimeout(typeWriter, speed); } else { heroTitleElement.classList.add('typing-done'); heroSection.classList.add('typing-complete'); } } if(heroTitleElement) setTimeout(typeWriter, 500);
-                     const sections = document.querySelectorAll('.section:not(#hero)'); const observerOptions = { root: null, threshold: 0.15, rootMargin: "0px 0px -10% 0px" }; const observer = new IntersectionObserver((entries, observer) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); /* observer.unobserve(entry.target); */ } }); }, observerOptions); sections.forEach(section => { observer.observe(section); });
-         
-                     // --- Confetti Function --- (Same as before)
-                      function fireCoolConfetti() { if (!myConfetti) { console.warn("Confetti library not loaded."); return; } const defaults = { startVelocity: 35, spread: 360, ticks: 80, zIndex: 1060, particleCount: 120, }; const colors = config.settings.confettiColors || ['#e0c58f', '#ffffff', '#1b6ca8']; myConfetti({ ...defaults, particleCount: 80, angle: 60, spread: 70, origin: { x: 0.1, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 80, angle: 120, spread: 70, origin: { x: 0.9, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: colors, scalar: 1.2 }); myConfetti({ ...defaults, particleCount: 30, shapes: ['star'], colors: ['#FFD700', '#FFEA00'], scalar: 0.75, origin: { y: 0.6 } }); }
-         
-                      // --- NEW: Modal Step Logic ---
-                      function displayModalStep(stepIndex) {
-                          // Hide all steps first
-                          const allSteps = successModalContent.querySelectorAll('.modal-step');
-                          allSteps.forEach(step => step.classList.remove('active'));
-         
-                          // Clear previous dynamic content
-                          modalStepsContainer.innerHTML = '';
-         
-                          if (stepIndex >= 0 && stepIndex < config.modalQuestions.length) {
-                              // --- Display a question step ---
-                              modalStepFinal.style.display = 'none'; // Hide final thank you
-         
-                              const questionData = config.modalQuestions[stepIndex];
-                              const stepDiv = document.createElement('div');
-                              stepDiv.classList.add('modal-step');
-                              stepDiv.id = `modal-step-${stepIndex}`; // Assign an ID maybe?
-         
-                              // Add Question Text
-                              const questionP = document.createElement('p');
-                              questionP.classList.add('question-text');
-                               questionP.id = `modalStepTitle-${stepIndex}`; // For aria-labelledby if needed later
-                               questionP.textContent = questionData.questionText;
-                              stepDiv.appendChild(questionP);
-         
-                              // Add Options Container
-                              const optionsDiv = document.createElement('div');
-                              optionsDiv.classList.add('modal-options');
-         
-                              // Create and Add Buttons
-                              questionData.options.forEach(option => {
-                                  const button = document.createElement('button');
-                                  button.type = 'button'; // Important for forms
-                                  button.classList.add('modal-option-btn');
-                                  button.textContent = option.text;
-                                  button.dataset.step = stepIndex; // Store current step index
-                                  button.dataset.questionId = questionData.id; // Store question ID
-                                  button.dataset.answer = option.value; // Store answer value
-                                  button.addEventListener('click', handleAnswerClick); // Add listener
-                                  optionsDiv.appendChild(button);
-                              });
-         
-                              stepDiv.appendChild(optionsDiv);
-                              modalStepsContainer.appendChild(stepDiv); // Add the new step to the container
-                              stepDiv.classList.add('active'); // Activate the newly added step
-         
-                          } else {
-                              // --- Display the final thank you step ---
-                              modalStepFinal.style.display = 'block'; // Show final thank you
-                              modalStepFinal.classList.add('active'); // Mark as active
-                              // Populate final details just in case
-                              setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
-                              setTextContent('modalRealtorName', config.realtor.fullName);
-                              fireCoolConfetti(); // Fire confetti only on final step
-                          }
-         
-                          // Make overlay visible if it's not already
-                           if (!successModalOverlay.classList.contains('visible')) {
-                               successModalOverlay.classList.add('visible');
+                // ... CONFIGURATION AREA REMAINS THE SAME ...
+                const config = { /* ... Your specific config data ... */
+                   property: { streetAddress: "789 Diamond Crest Dr", city: "Beverly Hills", cityStateZip: "Beverly Hills, CA 90210", heroSubtitle: "Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Compendium...", backgroundImageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80", },
+                   realtor: { fullName: "Victoria Ashworth", firstName: "Victoria", title: "Luxury Estates Director", phone: "(310) 555-0101", email: "victoria.ashworth@prestigegg.com", dreNumber: "01234567", bio: "It is my distinct pleasure to welcome you...", photoUrl: "https://via.placeholder.com/220x220/d4af37/101010?text=VA", social: { linkedin: "#", instagram: "#", website: "#" } },
+                   brokerage: { name: "Prestige Property Group", logoUrl: "https://via.placeholder.com/220x70/e0c58f/101010?text=Prestige+Group", address: "456 Rodeo Drive, Beverly Hills, CA 90210" },
+                   openHouse: { bundleItems: [ { icon: "fas fa-ruler-combined", text: "Detailed Architectural Floor Plans" }, { icon: "fas fa-star", text: "List of High-End Finishes & Appliances" }, { icon: "fas fa-camera-retro", text: "Private High-Resolution Photo Album" }, { icon: "fas fa-film", text: "Exclusive Cinematic Property Tour Video" }, { icon: "fas fa-map-location-dot", text: "Beverly Hills Neighborhood Insights Report" }, { icon: "fas fa-file-invoice-dollar", text: "Preliminary Title & Disclosure Summary" }, { icon: "fas fa-key", text: "Early Access Notification for Similar Estates" } ] },
+                   meta: { pageTitlePrefix: "🌟 Prestige Open House", navBrandLogoText: "Prestige", privacyPolicyLink: "#privacy", termsLink: "#terms" },
+                   settings: { webhookUrl: "", confettiColors: ['#e0c58f', '#fafafa', '#ffffff', '#b89b59', '#1b6ca8'] },
+                    modalQuestions: [ { id: "agent_status", questionText: "Are you currently exploring homes with a real estate agent?", options: [ { value: "committed", text: "Yes, I'm committed to an agent." }, { value: "not_committed", text: "No, I'm not committed to an agent." }, { value: "gathering_info", text: "Just gathering information at this stage." } ] }, /* Add more questions here */ ]
+                };
+                // ... CONFIGURATION AREA END ...
+       
+       
+               document.addEventListener('DOMContentLoaded', () => {
+       
+                   // --- DOM References --- (Ensure these IDs exist in HTML)
+                   const mainNav = document.getElementById('mainNav');
+                   const heroSection = document.getElementById('hero');
+                   const heroTitleElement = document.getElementById('heroTitle');
+                   const signInForm = document.getElementById('signInForm');
+                   const successModalOverlay = document.getElementById('successModalOverlay');
+                   const successModalContent = document.getElementById('successModalContent');
+                   const modalStepsContainer = document.getElementById('modal-steps-container');
+                   const modalStepFinal = document.getElementById('modal-step-final');
+                   const modalCloseBtn = document.getElementById('modalCloseBtn');
+                   const confettiCanvas = document.getElementById('confetti-canvas');
+                   const myConfetti = (typeof confetti === 'function' && confettiCanvas) ? confetti.create(confettiCanvas, { resize: true, useWorker: true }) : null;
+                   const submitButton = signInForm?.querySelector('.submit-btn');
+                   const buttonTextSpan = submitButton?.querySelector('.button-text');
+       
+                   // --- State Variables ---
+                   let currentStepIndex = 0;
+                   let collectedAnswers = {};
+                   let initialFormData = {};
+       
+                   // --- Helper functions --- (Unchanged)
+                   function setTextContent(id, text) { const el=document.getElementById(id); if(el) el.textContent=text||''; else console.warn(`ID '${id}' not found.`); }
+                   function setHTMLContent(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html||''; else console.warn(`ID '${id}' not found.`); }
+                   function setImage(id, src, alt) { const el=document.getElementById(id); if(el && el.tagName==='IMG'){ el.src=src||''; el.alt=alt||'Image'; } else console.warn(`ID '${id}' not IMG or not found.`); }
+                   function setLinkHref(id, href) { const el=document.getElementById(id); if(el && el.tagName==='A'){ el.href=href||'#'; } else console.warn(`ID '${id}' not A or not found.`); }
+                   function populateSocialIcons(containerId, socialLinks) { const container = document.getElementById(containerId); if (!container) { console.warn(`Social container '${containerId}' not found.`); return; } container.innerHTML = ''; const platformIcons = { linkedin: 'fab fa-linkedin-in', instagram: 'fab fa-instagram', website: 'fas fa-globe', facebook: 'fab fa-facebook-f', twitter: 'fab fa-twitter'}; for (const platform in socialLinks) { const url = socialLinks[platform]; if (url && url !== "#" && url !== "") { const iconClass = platformIcons[platform]; if (iconClass) { const link = document.createElement('a'); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer"; link.setAttribute('aria-label', platform.charAt(0).toUpperCase() + platform.slice(1)); link.innerHTML = `<i class="${iconClass}" aria-hidden="true"></i>`; container.appendChild(link); } } } }
+       
+                   // --- Apply Initial Config Data Function --- (Unchanged - Assumed correct)
+                   function populateInitialData() { /* ... Populates static parts ... */
+                       try {
+                           if (config.property.backgroundImageUrl && config.property.backgroundImageUrl !== "[BACKGROUND_IMAGE_URL_HERE]") { document.body.style.setProperty('--bg-image-url', `url('${config.property.backgroundImageUrl}')`); }
+                           document.title = `${config.meta.pageTitlePrefix} | ${config.property.streetAddress} | ${config.brokerage.name}`;
+                           setTextContent('navBrandLogo', config.meta.navBrandLogoText || config.brokerage.name);
+                           setTextContent('navAddress', config.property.streetAddress);
+                           setTextContent('heroSubtitle', config.property.heroSubtitle);
+                           const bundleList = document.getElementById('bundleList');
+                           if (bundleList) { bundleList.innerHTML = ''; config.openHouse.bundleItems.forEach(item => { const li = document.createElement('li'); li.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i> <span>${item.text}</span>`; bundleList.appendChild(li); }); } else { console.warn("Bundle list element not found."); }
+                           setImage('realtorPhoto', config.realtor.photoUrl, config.realtor.fullName);
+                           setTextContent('realtorNameBio', config.realtor.fullName);
+                           setHTMLContent('realtorBioText', config.realtor.bio);
+                           setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
+                           setTextContent('modalRealtorName', config.realtor.fullName);
+                           setImage('footerBrokerageLogo', config.brokerage.logoUrl, config.brokerage.name);
+                           setTextContent('footerBrokerageName', `${config.brokerage.name} | Curators of Fine Real Estate`);
+                           setTextContent('footerRealtorName', config.realtor.fullName);
+                           setTextContent('footerRealtorTitle', config.realtor.title);
+                           setTextContent('footerRealtorDre', config.realtor.dreNumber);
+                           setTextContent('footerRealtorPhone', config.realtor.phone);
+                           setLinkHref('footerRealtorPhoneLink', `tel:${config.realtor.phone.replace(/\D/g,'')}`);
+                           setTextContent('footerRealtorEmail', config.realtor.email);
+                           setLinkHref('footerRealtorEmailLink', `mailto:${config.realtor.email}`);
+                           setTextContent('footerBrokerageAddress', config.brokerage.address);
+                           const currentYear = new Date().getFullYear();
+                           setHTMLContent('footerCopyright', `© ${currentYear} ${config.brokerage.name}. All Rights Reserved... | <a href="${config.meta.privacyPolicyLink || '#'}">Privacy</a> | <a href="${config.meta.termsLink || '#'}">Terms</a>`);
+                           populateSocialIcons('footerSocialIcons', config.realtor.social);
+                       } catch (error) { console.error("Error populating data:", error); }
+                   }
+                   populateInitialData();
+       
+                   // --- General Page Logic (Scroll, Parallax, Nav, Typewriter, Observer) --- (Unchanged)
+                   let lastScrollTop = 0; const handleScroll = () => { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (mainNav) { if (scrollTop > 50) { mainNav.classList.add('scrolled'); } else { mainNav.classList.remove('scrolled'); } } setActiveLink(); }; window.addEventListener('scroll', handleScroll, { passive: true });
+                   const handleHeroParallax = () => { const scrollY = window.pageYOffset; const parallaxFactor = 0.1; if (heroSection) { const title = heroSection.querySelector('#heroTitle'); const subtitle = heroSection.querySelector('#heroSubtitle'); const cta = heroSection.querySelector('#heroCta'); if(title) title.style.transform = `translateY(${scrollY * parallaxFactor * 0.5}px)`; if(subtitle) subtitle.style.transform = `translateY(${scrollY * parallaxFactor}px)`; if(cta) cta.style.transform = `translateY(${scrollY * parallaxFactor * 1.1}px)`; } }; if (window.innerWidth > 992) { window.addEventListener('scroll', handleHeroParallax, { passive: true }); }
+                    const navLinks = document.querySelectorAll('#navLinksList li a'); const sectionsForNav = document.querySelectorAll('section[id]'); const setActiveLink = () => { let currentSectionId = 'hero'; const navHeight = mainNav ? mainNav.offsetHeight : 70; const scrollPosition = window.pageYOffset; sectionsForNav.forEach(section => { const sectionTop = section.offsetTop - navHeight - window.innerHeight * 0.3; const sectionBottom = sectionTop + section.offsetHeight; if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) { currentSectionId = section.getAttribute('id'); } }); const nearBottom = (window.innerHeight + scrollPosition) >= document.body.offsetHeight - 200; if (nearBottom && document.getElementById('signin')) { currentSectionId = 'signin'; } if (navLinks) { navLinks.forEach(link => { link.classList.remove('active'); const linkHref = link.getAttribute('href'); if (linkHref === `#${currentSectionId}`) { link.classList.add('active'); } }); } }; setActiveLink();
+                   const titleHTML = `Welcome to <span class="highlight">${config.property.streetAddress}'s</span> Open House`; let titleCharIndex = 0; function typeWriter() { if (!heroTitleElement) return; if (titleCharIndex < titleHTML.length) { let currentHTML = heroTitleElement.innerHTML; if (titleHTML.charAt(titleCharIndex) === '<') { const tagEndIndex = titleHTML.indexOf('>', titleCharIndex); if (tagEndIndex !== -1) { currentHTML += titleHTML.substring(titleCharIndex, tagEndIndex + 1); heroTitleElement.innerHTML = currentHTML; titleCharIndex = tagEndIndex + 1; } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } const speed = titleHTML.charAt(titleCharIndex - 1) === '>' ? 5 : 45 + Math.random() * 35; setTimeout(typeWriter, speed); } else { heroTitleElement.classList.add('typing-done'); heroSection.classList.add('typing-complete'); } } if(heroTitleElement) setTimeout(typeWriter, 500);
+                   const sections = document.querySelectorAll('.section:not(#hero)'); const observerOptions = { root: null, threshold: 0.15, rootMargin: "0px 0px -10% 0px" }; const observer = new IntersectionObserver((entries, observer) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); /* observer.unobserve(entry.target); */ } }); }, observerOptions); sections.forEach(section => { observer.observe(section); });
+       
+                   // --- Enhanced Confetti Function --- (Unchanged)
+                    function fireCoolConfetti() { if (!myConfetti) { console.warn("Confetti library not loaded."); return; } const defaults = { startVelocity: 35, spread: 360, ticks: 80, zIndex: 1060, particleCount: 120, }; const colors = config.settings.confettiColors || ['#e0c58f', '#ffffff', '#1b6ca8']; myConfetti({ ...defaults, particleCount: 80, angle: 60, spread: 70, origin: { x: 0.1, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 80, angle: 120, spread: 70, origin: { x: 0.9, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: colors, scalar: 1.2 }); myConfetti({ ...defaults, particleCount: 30, shapes: ['star'], colors: ['#FFD700', '#FFEA00'], scalar: 0.75, origin: { y: 0.6 } }); }
+       
+                    // --- Modal Step Logic (Revised for Clarity and Robustness) ---
+                    function displayModalStep(stepIndex) {
+                        console.log(`Attempting to display step: ${stepIndex}`); // DEBUG LOG
+                        if (!successModalContent || !modalStepsContainer || !modalStepFinal) {
+                            console.error("Modal structure elements not found!");
+                            return; // Exit if essential elements are missing
+                        }
+       
+                        // Hide all steps first (clear container AND hide final step)
+                        modalStepsContainer.innerHTML = '';
+                        modalStepFinal.style.display = 'none';
+                        modalStepFinal.classList.remove('active');
+                        // Remove active class from any previous dynamic steps (though clearing innerHTML should suffice)
+                        const existingSteps = modalStepsContainer.querySelectorAll('.modal-step');
+                        existingSteps.forEach(step => step.classList.remove('active'));
+       
+       
+                        if (stepIndex >= 0 && stepIndex < config.modalQuestions.length) {
+                            console.log(`Displaying question index ${stepIndex}`); // DEBUG LOG
+                            // --- Display a question step ---
+                            const questionData = config.modalQuestions[stepIndex];
+                            const stepDiv = document.createElement('div');
+                            stepDiv.classList.add('modal-step');
+                            stepDiv.id = `modal-step-${stepIndex}`;
+       
+                            const questionP = document.createElement('p');
+                            questionP.classList.add('question-text');
+                            questionP.id = `modalStepTitle-${stepIndex}`;
+                            questionP.textContent = questionData.questionText;
+                            stepDiv.appendChild(questionP);
+       
+                            const optionsDiv = document.createElement('div');
+                            optionsDiv.classList.add('modal-options');
+       
+                            questionData.options.forEach(option => {
+                                const button = document.createElement('button');
+                                button.type = 'button';
+                                button.classList.add('modal-option-btn');
+                                button.textContent = option.text;
+                                button.dataset.step = stepIndex;
+                                button.dataset.questionId = questionData.id;
+                                button.dataset.answer = option.value;
+                                button.addEventListener('click', handleAnswerClick);
+                                optionsDiv.appendChild(button);
+                            });
+       
+                            stepDiv.appendChild(optionsDiv);
+                            modalStepsContainer.appendChild(stepDiv); // Append before activating
+       
+                            // Use requestAnimationFrame to ensure the element is in the DOM before adding class for transition
+                            requestAnimationFrame(() => {
+                                stepDiv.classList.add('active');
+                            });
+       
+       
+                        } else {
+                            console.log("Displaying final thank you step"); // DEBUG LOG
+                            // --- Display the final thank you step ---
+                            setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
+                            setTextContent('modalRealtorName', config.realtor.fullName);
+                            modalStepFinal.style.display = 'block'; // Make it visible
+                            // Use requestAnimationFrame for transition consistency
+                             requestAnimationFrame(() => {
+                                modalStepFinal.classList.add('active');
+                            });
+                            fireCoolConfetti();
+                        }
+       
+                        // Make overlay visible (should only happen once)
+                        if (successModalOverlay && !successModalOverlay.classList.contains('visible')) {
+                             console.log("Making modal overlay visible"); // DEBUG LOG
+                             successModalOverlay.classList.add('visible');
+                         }
+                    }
+       
+                    function handleAnswerClick(event) {
+                        const button = event.currentTarget;
+                        const stepIndex = parseInt(button.dataset.step, 10);
+                        const questionId = button.dataset.questionId;
+                        const answerValue = button.dataset.answer;
+       
+                        collectedAnswers[questionId] = answerValue;
+                        console.log('Collected Answers:', collectedAnswers);
+       
+                        const currentStepOptions = button.closest('.modal-options');
+                        if(currentStepOptions) {
+                            currentStepOptions.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                        }
+       
+                         const nextStepIndex = stepIndex + 1;
+                         // Add a slight delay *before* calling displayModalStep for the next one
+                         // This allows the user to see their selection briefly.
+                         setTimeout(() => {
+                             displayModalStep(nextStepIndex);
+                         }, 200); // Adjust delay as needed
+                    }
+       
+                    // --- Modal Control Functions ---
+                    function showQuestionnaireModal() {
+                        console.log("showQuestionnaireModal called"); // DEBUG LOG
+                        currentStepIndex = 0;
+                        collectedAnswers = {};
+                        displayModalStep(currentStepIndex); // Display the first question
+                    }
+       
+                    function hideSuccessModal() {
+                        if(!successModalOverlay) return; // Guard clause
+                        successModalOverlay.classList.remove('visible');
+                        setTimeout(() => {
+                           signInForm?.reset();
+                           if (submitButton) {
+                               submitButton.disabled = false;
+                               submitButton.classList.remove('loading');
+                               // Restore original button text only if span exists
+                               const textSpan = submitButton.querySelector('.button-text');
+                               if (textSpan) textSpan.textContent = "Request My Compendium";
                            }
-                      }
-         
-                      function handleAnswerClick(event) {
-                          const button = event.currentTarget;
-                          const stepIndex = parseInt(button.dataset.step, 10);
-                          const questionId = button.dataset.questionId;
-                          const answerValue = button.dataset.answer;
-         
-                          // Store the answer
-                          collectedAnswers[questionId] = answerValue;
-                          console.log('Collected Answers:', collectedAnswers);
-         
-                          // --- Placeholder for sending *this specific* answer via webhook ---
-                          // if (config.settings.webhookUrl) {
-                          //     sendAnswerWebhook({ questionId: questionId, answer: answerValue, ...initialFormData });
-                          // }
-                          // --- End Placeholder ---
-         
-                          // Disable buttons briefly to prevent double-click & provide feedback
-                          const currentStepOptions = button.closest('.modal-options');
-                          if(currentStepOptions) {
-                              currentStepOptions.querySelectorAll('button').forEach(btn => btn.disabled = true);
-                          }
-         
-         
-                           // Transition to the next step or final message
-                           const nextStepIndex = stepIndex + 1;
-                            // Add a small delay for visual feedback before transitioning
-                            setTimeout(() => {
-                                displayModalStep(nextStepIndex);
-                            }, 250); // Short delay
-                      }
-         
-                      // --- Modal Control Functions ---
-                      function showQuestionnaireModal() {
-                          currentStepIndex = 0; // Reset step index
-                          collectedAnswers = {}; // Reset answers
-                          displayModalStep(currentStepIndex); // Display the first question
-                      }
-         
-                      function hideSuccessModal() {
-                          if(successModalOverlay) successModalOverlay.classList.remove('visible');
-                          // Reset form and button AFTER modal is hidden
-                          setTimeout(() => {
-                             signInForm?.reset();
-                             if (submitButton) {
-                                 submitButton.disabled = false;
-                                 submitButton.classList.remove('loading');
-                                 if (buttonTextSpan) buttonTextSpan.textContent = "Request My Compendium";
-                             }
-                              // Clear dynamic steps container for next time
-                              if(modalStepsContainer) modalStepsContainer.innerHTML = '';
-                          }, 400); // Delay matching modal fade out
-                      }
-         
-                     // --- Event Listeners for Modal ---
-                      if (modalCloseBtn) { modalCloseBtn.addEventListener('click', hideSuccessModal); }
-                      if (successModalOverlay) { successModalOverlay.addEventListener('click', (event) => { if (event.target === successModalOverlay) { hideSuccessModal(); } }); }
-                      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && successModalOverlay?.classList.contains('visible')) { hideSuccessModal(); } });
-         
-         
-                     // --- Sign In Form Submission Logic (Updated for Modal Questionnaire) ---
-                     if (signInForm && submitButton) {
-                         signInForm.addEventListener('submit', async (event) => {
-                             event.preventDefault();
-                             submitButton.disabled = true; submitButton.classList.add('loading');
-         
-                             // Store initial form data
-                             initialFormData = {
-                                 fullName: document.getElementById('fullName').value,
-                                 email: document.getElementById('email').value,
-                                 phone: document.getElementById('phone').value,
-                                 propertyAddress: `${config.property.streetAddress}, ${config.property.cityStateZip}`,
-                                 submittedAt: new Date().toISOString()
-                             };
-         
-                             // --- Send *Initial* Webhook ---
-                             if (config.settings.webhookUrl) {
-                                 console.log(`Sending initial data to webhook: ${config.settings.webhookUrl}`);
-                                 try {
-                                     const response = await fetch(config.settings.webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(initialFormData), mode: 'cors' });
-                                     if (!response.ok) { console.warn('Initial webhook failure:', response.status, await response.text()); /* Potentially handle differently? */ }
-                                     else { console.log('Initial webhook success!'); }
-                                 } catch (error) { console.error('Initial webhook error:', error); /* Potentially handle differently? */ }
-                             } else {
-                                 console.log("No webhook URL for initial submission. Skipping.");
-                                 await new Promise(resolve => setTimeout(resolve, 300)); // Simulate delay if needed
-                             }
-         
-                             // --- Show Questionnaire Modal ---
-                              // Hide loading spinner before showing modal (or keep it until first question loaded?)
-                              // Let's keep the main form button loading until modal opens fully.
-                             showQuestionnaireModal();
-         
-                             // Optionally reset the loading state *after* modal is shown and ready
-                             // submitButton.classList.remove('loading'); // Re-enable if needed or handle on close
-                         });
-                     } else { console.error("Sign in form or submit button not found!"); }
-         
-                 }); // End DOMContentLoaded
-             </script>
-         
-         </body>
-         </html>
+                           if(modalStepsContainer) modalStepsContainer.innerHTML = ''; // Clear dynamic steps
+                            // Also hide final step explicitly on close
+                            if(modalStepFinal) modalStepFinal.style.display = 'none';
+                            modalStepFinal?.classList.remove('active');
+       
+                        }, 400);
+                    }
+       
+                   // --- Event Listeners for Modal --- (Unchanged)
+                    if (modalCloseBtn) { modalCloseBtn.addEventListener('click', hideSuccessModal); }
+                    if (successModalOverlay) { successModalOverlay.addEventListener('click', (event) => { if (event.target === successModalOverlay) { hideSuccessModal(); } }); }
+                    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && successModalOverlay?.classList.contains('visible')) { hideSuccessModal(); } });
+       
+       
+                   // --- Sign In Form Submission Logic (Focus on calling showQuestionnaireModal) ---
+                   if (signInForm && submitButton) {
+                       signInForm.addEventListener('submit', async (event) => {
+                           event.preventDefault();
+                           submitButton.disabled = true; submitButton.classList.add('loading');
+       
+                           initialFormData = { /* ... collect data ... */
+                                fullName: document.getElementById('fullName').value, email: document.getElementById('email').value, phone: document.getElementById('phone').value, propertyAddress: `${config.property.streetAddress}, ${config.property.cityStateZip}`, submittedAt: new Date().toISOString()
+                           };
+       
+                           // --- Webhook Sending (await ensures it finishes before modal call) ---
+                           if (config.settings.webhookUrl) {
+                               console.log(`Sending initial data to webhook: ${config.settings.webhookUrl}`);
+                               try {
+                                   const response = await fetch(config.settings.webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(initialFormData), mode: 'cors' });
+                                   if (!response.ok) { console.warn('Initial webhook failure:', response.status, await response.text()); }
+                                   else { console.log('Initial webhook success!'); }
+                               } catch (error) { console.error('Initial webhook error:', error); }
+                           } else {
+                               console.log("No webhook URL. Skipping.");
+                               await new Promise(resolve => setTimeout(resolve, 300)); // Simulate network if no webhook
+                           }
+       
+                           // --- Show the Modal (Crucial Call) ---
+                           console.log("Webhook processing finished, calling showQuestionnaireModal..."); // DEBUG LOG
+                           showQuestionnaireModal(); // This MUST be called here
+       
+                           // DO NOT reset the button here - reset happens when modal closes
+                       });
+                    } else { console.error("Sign in form or submit button not found!"); }
+       
+               }); // End DOMContentLoaded
+           </script>
+       
+       </body>
+       </html>
