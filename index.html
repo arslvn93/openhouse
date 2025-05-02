@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title will be set dynamically by JS -->
+    <title>Loading Open House...</title>
+
+    <!-- ★★★ START: SOCIAL SHARE META TAGS - EDIT MANUALLY FOR EACH PAGE ★★★ -->
+    <!-- Replace bracketed placeholders below with info matching your config object for this specific page. -->
+    <meta property="og:title" content="🌟 Grand Open House | 789 Diamond Crest Dr | Prestige Property Group" />
+    <meta property="og:description" content="View details for the exclusive open house at 789 Diamond Crest Dr. Register for the Property Compendium." />
+    <!-- Use the ABSOLUTE URL to the realtor photo -->
+    <meta property="og:image" content="https://via.placeholder.com/220x220/e8e8e8/101010?text=Victoria+A." />
+    <!-- <meta property="og:url" content="[ABSOLUTE_URL_TO_THIS_LIVE_PAGE_HERE]" /> -->
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="🌟 Grand Open House | 789 Diamond Crest Dr | Prestige Property Group" />
+    <meta name="twitter:description" content="View details for the exclusive open house at 789 Diamond Crest Dr. Register for the Property Compendium." />
+    <!-- Use the ABSOLUTE URL to the realtor photo -->
+    <meta name="twitter:image" content="https://via.placeholder.com/220x220/e8e8e8/101010?text=Victoria+A." />
+    <!-- <meta name="twitter:url" content="[ABSOLUTE_URL_TO_THIS_LIVE_PAGE_HERE]" /> -->
+    <!-- <meta name="twitter:site" content="@[YourBrokerageTwitterHandle]"> -->
+    <!-- <meta name="twitter:creator" content="@[YourRealtorTwitterHandle]"> -->
+    <!-- ★★★ END: SOCIAL SHARE META TAGS ★★★ -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- Styles remain the same --- */
+        :root {
+            --primary-color: #e0c58f; --secondary-color: #1b6ca8; --accent-color: #c08497;
+            --dark-bg: #0f0f0f; --card-dark-bg: #181818; --light-text-color: #fafafa;
+            --medium-text-color: #cccccc; --header-bg: rgba(15, 15, 15, 0.65);
+            --header-bg-scrolled: rgba(15, 15, 15, 0.85); --glass-blur: 22px;
+            --glass-bg: rgba(28, 28, 28, 0.65); --glass-border: rgba(224, 197, 143, 0.2);
+            --glass-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.4);
+            --glass-inner-shadow: inset 0 0 25px rgba(224, 197, 143, 0.06);
+            --border-radius: 18px; --transition-speed: 0.6s;
+            --cubic-bezier-smooth-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+            --font-size-base: clamp(0.875rem, 1.5vw + 0.5rem, 1.05rem);
+            --font-size-h1: clamp(2.2rem, 5vw + 1rem, 3.8rem);
+            --font-size-h2: clamp(1.8rem, 4vw + 0.8rem, 2.8rem);
+            --font-size-h3: clamp(1.4rem, 3vw + 0.6rem, 2rem);
+            --font-size-large: clamp(1.1rem, 2vw + 0.5rem, 1.4rem);
+            --font-size-medium: clamp(1rem, 1.8vw + 0.4rem, 1.2rem);
+            --font-size-small: clamp(0.85rem, 1.2vw + 0.4rem, 1rem);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: var(--font-size-base); }
+        body { font-family: 'Poppins', sans-serif; font-weight: 400; line-height: 1.8; color: var(--light-text-color); background-color: var(--dark-bg); background-image: linear-gradient(rgba(15, 15, 15, 0.7), rgba(15, 15, 15, 0.85)), var(--bg-image-url, url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')); background-attachment: fixed; background-position: center; background-repeat: no-repeat; background-size: cover; overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .container { max-width: 1100px; margin: auto; padding: 0 clamp(15px, 5vw, 30px); }
+        .section { padding: clamp(60px, 10vh, 100px) 0; opacity: 0; transform: translateY(60px); transition: opacity 1.3s var(--cubic-bezier-smooth-out), transform 1.3s var(--cubic-bezier-smooth-out); }
+        .section.visible { opacity: 1; transform: translateY(0); }
+        .section-title { font-family: 'Playfair Display', serif; font-size: var(--font-size-h2); font-weight: 700; color: var(--primary-color); text-align: center; margin-bottom: clamp(40px, 8vh, 70px); position: relative; padding-bottom: 20px; letter-spacing: 1.5px; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: clamp(80px, 15vw, 120px); height: 2px; background: linear-gradient(90deg, transparent, var(--primary-color), transparent); opacity: 0.8; }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border-radius: var(--border-radius); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow), var(--glass-inner-shadow); padding: clamp(30px, 6vw, 50px) clamp(30px, 7vw, 60px); margin-top: clamp(30px, 5vh, 50px); color: var(--light-text-color); position: relative; overflow: hidden; background-image: linear-gradient(160deg, rgba(28, 28, 28, 0.6) 0%, rgba(35, 35, 35, 0.7) 100%), var(--glass-bg); transition: background 0.8s ease-out; }
+        .section.visible .glass-card { background-image: none; }
+        .main-nav { position: fixed; top: 0; left: 0; width: 100%; background: var(--header-bg); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); padding: 18px 0; z-index: 1000; border-bottom: 1px solid rgba(224, 197, 143, 0.1); transition: background-color 0.4s ease, padding 0.4s ease, top 0.4s ease; }
+        .main-nav.scrolled { background: var(--header-bg-scrolled); padding: 14px 0; }
+        .main-nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .header-left { display: flex; align-items: center; gap: clamp(15px, 3vw, 25px); }
+        .main-nav .logo { font-family: 'Montserrat', sans-serif; color: var(--light-text-color); font-size: clamp(1.4rem, 3vw, 1.7rem); font-weight: 600; text-decoration: none; }
+        .header-address { font-size: var(--font-size-small); color: var(--medium-text-color); font-weight: 300; border-left: 1px solid var(--glass-border); padding-left: clamp(15px, 3vw, 20px); opacity: 0.8; transition: opacity 0.4s ease; display: none; }
+        @media (min-width: 768px) { .header-address { display: block; } }
+        .main-nav ul { list-style: none; display: none; padding: 0; margin: 0; }
+        @media (min-width: 992px) { .main-nav ul { display: flex; } .main-nav ul li { margin-left: clamp(25px, 4vw, 40px); } .main-nav ul li a { color: var(--medium-text-color); text-decoration: none; font-weight: 500; padding: 10px 0; font-size: var(--font-size-small); letter-spacing: 0.8px; position: relative; transition: color var(--transition-speed) var(--cubic-bezier-smooth-out); } .main-nav ul li a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1.5px; background-color: var(--primary-color); transition: width 0.4s var(--cubic-bezier-smooth-out); } .main-nav ul li a:hover { color: var(--light-text-color); } .main-nav ul li a:hover::after { width: 100%; } .main-nav ul li a.active { color: var(--primary-color); font-weight: 600; } .main-nav ul li a.active::after { width: 100%; } }
+        @media (max-width: 991px) { .main-nav .container { justify-content: center; } .header-left { gap: 15px; } }
+        @media (max-width: 600px) { .header-address { display: none;} .main-nav .logo { font-size: clamp(1.3rem, 5vw, 1.5rem); } .main-nav { padding: 15px 0; } .main-nav.scrolled { padding: 12px 0; } }
+        #hero { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: var(--light-text-color); padding: 100px 15px 60px; position: relative; overflow: hidden; }
+        #hero > * { position: relative; }
+        #hero .hero-title-line { font-family: 'Playfair Display', serif; font-size: var(--font-size-h1); font-weight: 700; margin-bottom: clamp(15px, 4vh, 30px); color: #fff; line-height: 1.2; display: inline-block; min-height: 1.2em; text-shadow: 1px 1px 30px rgba(0, 0, 0, 0.7); }
+        #hero .hero-title-line .highlight { color: var(--primary-color); }
+        #hero .hero-title-line:not(.typing-done)::after { content: ''; display: inline-block; width: 3px; height: 0.9em; background-color: var(--primary-color); margin-left: 8px; vertical-align: baseline; opacity: 1; animation: blink 0.8s step-end infinite; }
+        #hero .hero-title-line.typing-done::after { display: none; }
+        #hero p.subtitle { font-size: var(--font-size-large); margin-bottom: clamp(35px, 6vh, 55px); max-width: 850px; font-weight: 300; color: var(--medium-text-color); line-height: 1.9; opacity: 0.01; transform: translateY(15px) scale(0.98); transition: opacity 1s ease-out 0.2s, transform 1s ease-out 0.2s; }
+        .cta-button { font-size: var(--font-size-medium); padding: clamp(16px, 2.5vw, 20px) clamp(35px, 6vw, 50px); display: inline-block; background: linear-gradient(135deg, var(--primary-color), #b89b59); color: var(--dark-bg); font-weight: 600; text-decoration: none; border-radius: 50px; letter-spacing: 1px; transition: all var(--transition-speed) var(--cubic-bezier-smooth-out); box-shadow: 0 8px 35px rgba(224, 197, 143, 0.25); position: relative; overflow: hidden; opacity: 0.01; transform: translateY(15px) scale(0.98); transition: opacity 1s ease-out 0.4s, transform 1s ease-out 0.4s, background 0.4s, box-shadow 0.4s; }
+        #hero.typing-complete p.subtitle { transition-delay: 0.3s; }
+        #hero.typing-complete .cta-button { transition-delay: 0.5s; }
+        #hero.typing-complete p.subtitle, #hero.typing-complete .cta-button { opacity: 1; transform: translateY(0) scale(1); }
+        .cta-button::before { content: ''; position: absolute; top: 0; left: -110%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); transform: skewX(-25deg); transition: left 0.8s ease; }
+        .cta-button:hover::before { left: 130%; }
+        .cta-button:hover { background: linear-gradient(135deg, #b89b59, var(--primary-color)); transform: scale(1.05) translateY(-4px); box-shadow: 0 12px 45px rgba(224, 197, 143, 0.35); }
+        .cta-button i { margin-left: 15px; }
+        @keyframes blink { 50% { opacity: 0; } }
+        #whats-included ul { list-style: none; padding: 0; margin: 20px auto; max-width: 750px; }
+        #whats-included li { background: rgba(255, 255, 255, 0.02); margin-bottom: 22px; padding: clamp(18px, 3vw, 24px) clamp(20px, 4vw, 30px); border-radius: 14px; display: flex; align-items: center; transition: transform 0.5s var(--cubic-bezier-smooth-out), background-color 0.5s var(--cubic-bezier-smooth-out), box-shadow 0.5s var(--cubic-bezier-smooth-out); border: 1px solid rgba(224, 197, 143, 0.12); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        #whats-included li:hover { transform: scale(1.03) translateX(8px); background-color: rgba(224, 197, 143, 0.08); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+        #whats-included li i { font-size: clamp(1.6rem, 3vw, 2rem); color: var(--secondary-color); margin-right: clamp(20px, 4vw, 30px); width: 40px; text-align: center; transition: transform 0.5s var(--cubic-bezier-smooth-out); }
+        #whats-included li:hover i { transform: scale(1.15) rotate(4deg); }
+        #whats-included li span { font-size: var(--font-size-medium); font-weight: 400; color: var(--light-text-color); }
+        #about-realtor .realtor-content { display: flex; flex-direction: column; align-items: center; gap: 30px; text-align: center;}
+        @media (min-width: 768px) { #about-realtor .realtor-content { flex-direction: row; text-align: left; gap: clamp(40px, 6vw, 60px); } }
+        #about-realtor .realtor-image-container { flex-shrink: 0; width: clamp(150px, 30vw, 200px); height: clamp(150px, 30vw, 200px); position: relative; border-radius: 50%; box-shadow: 0 0 45px rgba(224, 197, 143, 0.3); margin-bottom: 15px; }
+        @media (min-width: 768px) { #about-realtor .realtor-image-container { margin-bottom: 0; } }
+        #about-realtor .realtor-image-container img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: clamp(5px, 1vw, 7px) solid var(--primary-color); display: block; }
+        #about-realtor .realtor-bio { flex-grow: 1; }
+        #about-realtor .realtor-bio h3 { font-family: 'Montserrat', sans-serif; font-size: var(--font-size-h3); color: var(--primary-color); margin-bottom: 18px; font-weight: 600; }
+        #about-realtor .realtor-bio p { font-size: var(--font-size-small); line-height: 1.9; color: var(--medium-text-color); font-weight: 300; }
+        #signin p.subtitle { color: var(--medium-text-color); text-align: center; margin-top: calc(-1 * clamp(25px, 5vh, 40px)); margin-bottom: clamp(35px, 6vh, 50px); font-size: var(--font-size-medium); font-weight: 300; }
+        #signin .form-grid { display: grid; grid-template-columns: 1fr; gap: clamp(25px, 4vh, 35px); margin-top: 35px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .form-group label { display: block; margin-bottom: 12px; font-weight: 500; color: var(--medium-text-color); font-size: var(--font-size-small); letter-spacing: 0.7px; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"] { width: 100%; padding: clamp(15px, 2.2vw, 18px) 25px; padding-left: clamp(50px, 8vw, 60px); border: 1px solid rgba(224, 197, 143, 0.2); border-radius: 14px; font-size: var(--font-size-small); font-family: 'Poppins', sans-serif; background-color: rgba(22, 22, 22, 0.75); color: var(--light-text-color); transition: all 0.4s var(--cubic-bezier-smooth-out); min-height: 50px; }
+        .form-group input::placeholder { color: var(--medium-text-color); opacity: 0.4; }
+        .form-group input:focus { outline: none; border-color: var(--primary-color); background-color: rgba(30, 30, 30, 0.85); box-shadow: 0 0 22px rgba(224, 197, 143, 0.2); }
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: clamp(18px, 3vw, 22px); top: 50%; transform: translateY(-50%); color: var(--medium-text-color); font-size: clamp(1rem, 2vw, 1.15rem); transition: color 0.4s var(--cubic-bezier-smooth-out); pointer-events: none; }
+        .input-wrapper input:focus + i { color: var(--primary-color); }
+        .submit-btn { background: linear-gradient(135deg, var(--primary-color), #b89b59); color: var(--dark-bg); border: none; padding: clamp(16px, 2.5vw, 18px) 40px; font-size: var(--font-size-medium); font-weight: 600; border-radius: 50px; cursor: pointer; transition: all var(--transition-speed) var(--cubic-bezier-smooth-out); width: 100%; margin-top: 20px; letter-spacing: 1px; box-shadow: 0 7px 30px rgba(224, 197, 143, 0.2); display: flex; align-items: center; justify-content: center; gap: 15px; position: relative; overflow: hidden; min-height: 55px; }
+        .submit-btn:hover { background: linear-gradient(135deg, #b89b59, var(--primary-color)); transform: translateY(-5px) scale(1.03); box-shadow: 0 12px 40px rgba(224, 197, 143, 0.3); }
+        .submit-btn:active { transform: translateY(-2px) scale(1.01); box-shadow: 0 7px 30px rgba(224, 197, 143, 0.25); }
+        .submit-btn i { font-size: clamp(1.1rem, 2vw, 1.25rem); }
+        .submit-btn.loading { background: var(--medium-text-color); cursor: not-allowed; color: rgba(15,15,15, 0.7); }
+        .submit-btn .button-text { transition: opacity 0.3s ease; }
+        .submit-btn.loading .button-text { opacity: 0; }
+        .submit-btn .spinner { display: inline-block; position: absolute; width: 20px; height: 20px; border: 3px solid rgba(15, 15, 15, 0.3); border-radius: 50%; border-top-color: var(--dark-bg); animation: spin 1s ease-in-out infinite; opacity: 0; transition: opacity 0.3s ease; }
+        .submit-btn.loading .spinner { opacity: 1; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 15, 15, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 1050; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
+        .modal-overlay.visible { opacity: 1; visibility: visible; transition: opacity 0.4s ease, visibility 0s linear 0s; }
+        .modal-content { background: var(--card-dark-bg); padding: clamp(30px, 5vw, 50px); border-radius: var(--border-radius); box-shadow: 0 10px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(224, 197, 143, 0.15); text-align: center; max-width: 550px; width: 90%; position: relative; transform: scale(0.95) translateY(10px); opacity: 0; transition: transform 0.5s var(--cubic-bezier-smooth-out) 0.1s, opacity 0.5s var(--cubic-bezier-smooth-out) 0.1s; }
+        .modal-overlay.visible .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+        .modal-close-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.8rem; color: var(--medium-text-color); cursor: pointer; padding: 5px; line-height: 1; transition: color 0.3s ease, transform 0.3s ease; }
+        .modal-close-btn:hover { color: var(--light-text-color); transform: rotate(90deg); }
+        .modal-content i.icon { font-size: clamp(4rem, 10vw, 5rem); color: var(--primary-color); margin-bottom: 25px; display: inline-block; text-shadow: 0 0 20px rgba(224, 197, 143, 0.4); animation: popIn 0.6s var(--cubic-bezier-smooth-out) 0.3s backwards; }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1;} }
+        .modal-content h2 { font-family: 'Playfair Display', serif; font-size: var(--font-size-h3); color: var(--primary-color); margin-bottom: 15px; font-weight: 700; }
+        .modal-content p#modalMainMessage { font-size: var(--font-size-medium); margin-bottom: 30px; line-height: 1.8; color: var(--medium-text-color); font-weight: 300;}
+        .modal-content p#modalHost { font-size: var(--font-size-small); color: var(--medium-text-color); }
+        .modal-content strong { color: var(--light-text-color); font-weight: 500; }
+        footer { background-color: #0a0a0a; color: var(--medium-text-color); text-align: center; padding: clamp(50px, 8vh, 80px) clamp(15px, 5vw, 30px) clamp(30px, 5vh, 50px); margin-top: clamp(60px, 10vh, 100px); border-top: 1px solid rgba(224, 197, 143, 0.15); }
+        footer .footer-content { max-width: 850px; margin: auto; }
+        footer .brokerage-logo img { max-height: clamp(45px, 8vw, 60px); margin-bottom: 30px; }
+        footer h4 { font-family: 'Montserrat', sans-serif; font-size: var(--font-size-large); font-weight: 500; margin-bottom: 25px; color: var(--primary-color); letter-spacing: 1.2px; }
+        footer p { margin-bottom: 15px; font-size: var(--font-size-small); line-height: 1.8; font-weight: 300;}
+        footer strong { color: var(--light-text-color); font-weight: 500; }
+        footer a { color: var(--primary-color); text-decoration: none; transition: color 0.4s ease; }
+        footer a:hover { color: #fff2d8; }
+        footer .social-icons { margin: clamp(25px, 5vh, 40px) 0; }
+        footer .social-icons a { color: var(--medium-text-color); font-size: clamp(1.4rem, 3vw, 1.7rem); margin: 0 clamp(12px, 2.5vw, 18px); transition: color 0.4s var(--cubic-bezier-smooth-out), transform 0.4s var(--cubic-bezier-smooth-out); }
+        footer .social-icons a:hover { color: var(--primary-color); transform: scale(1.2) rotate(-5deg); }
+        footer .copyright { margin-top: clamp(30px, 6vh, 50px); font-size: clamp(0.75rem, 1.5vw + 0.3rem, 0.9rem); opacity: 0.6; font-weight: 300;}
+        @keyframes bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.03); } }
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1060; pointer-events: none; }
+
+    </style>
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+    <nav class="main-nav" id="mainNav">
+        <div class="container">
+             <div class="header-left">
+                <a href="#" class="logo" id="navBrandLogo"></a>
+                <span class="header-address" id="navAddress"></span>
+             </div>
+             <ul id="navLinksList">
+                <li><a href="#hero" class="active">Welcome</a></li>
+                <li><a href="#whats-included">Compendium</a></li>
+                <li><a href="#about-realtor">Your Host</a></li>
+                <li><a href="#signin">Register</a></li>
+             </ul>
+        </div>
+    </nav>
+
+    <section id="hero" class="section visible">
+        <div class="hero-title-line" id="heroTitle"></div>
+        <p class="subtitle" id="heroSubtitle"></p>
+        <a href="#signin" class="cta-button" id="heroCta">Register & Receive Compendium <i class="fas fa-chevron-right"></i></a>
+    </section>
+
+    <main>
+        <section id="whats-included" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">The Property Compendium</h2> <ul id="bundleList"></ul> </div> </div> </section>
+        <section id="about-realtor" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">Your Dedicated Host</h2> <div class="realtor-content"> <div class="realtor-image-container"> <img src="" alt="Realtor Photo" id="realtorPhoto"> </div> <div class="realtor-bio"> <h3 id="realtorNameBio"></h3> <p id="realtorBioText"></p> </div> </div> </div> </div> </section>
+        <section id="signin" class="section"> <div class="container"> <div class="glass-card" id="signInCard"> <h2 class="section-title">Register Your Interest</h2> <p class="subtitle">Kindly provide your details to receive the exclusive Property Compendium.</p> <form id="signInForm"> <div class="form-grid"> <div class="form-group"><label for="fullName">Full Name:</label><div class="input-wrapper"><input type="text" id="fullName" name="fullName" placeholder="Example Full Name" required><i class="fas fa-user-tie"></i></div></div> <div class="form-group"><label for="email">Email Address:</label><div class="input-wrapper"><input type="email" id="email" name="email" placeholder="Example Email" required><i class="fas fa-envelope-open-text"></i></div></div> <div class="form-group"><label for="phone">Phone Number (Preferred):</label><div class="input-wrapper"><input type="tel" id="phone" name="phone" placeholder="Example Phone"><i class="fas fa-phone-volume"></i></div></div> <div class="form-group"><button type="submit" class="submit-btn"><span class="button-text">Request My Compendium</span><div class="spinner"></div></button></div> </div> </form> </div> </div> </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+             <div class="brokerage-logo"> <img src="" alt="Brokerage Logo" id="footerBrokerageLogo"> </div>
+            <h4 id="footerBrokerageName"></h4>
+            <p><strong id="footerRealtorName"></strong> | <span id="footerRealtorTitle"></span> | DRE #<span id="footerRealtorDre"></span></p>
+            <p><i class="fas fa-mobile-alt" style="margin-right: 8px;"></i> <a href="" id="footerRealtorPhoneLink"><span id="footerRealtorPhone"></span></a> | <i class="fas fa-envelope" style="margin-left: 15px; margin-right: 8px;"></i> <a href="" id="footerRealtorEmailLink"><span id="footerRealtorEmail"></span></a></p>
+            <p><i class="fas fa-map-pin" style="margin-right: 8px;"></i> <span id="footerBrokerageAddress"></span></p>
+             <div class="social-icons" id="footerSocialIcons"></div>
+            <p class="copyright" id="footerCopyright"></p>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="successModalOverlay"> <div class="modal-content" id="successModalContent" role="dialog" aria-modal="true" aria-labelledby="modalHeader"> <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button> <i class="fas fa-check-circle icon"></i> <h2 id="modalHeader">Thank You!</h2> <p id="modalMainMessage">Info Sent For <strong id="modalAddress"></strong> Open House Bundle.<br><br><span id="modalEmailPrompt">You will receive an email...</span></p> <p id="modalHost">Your Host: <strong id="modalRealtorName"></strong></p> </div> </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+         // ========================================================================
+         // ★★★ CONFIGURATION AREA START ★★★
+         // THIS is where you put the specific details for each open house.
+         // ========================================================================
+         const config = {
+            property: {
+                streetAddress: "789 Diamond Crest Dr", // Used in Title, Header, Hero, Modal
+                city: "Beverly Hills",                 // Used in Modal Address
+                cityStateZip: "Beverly Hills, CA 90210", // Used in Webhook data
+                // Specific Hero Subtitle example
+                heroSubtitle: "Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Compendium, featuring detailed specifications, floor plans, private gallery access, and neighborhood prestige report.",
+                 // Specific Background Image example
+                backgroundImageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
+            },
+            realtor: {
+                fullName: "Victoria Ashworth", // Specific Example
+                firstName: "Victoria",         // Specific Example
+                title: "Luxury Estates Director", // Specific Example
+                phone: "(310) 555-0101", // Specific Example Phone
+                email: "victoria.ashworth@prestigegg.com", // Specific Example Email
+                dreNumber: "01234567", // Specific Example DRE
+                 // Specific Example Bio Text
+                bio: "It is my distinct pleasure to welcome you. I am Victoria, your personal guide for this remarkable property. As a specialist in the luxury Beverly Hills market, I offer 15 years of proven expertise and unwavering commitment to client success.<br><br>Please feel free to engage me with any questions – understanding your needs is my priority.",
+                // Specific Placeholder Image URL (Replace with REAL URL)
+                photoUrl: "https://via.placeholder.com/220x220/d4af37/101010?text=VA", // Placeholder using initials
+                social: { // Specific Example Links (Use # if none)
+                    linkedin: "https://linkedin.com/in/victoriaashworth",
+                    instagram: "https://instagram.com/victoriaestates",
+                    website: "https://prestigepropertygroup.com/victoria-ashworth",
+                    // facebook: "#",
+                }
+            },
+            brokerage: {
+                name: "Prestige Property Group", // Specific Example
+                // Specific Placeholder Logo URL (Replace with REAL URL)
+                logoUrl: "https://via.placeholder.com/220x70/e0c58f/101010?text=Prestige+Group",
+                address: "456 Rodeo Drive, Beverly Hills, CA 90210", // Specific Example Address
+            },
+            openHouse: {
+                bundleItems: [ // Specific Example List
+                    { icon: "fas fa-ruler-combined", text: "Detailed Architectural Floor Plans" },
+                    { icon: "fas fa-star", text: "List of High-End Finishes & Appliances" },
+                    { icon: "fas fa-camera-retro", text: "Private High-Resolution Photo Album" },
+                    { icon: "fas fa-film", text: "Exclusive Cinematic Property Tour Video" },
+                    { icon: "fas fa-map-location-dot", text: "Beverly Hills Neighborhood Insights Report" },
+                    { icon: "fas fa-file-invoice-dollar", text: "Preliminary Title & Disclosure Summary" },
+                    { icon: "fas fa-key", text: "Early Access Notification for Similar Estates" }
+                ],
+            },
+            meta: {
+                pageTitlePrefix: "🌟 Prestige Open House", // Specific Example
+                navBrandLogoText: "Prestige", // Specific Example
+                privacyPolicyLink: "#privacy",
+                termsLink: "#terms"
+            },
+            settings: {
+                 // ★★★ PASTE YOUR WEBHOOK URL HERE or leave "" to disable ★★★
+                 webhookUrl: "", // Example: "https://hooks.zapier.com/hooks/catch/123456/abcdef/"
+                 confettiColors: ['#e0c58f', '#fafafa', '#ffffff', '#b89b59', '#1b6ca8'] // Specific Example Colors
+            }
+         };
+         // ========================================================================
+         // ★★★ CONFIGURATION AREA END ★★★
+         // ========================================================================
+
+         // --- The rest of the JavaScript remains the same ---
+         // (populateData, helpers, scroll logic, parallax, nav link, typewriter,
+         // observer, confetti, modal controls, form submission)
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainNav = document.getElementById('mainNav');
+            const heroSection = document.getElementById('hero');
+            const heroTitleElement = document.getElementById('heroTitle');
+            const heroSubtitle = document.getElementById('heroSubtitle');
+            const signInForm = document.getElementById('signInForm');
+            const successModalOverlay = document.getElementById('successModalOverlay');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const confettiCanvas = document.getElementById('confetti-canvas');
+            const myConfetti = (typeof confetti === 'function' && confettiCanvas) ? confetti.create(confettiCanvas, { resize: true, useWorker: true }) : null;
+            const submitButton = signInForm?.querySelector('.submit-btn');
+            const buttonTextSpan = submitButton?.querySelector('.button-text');
+
+             function setTextContent(id, text) { const el=document.getElementById(id); if(el) el.textContent=text||''; else console.warn(`ID '${id}' not found.`); }
+             function setHTMLContent(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html||''; else console.warn(`ID '${id}' not found.`); }
+             function setImage(id, src, alt) { const el=document.getElementById(id); if(el && el.tagName==='IMG'){ el.src=src||''; el.alt=alt||'Image'; } else console.warn(`ID '${id}' not IMG or not found.`); }
+             function setLinkHref(id, href) { const el=document.getElementById(id); if(el && el.tagName==='A'){ el.href=href||'#'; } else console.warn(`ID '${id}' not A or not found.`); }
+             function populateSocialIcons(containerId, socialLinks) { const container = document.getElementById(containerId); if (!container) { console.warn(`Social container '${containerId}' not found.`); return; } container.innerHTML = ''; const platformIcons = { linkedin: 'fab fa-linkedin-in', instagram: 'fab fa-instagram', website: 'fas fa-globe', facebook: 'fab fa-facebook-f', twitter: 'fab fa-twitter'}; for (const platform in socialLinks) { const url = socialLinks[platform]; if (url && url !== "#" && url !== "") { const iconClass = platformIcons[platform]; if (iconClass) { const link = document.createElement('a'); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer"; link.setAttribute('aria-label', platform.charAt(0).toUpperCase() + platform.slice(1)); link.innerHTML = `<i class="${iconClass}" aria-hidden="true"></i>`; container.appendChild(link); } } } }
+
+            function populateData() {
+                try {
+                    if (config.property.backgroundImageUrl && config.property.backgroundImageUrl !== "[BACKGROUND_IMAGE_URL_HERE]") { // Check if placeholder isn't used
+                        document.body.style.setProperty('--bg-image-url', `url('${config.property.backgroundImageUrl}')`);
+                    }
+                    document.title = `${config.meta.pageTitlePrefix} | ${config.property.streetAddress} | ${config.brokerage.name}`;
+                    setTextContent('navBrandLogo', config.meta.navBrandLogoText || config.brokerage.name);
+                    setTextContent('navAddress', config.property.streetAddress);
+                    setTextContent('heroSubtitle', config.property.heroSubtitle);
+                    const bundleList = document.getElementById('bundleList');
+                    if (bundleList) { bundleList.innerHTML = ''; config.openHouse.bundleItems.forEach(item => { const li = document.createElement('li'); li.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i> <span>${item.text}</span>`; bundleList.appendChild(li); }); } else { console.warn("Bundle list element not found."); }
+                    setImage('realtorPhoto', config.realtor.photoUrl, config.realtor.fullName);
+                    setTextContent('realtorNameBio', config.realtor.fullName);
+                    setHTMLContent('realtorBioText', config.realtor.bio);
+                    setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
+                    setTextContent('modalRealtorName', config.realtor.fullName);
+                    setImage('footerBrokerageLogo', config.brokerage.logoUrl, config.brokerage.name);
+                    setTextContent('footerBrokerageName', `${config.brokerage.name} | Curators of Fine Real Estate`);
+                    setTextContent('footerRealtorName', config.realtor.fullName);
+                    setTextContent('footerRealtorTitle', config.realtor.title);
+                    setTextContent('footerRealtorDre', config.realtor.dreNumber);
+                    setTextContent('footerRealtorPhone', config.realtor.phone);
+                    setLinkHref('footerRealtorPhoneLink', `tel:${config.realtor.phone.replace(/\D/g,'')}`);
+                    setTextContent('footerRealtorEmail', config.realtor.email);
+                    setLinkHref('footerRealtorEmailLink', `mailto:${config.realtor.email}`);
+                    setTextContent('footerBrokerageAddress', config.brokerage.address);
+                    const currentYear = new Date().getFullYear();
+                    setHTMLContent('footerCopyright', `© ${currentYear} ${config.brokerage.name}. All Rights Reserved. Licensed Real Estate Brokerage. Equal Housing Opportunity. | <a href="${config.meta.privacyPolicyLink || '#'}">Privacy Policy</a> | <a href="${config.meta.termsLink || '#'}">Site Terms</a>`);
+                    populateSocialIcons('footerSocialIcons', config.realtor.social);
+                } catch (error) { console.error("Error populating data:", error); }
+            }
+            populateData();
+
+            let lastScrollTop = 0;
+            const handleScroll = () => { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (mainNav) { if (scrollTop > 50) { mainNav.classList.add('scrolled'); } else { mainNav.classList.remove('scrolled'); } } setActiveLink(); };
+            window.addEventListener('scroll', handleScroll, { passive: true });
+
+            const handleHeroParallax = () => { const scrollY = window.pageYOffset; const parallaxFactor = 0.1; if (heroSection) { const title = heroSection.querySelector('#heroTitle'); const subtitle = heroSection.querySelector('#heroSubtitle'); const cta = heroSection.querySelector('#heroCta'); if(title) title.style.transform = `translateY(${scrollY * parallaxFactor * 0.5}px)`; if(subtitle) subtitle.style.transform = `translateY(${scrollY * parallaxFactor}px)`; if(cta) cta.style.transform = `translateY(${scrollY * parallaxFactor * 1.1}px)`; } };
+            if (window.innerWidth > 992) { window.addEventListener('scroll', handleHeroParallax, { passive: true }); }
+
+             const navLinks = document.querySelectorAll('#navLinksList li a');
+             const sectionsForNav = document.querySelectorAll('section[id]');
+             const setActiveLink = () => { let currentSectionId = 'hero'; const navHeight = mainNav ? mainNav.offsetHeight : 70; const scrollPosition = window.pageYOffset; sectionsForNav.forEach(section => { const sectionTop = section.offsetTop - navHeight - window.innerHeight * 0.3; const sectionBottom = sectionTop + section.offsetHeight; if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) { currentSectionId = section.getAttribute('id'); } }); const nearBottom = (window.innerHeight + scrollPosition) >= document.body.offsetHeight - 200; if (nearBottom && document.getElementById('signin')) { currentSectionId = 'signin'; } if (navLinks) { navLinks.forEach(link => { link.classList.remove('active'); const linkHref = link.getAttribute('href'); if (linkHref === `#${currentSectionId}`) { link.classList.add('active'); } }); } };
+             setActiveLink();
+
+            const titleHTML = `Welcome to <span class="highlight">${config.property.streetAddress}'s</span> Open House`;
+            let titleCharIndex = 0;
+            function typeWriter() { if (!heroTitleElement) return; if (titleCharIndex < titleHTML.length) { let currentHTML = heroTitleElement.innerHTML; if (titleHTML.charAt(titleCharIndex) === '<') { const tagEndIndex = titleHTML.indexOf('>', titleCharIndex); if (tagEndIndex !== -1) { currentHTML += titleHTML.substring(titleCharIndex, tagEndIndex + 1); heroTitleElement.innerHTML = currentHTML; titleCharIndex = tagEndIndex + 1; } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } const speed = titleHTML.charAt(titleCharIndex - 1) === '>' ? 5 : 45 + Math.random() * 35; setTimeout(typeWriter, speed); } else { heroTitleElement.classList.add('typing-done'); heroSection.classList.add('typing-complete'); } }
+            if(heroTitleElement) setTimeout(typeWriter, 500);
+
+            const sections = document.querySelectorAll('.section:not(#hero)');
+            const observerOptions = { root: null, threshold: 0.15, rootMargin: "0px 0px -10% 0px" };
+            const observer = new IntersectionObserver((entries, observer) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); /* observer.unobserve(entry.target); */ } }); }, observerOptions);
+            sections.forEach(section => { observer.observe(section); });
+
+             function fireCoolConfetti() { if (!myConfetti) { console.warn("Confetti library not loaded."); return; } const defaults = { startVelocity: 35, spread: 360, ticks: 80, zIndex: 1060, particleCount: 120, }; const colors = config.settings.confettiColors || ['#e0c58f', '#ffffff', '#1b6ca8']; myConfetti({ ...defaults, particleCount: 80, angle: 60, spread: 70, origin: { x: 0.1, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 80, angle: 120, spread: 70, origin: { x: 0.9, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: colors, scalar: 1.2 }); myConfetti({ ...defaults, particleCount: 30, shapes: ['star'], colors: ['#FFD700', '#FFEA00'], scalar: 0.75, origin: { y: 0.6 } }); }
+
+             function showSuccessModal() { setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`); setTextContent('modalRealtorName', config.realtor.fullName); if(successModalOverlay) successModalOverlay.classList.add('visible'); setTimeout(fireCoolConfetti, 200); }
+             function hideSuccessModal() { if(successModalOverlay) successModalOverlay.classList.remove('visible'); signInForm?.reset(); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); if (buttonTextSpan) buttonTextSpan.textContent = "Request My Compendium"; } }
+
+             if (modalCloseBtn) { modalCloseBtn.addEventListener('click', hideSuccessModal); }
+             if (successModalOverlay) { successModalOverlay.addEventListener('click', (event) => { if (event.target === successModalOverlay) { hideSuccessModal(); } }); }
+             document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && successModalOverlay?.classList.contains('visible')) { hideSuccessModal(); } });
+
+            if (signInForm && submitButton) {
+                signInForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    submitButton.disabled = true; submitButton.classList.add('loading');
+                    const formData = { fullName: document.getElementById('fullName').value, email: document.getElementById('email').value, phone: document.getElementById('phone').value, propertyAddress: `${config.property.streetAddress}, ${config.property.cityStateZip}`, submittedAt: new Date().toISOString() };
+
+                    if (config.settings.webhookUrl) {
+                        console.log(`Sending data to webhook: ${config.settings.webhookUrl}`);
+                        try { const response = await fetch(config.settings.webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData), mode: 'cors' }); if (!response.ok) { console.warn('Webhook failure:', response.status, await response.text()); } else { console.log('Webhook success!'); } }
+                        catch (error) { console.error('Webhook error:', error); }
+                    } else { console.log("No webhook URL. Skipping."); await new Promise(resolve => setTimeout(resolve, 300)); }
+
+                    showSuccessModal();
+                });
+             } else { console.error("Sign in form or submit button not found!"); }
+
+        }); // End DOMContentLoaded
+    </script>
+
+</body>
+</html>
