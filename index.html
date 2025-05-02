@@ -40,6 +40,8 @@
             --font-size-large: clamp(1.1rem, 2vw + 0.5rem, 1.4rem);
             --font-size-medium: clamp(1rem, 1.8vw + 0.4rem, 1.2rem);
             --font-size-small: clamp(0.85rem, 1.2vw + 0.4rem, 1rem);
+            /* Corrected minimum input font size for clamp */
+             --font-size-input: clamp(1rem, 1.8vw + 0.4rem, 1.05rem); /* Min 1rem (16px) */
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; font-size: var(--font-size-base); }
@@ -95,7 +97,26 @@
         #signin p.subtitle { color: var(--medium-text-color); text-align: center; margin-top: calc(-1 * clamp(25px, 5vh, 40px)); margin-bottom: clamp(35px, 6vh, 50px); font-size: var(--font-size-medium); font-weight: 300; }
         #signin .form-grid { display: grid; grid-template-columns: 1fr; gap: clamp(25px, 4vh, 35px); margin-top: 35px; max-width: 600px; margin-left: auto; margin-right: auto; }
         .form-group label { display: block; margin-bottom: 12px; font-weight: 500; color: var(--medium-text-color); font-size: var(--font-size-small); letter-spacing: 0.7px; }
-        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"] { width: 100%; padding: clamp(15px, 2.2vw, 18px) 25px; padding-left: clamp(50px, 8vw, 60px); border: 1px solid rgba(224, 197, 143, 0.2); border-radius: 14px; font-size: var(--font-size-small); font-family: 'Poppins', sans-serif; background-color: rgba(22, 22, 22, 0.75); color: var(--light-text-color); transition: all 0.4s var(--cubic-bezier-smooth-out); min-height: 50px; }
+
+        /* --- ★★★ CSS FIX FOR INPUT FONT SIZE ★★★ --- */
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"] {
+            width: 100%;
+            padding: clamp(15px, 2.2vw, 18px) 25px; /* Responsive Padding */
+            padding-left: clamp(50px, 8vw, 60px); /* Space for icon */
+            border: 1px solid rgba(224, 197, 143, 0.2);
+            border-radius: 14px;
+             /* Ensure font size is at least 16px (1rem) to prevent iOS zoom */
+             font-size: var(--font-size-input); /* Use variable set to clamp(1rem,...) */
+            font-family: 'Poppins', sans-serif;
+            background-color: rgba(22, 22, 22, 0.75);
+            color: var(--light-text-color);
+            transition: all 0.4s var(--cubic-bezier-smooth-out);
+            min-height: 50px; /* Good tap height */
+        }
+        /* --- End Input Font Size Fix --- */
+
         .form-group input::placeholder { color: var(--medium-text-color); opacity: 0.4; }
         .form-group input:focus { outline: none; border-color: var(--primary-color); background-color: rgba(30, 30, 30, 0.85); box-shadow: 0 0 22px rgba(224, 197, 143, 0.2); }
         .input-wrapper { position: relative; }
@@ -112,12 +133,10 @@
         .submit-btn.loading .spinner { opacity: 1; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* --- Modal Styles --- */
+        /* Modal Styles (Simplified visibility focus) */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 15, 15, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 1050; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
         .modal-overlay.visible { opacity: 1; visibility: visible; transition-delay: 0s; }
-        .modal-content { background: var(--card-dark-bg); padding: clamp(30px, 5vw, 40px); border-radius: var(--border-radius); box-shadow: 0 10px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(224, 197, 143, 0.15); text-align: center; max-width: 550px; width: 90%; position: relative; transform: translateY(0); opacity: 1; transition: none; }
-         /* Optional: Re-enable fancy transition */
-         /* .modal-overlay.visible .modal-content { transition: transform 0.5s var(--cubic-bezier-smooth-out) 0.1s, opacity 0.5s var(--cubic-bezier-smooth-out) 0.1s; transform: scale(1) translateY(0); opacity: 1; } */
+        .modal-content { background: var(--card-dark-bg); padding: clamp(30px, 5vw, 40px); border-radius: var(--border-radius); box-shadow: 0 10px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(224, 197, 143, 0.15); text-align: center; max-width: 550px; width: 90%; position: relative; transform: translateY(0); opacity: 1; /* Basic display */ transition: none; }
         .modal-step { display: none; opacity: 1; }
         .modal-step.active { display: block !important; opacity: 1 !important; animation: fadeInStep 0.4s ease-out forwards; }
         @keyframes fadeInStep { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -184,7 +203,29 @@
     <main>
         <section id="whats-included" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">The Property Compendium</h2> <ul id="bundleList"></ul> </div> </div> </section>
         <section id="about-realtor" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">Your Dedicated Host</h2> <div class="realtor-content"> <div class="realtor-image-container"> <img src="" alt="Realtor Photo" id="realtorPhoto"> </div> <div class="realtor-bio"> <h3 id="realtorNameBio"></h3> <p id="realtorBioText"></p> </div> </div> </div> </div> </section>
-        <section id="signin" class="section"> <div class="container"> <div class="glass-card" id="signInCard"> <h2 class="section-title">Register Your Interest</h2> <p class="subtitle">Kindly provide your details...</p> <form id="signInForm"> <div class="form-grid"> <div class="form-group"><label for="fullName">Full Name:</label><div class="input-wrapper"><input type="text" id="fullName" name="fullName" placeholder="Example Full Name" required><i class="fas fa-user-tie"></i></div></div> <div class="form-group"><label for="email">Email Address:</label><div class="input-wrapper"><input type="email" id="email" name="email" placeholder="Example Email" required><i class="fas fa-envelope-open-text"></i></div></div> <div class="form-group"><label for="phone">Phone Number (Preferred):</label><div class="input-wrapper"><input type="tel" id="phone" name="phone" placeholder="Example Phone"><i class="fas fa-phone-volume"></i></div></div> <div class="form-group"><button type="submit" class="submit-btn"><span class="button-text">Request My Compendium</span><div class="spinner"></div></button></div> </div> </form> </div> </div> </section>
+        <section id="signin" class="section">
+            <div class="container">
+                 <div class="glass-card" id="signInCard">
+                     <h2 class="section-title">Register Your Interest</h2>
+                     <p class="subtitle">Kindly provide your details...</p>
+                     <form id="signInForm">
+                         <div class="form-grid">
+                            <div class="form-group"><label for="fullName">Full Name:</label><div class="input-wrapper"><input type="text" id="fullName" name="fullName" placeholder="Example Full Name" required><i class="fas fa-user-tie"></i></div></div>
+                            <div class="form-group"><label for="email">Email Address:</label><div class="input-wrapper"><input type="email" id="email" name="email" placeholder="Example Email" required><i class="fas fa-envelope-open-text"></i></div></div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number (Preferred):</label>
+                                <div class="input-wrapper">
+                                    <input type="tel" id="phone" name="phone" placeholder="Example Phone"
+                                           inputmode="numeric"> <!-- ★★★ INPUTMODE ADDED HERE ★★★ -->
+                                    <i class="fas fa-phone-volume"></i>
+                                </div>
+                            </div>
+                            <div class="form-group"><button type="submit" class="submit-btn"><span class="button-text">Request My Compendium</span><div class="spinner"></div></button></div>
+                         </div>
+                     </form>
+                 </div>
+             </div>
+        </section>
     </main>
 
     <footer> <!-- Footer HTML Structure -->
@@ -211,6 +252,7 @@
              </div>
         </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
@@ -245,7 +287,7 @@
             const confettiCanvas = document.getElementById('confetti-canvas');
             const myConfetti = (typeof confetti === 'function' && confettiCanvas) ? confetti.create(confettiCanvas, { resize: true, useWorker: true }) : null;
             const submitButton = signInForm?.querySelector('.submit-btn');
-            const buttonTextSpan = submitButton?.querySelector('.button-text');
+            const buttonTextSpan = submitButton?.querySelector('.button-text'); // Ensure this exists if using
 
             // --- State Variables ---
             let currentStepIndex = 0;
@@ -253,13 +295,13 @@
             let initialFormData = {};
 
             // --- Helper functions ---
-             function setTextContent(id, text) { const el=document.getElementById(id); if(el) el.textContent=text||''; else console.warn(`ID '${id}' not found for text.`); }
-             function setHTMLContent(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html||''; else console.warn(`ID '${id}' not found for HTML.`); }
+             function setTextContent(id, text) { const el=document.getElementById(id); if(el) el.textContent=text||''; else console.warn(`ID '${id}' not found.`); }
+             function setHTMLContent(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html||''; else console.warn(`ID '${id}' not found.`); }
              function setImage(id, src, alt) { const el=document.getElementById(id); if(el && el.tagName==='IMG'){ el.src=src||''; el.alt=alt||'Image'; } else console.warn(`ID '${id}' not IMG or not found.`); }
              function setLinkHref(id, href) { const el=document.getElementById(id); if(el && el.tagName==='A'){ el.href=href||'#'; } else console.warn(`ID '${id}' not A or not found.`); }
              function populateSocialIcons(containerId, socialLinks) { const container = document.getElementById(containerId); if (!container) { console.warn(`Social container '${containerId}' not found.`); return; } container.innerHTML = ''; const platformIcons = { linkedin: 'fab fa-linkedin-in', instagram: 'fab fa-instagram', website: 'fas fa-globe', facebook: 'fab fa-facebook-f', twitter: 'fab fa-twitter'}; for (const platform in socialLinks) { const url = socialLinks[platform]; if (url && url !== "#" && url !== "") { const iconClass = platformIcons[platform]; if (iconClass) { const link = document.createElement('a'); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer"; link.setAttribute('aria-label', platform.charAt(0).toUpperCase() + platform.slice(1)); link.innerHTML = `<i class="${iconClass}" aria-hidden="true"></i>`; container.appendChild(link); } } } }
 
-            // --- Apply Initial Config Data Function (with Footer Fix) ---
+            // --- Apply Initial Config Data Function ---
             function populateInitialData() {
                 try {
                     if (config.property.backgroundImageUrl && config.property.backgroundImageUrl !== "[BACKGROUND_IMAGE_URL_HERE]") { document.body.style.setProperty('--bg-image-url', `url('${config.property.backgroundImageUrl}')`); }
@@ -303,35 +345,22 @@
             // --- Confetti Function ---
              function fireCoolConfetti() { if (!myConfetti) { console.warn("Confetti library not loaded."); return; } const defaults = { startVelocity: 35, spread: 360, ticks: 80, zIndex: 1060, particleCount: 120, }; const colors = config.settings.confettiColors || ['#e0c58f', '#ffffff', '#1b6ca8']; myConfetti({ ...defaults, particleCount: 80, angle: 60, spread: 70, origin: { x: 0.1, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 80, angle: 120, spread: 70, origin: { x: 0.9, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: colors, scalar: 1.2 }); myConfetti({ ...defaults, particleCount: 30, shapes: ['star'], colors: ['#FFD700', '#FFEA00'], scalar: 0.75, origin: { y: 0.6 } }); }
 
-             // --- Modal Step Display & Handling ---
+
+            // --- Modal Step Display & Handling (Simplified CSS Focus) ---
             function displayModalStep(stepIndex) {
                 console.log(`Displaying step index: ${stepIndex}`);
                 if (!successModalContent || !modalStepsContainer || !modalStepFinal) { console.error("Modal structure elements missing!"); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); } return; }
-                if (!successModalOverlay) { console.error("Modal overlay missing!"); return; } // Added overlay check
+                if (!successModalOverlay) { console.error("Modal overlay missing!"); return; }
 
-                // Ensure overlay is visible *before* manipulating content
-                if (!successModalOverlay.classList.contains('visible')) {
-                    console.warn("Overlay wasn't visible. Making visible first.");
-                    successModalOverlay.classList.add('visible');
-                     // Add a small delay to allow overlay transition to start visually
-                     setTimeout(() => proceedWithStepDisplay(stepIndex), 50);
-                     return; // Exit and let the timeout handle it
-                } else {
-                    // Overlay is already visible, proceed directly
-                     proceedWithStepDisplay(stepIndex);
-                }
-            }
+                // Ensure overlay is visible
+                if (!successModalOverlay.classList.contains('visible')) { console.warn("Overlay wasn't visible when trying to display step. Forcing visible."); successModalOverlay.classList.add('visible'); }
 
-             function proceedWithStepDisplay(stepIndex) {
-                  console.log(`Proceeding to display step: ${stepIndex}`);
-                 // Clear previous content & hide final step
-                 modalStepsContainer.innerHTML = '';
-                 modalStepFinal.style.display = 'none';
-                 modalStepFinal.classList.remove('active');
+                modalStepsContainer.innerHTML = '';
+                modalStepFinal.style.display = 'none';
+                modalStepFinal.classList.remove('active');
 
-                 try {
+                try {
                     if (stepIndex >= 0 && stepIndex < config.modalQuestions.length) {
-                        // --- Display QUESTION ---
                         const questionData = config.modalQuestions[stepIndex];
                         console.log("Creating question step:", questionData.id);
                         const stepDiv = document.createElement('div');
@@ -349,91 +378,85 @@
                             </div>`;
                         stepDiv.querySelectorAll('.modal-option-btn').forEach(button => button.addEventListener('click', handleAnswerClick));
                         modalStepsContainer.appendChild(stepDiv);
-                         // Use timeout for reliable class addition
-                        setTimeout(() => { stepDiv.classList.add('active'); }, 10);
+                        setTimeout(() => { stepDiv.classList.add('active'); }, 10); // Make active *after* appending
 
                     } else {
-                        // --- Display FINAL Thank You ---
                         console.log("Showing final step");
                         setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
                         setTextContent('modalRealtorName', config.realtor.fullName);
-                        modalStepFinal.style.display = 'block';
-                         // Use timeout for reliable class addition
-                        setTimeout(() => { modalStepFinal.classList.add('active'); }, 10);
+                        modalStepFinal.style.display = 'block'; // Make final step visible
+                        setTimeout(() => { modalStepFinal.classList.add('active'); }, 10); // Add active class
                          fireCoolConfetti();
                     }
-                 } catch(error) { console.error(`Error displaying modal step ${stepIndex}:`, error); hideSuccessModal(); }
-             }
-
+                } catch(error) { console.error(`Error displaying modal step ${stepIndex}:`, error); hideSuccessModal(); }
+            }
 
             function handleAnswerClick(event) {
-                console.log("Answer click handled");
-                try {
-                    const button = event.currentTarget;
-                    const stepIndex = parseInt(button.dataset.step, 10);
-                    const questionId = button.dataset.questionId;
-                    const answerValue = button.dataset.answer;
-                    if (isNaN(stepIndex)) { console.error("Invalid step index"); return; }
+                 console.log("Answer click handled");
+                 try {
+                     const button = event.currentTarget;
+                     const stepIndex = parseInt(button.dataset.step, 10);
+                     const questionId = button.dataset.questionId;
+                     const answerValue = button.dataset.answer;
+                     if (isNaN(stepIndex)) { console.error("Invalid step index"); return; }
 
-                    collectedAnswers[questionId] = answerValue;
-                    console.log('Collected Answers:', collectedAnswers);
+                     collectedAnswers[questionId] = answerValue;
+                     console.log('Collected Answers:', collectedAnswers);
 
-                    const currentStep = document.getElementById(`modal-step-${questionId}`);
-                    if (currentStep) {
-                        currentStep.querySelectorAll('button').forEach(btn => btn.disabled = true);
-                        button.style.borderColor = 'var(--primary-color)'; button.style.backgroundColor = 'rgba(224, 197, 143, 0.2)';
+                     const currentStep = document.getElementById(`modal-step-${questionId}`);
+                     if (currentStep) {
+                         currentStep.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                         button.style.borderColor = 'var(--primary-color)'; button.style.backgroundColor = 'rgba(224, 197, 143, 0.2)';
 
-                        // Fade out current step (Optional but smoother)
-                        const activeStep = modalStepsContainer.querySelector('.modal-step.active');
-                        if (activeStep) {
-                             activeStep.style.transition = 'opacity 0.3s ease-out';
-                             activeStep.style.opacity = '0';
-                             setTimeout(() => displayModalStep(stepIndex + 1), 300); // Display next after fade
-                         } else {
-                              // Fallback if fade target not found
+                         // Optional fade out before showing next
+                         const activeStep = modalStepsContainer.querySelector('.modal-step.active');
+                         if (activeStep) {
+                              activeStep.style.transition = 'opacity 0.3s ease-out';
+                              activeStep.style.opacity = '0';
                               setTimeout(() => displayModalStep(stepIndex + 1), 300);
-                         }
+                          } else {
+                               setTimeout(() => displayModalStep(stepIndex + 1), 300); // Fallback delay
+                          }
 
-                    } else { console.warn(`Could not find step ${questionId} to disable buttons.`); setTimeout(() => displayModalStep(stepIndex + 1), 300); }
-                } catch (error) { console.error("Error handling answer click:", error); hideSuccessModal(); }
-            }
+                     } else { console.warn(`Could not find step ${questionId} to disable buttons.`); setTimeout(() => displayModalStep(stepIndex + 1), 300); }
+                 } catch (error) { console.error("Error handling answer click:", error); hideSuccessModal(); }
+             }
 
             // --- Modal Control Functions ---
-            function showQuestionnaireModal() {
-                console.log("showQuestionnaireModal called");
-                if (!successModalOverlay) { console.error("Modal overlay element not found for show!"); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); } return; }
-                currentStepIndex = 0; collectedAnswers = {};
-                if(modalStepsContainer) modalStepsContainer.innerHTML = ''; // Clear previous steps
-                if(modalStepFinal) modalStepFinal.style.display = 'none'; modalStepFinal.classList.remove('active');
+             function showQuestionnaireModal() {
+                 console.log("showQuestionnaireModal called");
+                 if (!successModalOverlay) { console.error("Modal overlay element not found!"); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); } return; }
+                 currentStepIndex = 0; collectedAnswers = {};
+                 if(modalStepsContainer) modalStepsContainer.innerHTML = '';
+                 if(modalStepFinal) modalStepFinal.style.display = 'none'; modalStepFinal.classList.remove('active');
 
-                successModalOverlay.classList.add('visible'); // Make overlay visible
-                console.log("Overlay class 'visible' added.");
+                 successModalOverlay.classList.add('visible');
+                 console.log("Overlay class 'visible' added.");
+                 setTimeout(() => displayModalStep(currentStepIndex), 50); // Display first step
+             }
 
-                // Display First Step *after* overlay transition has likely started
-                setTimeout(() => displayModalStep(currentStepIndex), 50);
-            }
-
-            function hideSuccessModal() {
-                console.log("hideSuccessModal called");
-                if(!successModalOverlay) return;
-                successModalOverlay.classList.remove('visible');
-                setTimeout(() => {
-                   signInForm?.reset();
-                   if (submitButton) {
-                       submitButton.disabled = false; submitButton.classList.remove('loading');
-                       const textSpan = submitButton.querySelector('.button-text');
-                       if (textSpan) { textSpan.textContent = "Request My Compendium"; }
-                       else if (!submitButton.querySelector('.button-text')) { submitButton.innerHTML = '<span class="button-text">Request My Compendium</span><div class="spinner"></div>'; }
-                   }
-                   if(modalStepsContainer) modalStepsContainer.innerHTML = '';
-                   if(modalStepFinal) { modalStepFinal.style.display = 'none'; modalStepFinal.classList.remove('active'); }
-                }, 400); // Match overlay fade duration
-            }
+             function hideSuccessModal() {
+                 console.log("hideSuccessModal called");
+                 if(!successModalOverlay) return;
+                 successModalOverlay.classList.remove('visible');
+                 setTimeout(() => {
+                    signInForm?.reset();
+                    if (submitButton) {
+                        submitButton.disabled = false; submitButton.classList.remove('loading');
+                        const textSpan = submitButton.querySelector('.button-text');
+                        if (textSpan) { textSpan.textContent = "Request My Compendium"; }
+                        else if (!submitButton.querySelector('.button-text')) { submitButton.innerHTML = '<span class="button-text">Request My Compendium</span><div class="spinner"></div>'; }
+                    }
+                    if(modalStepsContainer) modalStepsContainer.innerHTML = '';
+                    if(modalStepFinal) { modalStepFinal.style.display = 'none'; modalStepFinal.classList.remove('active'); }
+                 }, 400);
+             }
 
             // --- Event Listeners for Modal ---
              if (modalCloseBtn) { modalCloseBtn.addEventListener('click', hideSuccessModal); }
              if (successModalOverlay) { successModalOverlay.addEventListener('click', (event) => { if (event.target === successModalOverlay) { hideSuccessModal(); } }); }
              document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && successModalOverlay?.classList.contains('visible')) { hideSuccessModal(); } });
+
 
             // --- Sign In Form Submission Logic ---
             if (signInForm && submitButton) {
@@ -455,7 +478,7 @@
                 });
              } else { console.error("Sign in form or submit button not found!"); }
 
-        }); // End DOMContentLoaded
+        });
     </script>
 
 </body>
