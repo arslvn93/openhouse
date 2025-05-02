@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
-        /* --- Styles remain the same --- */
+        /* --- Root Variables and Base Styles --- */
         :root {
             --primary-color: #e0c58f; --secondary-color: #1b6ca8; --accent-color: #c08497;
             --dark-bg: #0f0f0f; --card-dark-bg: #181818; --light-text-color: #fafafa;
@@ -112,20 +112,23 @@
         .submit-btn.loading .spinner { opacity: 1; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Modal Styles (Simplified visibility focus) */
+        /* --- Modal Styles --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 15, 15, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 1050; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
         .modal-overlay.visible { opacity: 1; visibility: visible; transition-delay: 0s; }
-        .modal-content { background: var(--card-dark-bg); padding: clamp(30px, 5vw, 40px); border-radius: var(--border-radius); box-shadow: 0 10px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(224, 197, 143, 0.15); text-align: center; max-width: 550px; width: 90%; position: relative; transform: translateY(0); opacity: 1; /* Basic display */ transition: none; }
-        .modal-step { display: none; opacity: 1; } /* Hide by default, but visible when active */
-        .modal-step.active { display: block !important; animation: fadeInStep 0.4s ease-out forwards; }
+        .modal-content { background: var(--card-dark-bg); padding: clamp(30px, 5vw, 40px); border-radius: var(--border-radius); box-shadow: 0 10px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(224, 197, 143, 0.15); text-align: center; max-width: 550px; width: 90%; position: relative; transform: translateY(0); opacity: 1; transition: none; }
+         /* Optional: Re-enable fancy transition */
+         /* .modal-overlay.visible .modal-content { transition: transform 0.5s var(--cubic-bezier-smooth-out) 0.1s, opacity 0.5s var(--cubic-bezier-smooth-out) 0.1s; transform: scale(1) translateY(0); opacity: 1; } */
+        .modal-step { display: none; opacity: 1; }
+        .modal-step.active { display: block !important; opacity: 1 !important; animation: fadeInStep 0.4s ease-out forwards; }
         @keyframes fadeInStep { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .modal-step .question-text { font-size: var(--font-size-large); font-weight: 500; color: var(--light-text-color); margin-bottom: 35px; line-height: 1.6; }
         .modal-options { display: flex; flex-direction: column; gap: 15px; align-items: center; }
         .modal-option-btn { display: block; width: 100%; max-width: 380px; padding: 15px 25px; font-size: var(--font-size-medium); font-weight: 500; color: var(--light-text-color); background-color: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); border-radius: 12px; cursor: pointer; text-align: center; transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease; }
         .modal-option-btn:hover { background-color: rgba(224, 197, 143, 0.15); border-color: rgba(224, 197, 143, 0.3); transform: translateY(-2px); }
         .modal-option-btn:active { transform: translateY(0); background-color: rgba(224, 197, 143, 0.2); }
-        #modal-step-final i.icon { font-size: clamp(4rem, 10vw, 5rem); color: var(--primary-color); margin-bottom: 25px; display: inline-block; text-shadow: 0 0 20px rgba(224, 197, 143, 0.4); animation: popIn 0.6s var(--cubic-bezier-smooth-out) 0.3s backwards; }
+        #modal-step-final i.icon { font-size: clamp(4rem, 10vw, 5rem); color: var(--primary-color); margin-bottom: 25px; display: inline-block; text-shadow: 0 0 20px rgba(224, 197, 143, 0.4); }
         @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1;} }
+        #modal-step-final i.icon { animation: popIn 0.6s var(--cubic-bezier-smooth-out) 0.3s backwards; }
         #modal-step-final h2 { font-family: 'Playfair Display', serif; font-size: var(--font-size-h3); color: var(--primary-color); margin-bottom: 15px; font-weight: 700; }
         #modal-step-final p#modalMainMessage { font-size: var(--font-size-medium); margin-bottom: 30px; line-height: 1.8; color: var(--medium-text-color); font-weight: 300;}
         #modal-step-final p#modalHost { font-size: var(--font-size-small); color: var(--medium-text-color); }
@@ -134,6 +137,24 @@
         .modal-close-btn:hover { color: var(--light-text-color); transform: rotate(90deg); }
         #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1060; pointer-events: none; }
         @keyframes bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.03); } }
+
+         /* Footer Styles (Restored) */
+        footer { background-color: #0a0a0a; color: var(--medium-text-color); text-align: center; padding: clamp(50px, 8vh, 80px) clamp(15px, 5vw, 30px) clamp(30px, 5vh, 50px); margin-top: clamp(60px, 10vh, 100px); border-top: 1px solid rgba(224, 197, 143, 0.15); }
+        footer .footer-content { max-width: 850px; margin: auto; }
+        footer .brokerage-logo img { max-height: clamp(45px, 8vw, 60px); margin-bottom: 30px; }
+        footer h4 { font-family: 'Montserrat', sans-serif; font-size: var(--font-size-large); font-weight: 500; margin-bottom: 25px; color: var(--primary-color); letter-spacing: 1.2px; }
+        footer p { margin-bottom: 15px; font-size: var(--font-size-small); line-height: 1.8; font-weight: 300;}
+        footer strong { color: var(--light-text-color); font-weight: 500; }
+        footer a { color: var(--primary-color); text-decoration: none; transition: color 0.4s ease; }
+        footer a:hover { color: #fff2d8; }
+        footer p i { margin-right: 8px; opacity: 0.8; }
+        footer p i.fa-envelope { margin-left: 15px; }
+        footer .social-icons { margin: clamp(25px, 5vh, 40px) 0; }
+        footer .social-icons a { color: var(--medium-text-color); font-size: clamp(1.4rem, 3vw, 1.7rem); margin: 0 clamp(12px, 2.5vw, 18px); transition: color 0.4s var(--cubic-bezier-smooth-out), transform 0.4s var(--cubic-bezier-smooth-out); }
+        footer .social-icons a:hover { color: var(--primary-color); transform: scale(1.2) rotate(-5deg); }
+        footer .copyright { margin-top: clamp(30px, 6vh, 50px); font-size: clamp(0.75rem, 1.5vw + 0.3rem, 0.9rem); opacity: 0.6; font-weight: 300;}
+        footer .copyright a { color: var(--primary-color); opacity: 0.8; }
+        footer .copyright a:hover { color: #fff2d8; opacity: 1; }
 
     </style>
 </head>
@@ -163,10 +184,10 @@
     <main>
         <section id="whats-included" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">The Property Compendium</h2> <ul id="bundleList"></ul> </div> </div> </section>
         <section id="about-realtor" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">Your Dedicated Host</h2> <div class="realtor-content"> <div class="realtor-image-container"> <img src="" alt="Realtor Photo" id="realtorPhoto"> </div> <div class="realtor-bio"> <h3 id="realtorNameBio"></h3> <p id="realtorBioText"></p> </div> </div> </div> </div> </section>
-        <section id="signin" class="section"> <div class="container"> <div class="glass-card" id="signInCard"> <h2 class="section-title">Register Your Interest</h2> <p class="subtitle">Kindly provide your details to receive the exclusive Property Compendium.</p> <form id="signInForm"> <div class="form-grid"> <div class="form-group"><label for="fullName">Full Name:</label><div class="input-wrapper"><input type="text" id="fullName" name="fullName" placeholder="Example Full Name" required><i class="fas fa-user-tie"></i></div></div> <div class="form-group"><label for="email">Email Address:</label><div class="input-wrapper"><input type="email" id="email" name="email" placeholder="Example Email" required><i class="fas fa-envelope-open-text"></i></div></div> <div class="form-group"><label for="phone">Phone Number (Preferred):</label><div class="input-wrapper"><input type="tel" id="phone" name="phone" placeholder="Example Phone"><i class="fas fa-phone-volume"></i></div></div> <div class="form-group"><button type="submit" class="submit-btn"><span class="button-text">Request My Compendium</span><div class="spinner"></div></button></div> </div> </form> </div> </div> </section>
+        <section id="signin" class="section"> <div class="container"> <div class="glass-card" id="signInCard"> <h2 class="section-title">Register Your Interest</h2> <p class="subtitle">Kindly provide your details...</p> <form id="signInForm"> <div class="form-grid"> <div class="form-group"><label for="fullName">Full Name:</label><div class="input-wrapper"><input type="text" id="fullName" name="fullName" placeholder="Example Full Name" required><i class="fas fa-user-tie"></i></div></div> <div class="form-group"><label for="email">Email Address:</label><div class="input-wrapper"><input type="email" id="email" name="email" placeholder="Example Email" required><i class="fas fa-envelope-open-text"></i></div></div> <div class="form-group"><label for="phone">Phone Number (Preferred):</label><div class="input-wrapper"><input type="tel" id="phone" name="phone" placeholder="Example Phone"><i class="fas fa-phone-volume"></i></div></div> <div class="form-group"><button type="submit" class="submit-btn"><span class="button-text">Request My Compendium</span><div class="spinner"></div></button></div> </div> </form> </div> </div> </section>
     </main>
 
-    <footer>
+    <footer> <!-- Footer HTML Structure -->
         <div class="container footer-content">
              <div class="brokerage-logo"> <img src="" alt="Brokerage Logo" id="footerBrokerageLogo"> </div>
             <h4 id="footerBrokerageName"></h4>
@@ -181,9 +202,7 @@
     <div class="modal-overlay" id="successModalOverlay">
         <div class="modal-content" id="successModalContent" role="dialog" aria-modal="true" aria-labelledby="modalStepTitle">
             <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
-            <div id="modal-steps-container">
-                <!-- Dynamic Step Content Goes Here -->
-            </div>
+            <div id="modal-steps-container"><!-- Dynamic Step Content Goes Here --></div>
              <div class="modal-step" id="modal-step-final" style="display: none;"> <!-- Starts hidden -->
                  <i class="fas fa-check-circle icon"></i>
                  <h2 id="modalHeader">Thank You!</h2>
@@ -192,7 +211,6 @@
              </div>
         </div>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
@@ -217,6 +235,7 @@
             const mainNav = document.getElementById('mainNav');
             const heroSection = document.getElementById('hero');
             const heroTitleElement = document.getElementById('heroTitle');
+            const heroSubtitle = document.getElementById('heroSubtitle');
             const signInForm = document.getElementById('signInForm');
             const successModalOverlay = document.getElementById('successModalOverlay');
             const successModalContent = document.getElementById('successModalContent');
@@ -234,8 +253,8 @@
             let initialFormData = {};
 
             // --- Helper functions ---
-             function setTextContent(id, text) { const el=document.getElementById(id); if(el) el.textContent=text||''; else console.warn(`ID '${id}' not found.`); }
-             function setHTMLContent(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html||''; else console.warn(`ID '${id}' not found.`); }
+             function setTextContent(id, text) { const el=document.getElementById(id); if(el) el.textContent=text||''; else console.warn(`ID '${id}' not found for text.`); }
+             function setHTMLContent(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html||''; else console.warn(`ID '${id}' not found for HTML.`); }
              function setImage(id, src, alt) { const el=document.getElementById(id); if(el && el.tagName==='IMG'){ el.src=src||''; el.alt=alt||'Image'; } else console.warn(`ID '${id}' not IMG or not found.`); }
              function setLinkHref(id, href) { const el=document.getElementById(id); if(el && el.tagName==='A'){ el.href=href||'#'; } else console.warn(`ID '${id}' not A or not found.`); }
              function populateSocialIcons(containerId, socialLinks) { const container = document.getElementById(containerId); if (!container) { console.warn(`Social container '${containerId}' not found.`); return; } container.innerHTML = ''; const platformIcons = { linkedin: 'fab fa-linkedin-in', instagram: 'fab fa-instagram', website: 'fas fa-globe', facebook: 'fab fa-facebook-f', twitter: 'fab fa-twitter'}; for (const platform in socialLinks) { const url = socialLinks[platform]; if (url && url !== "#" && url !== "") { const iconClass = platformIcons[platform]; if (iconClass) { const link = document.createElement('a'); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer"; link.setAttribute('aria-label', platform.charAt(0).toUpperCase() + platform.slice(1)); link.innerHTML = `<i class="${iconClass}" aria-hidden="true"></i>`; container.appendChild(link); } } } }
@@ -243,43 +262,18 @@
             // --- Apply Initial Config Data Function (with Footer Fix) ---
             function populateInitialData() {
                 try {
-                    // Set Background Image from Config
-                    if (config.property.backgroundImageUrl && config.property.backgroundImageUrl !== "[BACKGROUND_IMAGE_URL_HERE]") {
-                        document.body.style.setProperty('--bg-image-url', `url('${config.property.backgroundImageUrl}')`);
-                    }
-
-                    // Page Title
+                    if (config.property.backgroundImageUrl && config.property.backgroundImageUrl !== "[BACKGROUND_IMAGE_URL_HERE]") { document.body.style.setProperty('--bg-image-url', `url('${config.property.backgroundImageUrl}')`); }
                     document.title = `${config.meta.pageTitlePrefix} | ${config.property.streetAddress} | ${config.brokerage.name}`;
-
-                    // Header
                     setTextContent('navBrandLogo', config.meta.navBrandLogoText || config.brokerage.name);
                     setTextContent('navAddress', config.property.streetAddress);
-
-                    // Hero Subtitle
                     setTextContent('heroSubtitle', config.property.heroSubtitle);
-
-                    // What's Included Bundle List
                     const bundleList = document.getElementById('bundleList');
-                    if (bundleList) {
-                        bundleList.innerHTML = ''; // Clear placeholder
-                        config.openHouse.bundleItems.forEach(item => {
-                            const li = document.createElement('li');
-                            li.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i> <span>${item.text}</span>`;
-                            bundleList.appendChild(li);
-                        });
-                    } else {
-                        console.warn("Bundle list element not found.");
-                    }
-
-                    // About Realtor
+                    if (bundleList) { bundleList.innerHTML = ''; config.openHouse.bundleItems.forEach(item => { const li = document.createElement('li'); li.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i> <span>${item.text}</span>`; bundleList.appendChild(li); }); } else { console.warn("Bundle list element not found."); }
                     setImage('realtorPhoto', config.realtor.photoUrl, config.realtor.fullName);
                     setTextContent('realtorNameBio', config.realtor.fullName);
                     setHTMLContent('realtorBioText', config.realtor.bio);
-
-                    // Modal Placeholders (Set again before showing)
                     setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
                     setTextContent('modalRealtorName', config.realtor.fullName);
-
                     // **** FOOTER POPULATION RESTORED ****
                     setImage('footerBrokerageLogo', config.brokerage.logoUrl, config.brokerage.name);
                     setTextContent('footerBrokerageName', `${config.brokerage.name} | Curators of Fine Real Estate`);
@@ -292,41 +286,56 @@
                     setLinkHref('footerRealtorEmailLink', `mailto:${config.realtor.email}`);
                     setTextContent('footerBrokerageAddress', config.brokerage.address);
                     const currentYear = new Date().getFullYear();
-                    // Fixed typo in setHTMLContent arguments
                     setHTMLContent('footerCopyright', `© ${currentYear} ${config.brokerage.name}. All Rights Reserved. Licensed Real Estate Brokerage. Equal Housing Opportunity. | <a href="${config.meta.privacyPolicyLink || '#'}">Privacy Policy</a> | <a href="${config.meta.termsLink || '#'}">Site Terms</a>`);
                     populateSocialIcons('footerSocialIcons', config.realtor.social);
                      // **** END FOOTER POPULATION ****
-
                 } catch (error) { console.error("Error populating data:", error); }
             }
-            populateInitialData(); // Execute on load
+            populateInitialData();
 
-            // --- General Page Logic --- (Scroll, Parallax, Nav, Typewriter, Observer)
-            let lastScrollTop = 0; const handleScroll = () => { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (mainNav) { if (scrollTop > 50) { mainNav.classList.add('scrolled'); } else { mainNav.classList.remove('scrolled'); } } setActiveLink(); }; window.addEventListener('scroll', handleScroll, { passive: true });
-            const handleHeroParallax = () => { const scrollY = window.pageYOffset; const parallaxFactor = 0.1; if (heroSection) { const title = heroSection.querySelector('#heroTitle'); const subtitle = heroSection.querySelector('#heroSubtitle'); const cta = heroSection.querySelector('#heroCta'); if(title) title.style.transform = `translateY(${scrollY * parallaxFactor * 0.5}px)`; if(subtitle) subtitle.style.transform = `translateY(${scrollY * parallaxFactor}px)`; if(cta) cta.style.transform = `translateY(${scrollY * parallaxFactor * 1.1}px)`; } }; if (window.innerWidth > 992) { window.addEventListener('scroll', handleHeroParallax, { passive: true }); }
+             // --- General Page Logic ---
+             let lastScrollTop = 0; const handleScroll = () => { let scrollTop = window.pageYOffset || document.documentElement.scrollTop; if (mainNav) { if (scrollTop > 50) { mainNav.classList.add('scrolled'); } else { mainNav.classList.remove('scrolled'); } } setActiveLink(); }; window.addEventListener('scroll', handleScroll, { passive: true });
+             const handleHeroParallax = () => { const scrollY = window.pageYOffset; const parallaxFactor = 0.1; if (heroSection) { const title = heroSection.querySelector('#heroTitle'); const subtitle = heroSection.querySelector('#heroSubtitle'); const cta = heroSection.querySelector('#heroCta'); if(title) title.style.transform = `translateY(${scrollY * parallaxFactor * 0.5}px)`; if(subtitle) subtitle.style.transform = `translateY(${scrollY * parallaxFactor}px)`; if(cta) cta.style.transform = `translateY(${scrollY * parallaxFactor * 1.1}px)`; } }; if (window.innerWidth > 992) { window.addEventListener('scroll', handleHeroParallax, { passive: true }); }
              const navLinks = document.querySelectorAll('#navLinksList li a'); const sectionsForNav = document.querySelectorAll('section[id]'); const setActiveLink = () => { let currentSectionId = 'hero'; const navHeight = mainNav ? mainNav.offsetHeight : 70; const scrollPosition = window.pageYOffset; sectionsForNav.forEach(section => { const sectionTop = section.offsetTop - navHeight - window.innerHeight * 0.3; const sectionBottom = sectionTop + section.offsetHeight; if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) { currentSectionId = section.getAttribute('id'); } }); const nearBottom = (window.innerHeight + scrollPosition) >= document.body.offsetHeight - 200; if (nearBottom && document.getElementById('signin')) { currentSectionId = 'signin'; } if (navLinks) { navLinks.forEach(link => { link.classList.remove('active'); const linkHref = link.getAttribute('href'); if (linkHref === `#${currentSectionId}`) { link.classList.add('active'); } }); } }; setActiveLink();
-            const titleHTML = `Welcome to <span class="highlight">${config.property.streetAddress}'s</span> Open House`; let titleCharIndex = 0; function typeWriter() { if (!heroTitleElement) return; if (titleCharIndex < titleHTML.length) { let currentHTML = heroTitleElement.innerHTML; if (titleHTML.charAt(titleCharIndex) === '<') { const tagEndIndex = titleHTML.indexOf('>', titleCharIndex); if (tagEndIndex !== -1) { currentHTML += titleHTML.substring(titleCharIndex, tagEndIndex + 1); heroTitleElement.innerHTML = currentHTML; titleCharIndex = tagEndIndex + 1; } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } const speed = titleHTML.charAt(titleCharIndex - 1) === '>' ? 5 : 45 + Math.random() * 35; setTimeout(typeWriter, speed); } else { heroTitleElement.classList.add('typing-done'); heroSection.classList.add('typing-complete'); } } if(heroTitleElement) setTimeout(typeWriter, 500);
-            const sections = document.querySelectorAll('.section:not(#hero)'); const observerOptions = { root: null, threshold: 0.15, rootMargin: "0px 0px -10% 0px" }; const observer = new IntersectionObserver((entries, observer) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); /* observer.unobserve(entry.target); */ } }); }, observerOptions); sections.forEach(section => { observer.observe(section); });
+             const titleHTML = `Welcome to <span class="highlight">${config.property.streetAddress}'s</span> Open House`; let titleCharIndex = 0; function typeWriter() { if (!heroTitleElement) return; if (titleCharIndex < titleHTML.length) { let currentHTML = heroTitleElement.innerHTML; if (titleHTML.charAt(titleCharIndex) === '<') { const tagEndIndex = titleHTML.indexOf('>', titleCharIndex); if (tagEndIndex !== -1) { currentHTML += titleHTML.substring(titleCharIndex, tagEndIndex + 1); heroTitleElement.innerHTML = currentHTML; titleCharIndex = tagEndIndex + 1; } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } } else { currentHTML += titleHTML.charAt(titleCharIndex); heroTitleElement.innerHTML = currentHTML; titleCharIndex++; } const speed = titleHTML.charAt(titleCharIndex - 1) === '>' ? 5 : 45 + Math.random() * 35; setTimeout(typeWriter, speed); } else { heroTitleElement.classList.add('typing-done'); heroSection.classList.add('typing-complete'); } } if(heroTitleElement) setTimeout(typeWriter, 500);
+             const sections = document.querySelectorAll('.section:not(#hero)'); const observerOptions = { root: null, threshold: 0.15, rootMargin: "0px 0px -10% 0px" }; const observer = new IntersectionObserver((entries, observer) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); /* observer.unobserve(entry.target); */ } }); }, observerOptions); sections.forEach(section => { observer.observe(section); });
 
             // --- Confetti Function ---
              function fireCoolConfetti() { if (!myConfetti) { console.warn("Confetti library not loaded."); return; } const defaults = { startVelocity: 35, spread: 360, ticks: 80, zIndex: 1060, particleCount: 120, }; const colors = config.settings.confettiColors || ['#e0c58f', '#ffffff', '#1b6ca8']; myConfetti({ ...defaults, particleCount: 80, angle: 60, spread: 70, origin: { x: 0.1, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 80, angle: 120, spread: 70, origin: { x: 0.9, y: 0.7 }, colors: colors, scalar: 1.1 }); myConfetti({ ...defaults, particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: colors, scalar: 1.2 }); myConfetti({ ...defaults, particleCount: 30, shapes: ['star'], colors: ['#FFD700', '#FFEA00'], scalar: 0.75, origin: { y: 0.6 } }); }
 
-
-            // --- Modal Step Display & Handling (Focus on Visibility) ---
+             // --- Modal Step Display & Handling ---
             function displayModalStep(stepIndex) {
                 console.log(`Displaying step index: ${stepIndex}`);
-                if (!successModalContent || !modalStepsContainer || !modalStepFinal) { console.error("Modal elements missing!"); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); } return; }
+                if (!successModalContent || !modalStepsContainer || !modalStepFinal) { console.error("Modal structure elements missing!"); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); } return; }
+                if (!successModalOverlay) { console.error("Modal overlay missing!"); return; } // Added overlay check
 
-                modalStepsContainer.innerHTML = '';
-                modalStepFinal.style.display = 'none';
-                modalStepFinal.classList.remove('active');
+                // Ensure overlay is visible *before* manipulating content
+                if (!successModalOverlay.classList.contains('visible')) {
+                    console.warn("Overlay wasn't visible. Making visible first.");
+                    successModalOverlay.classList.add('visible');
+                     // Add a small delay to allow overlay transition to start visually
+                     setTimeout(() => proceedWithStepDisplay(stepIndex), 50);
+                     return; // Exit and let the timeout handle it
+                } else {
+                    // Overlay is already visible, proceed directly
+                     proceedWithStepDisplay(stepIndex);
+                }
+            }
 
-                try {
+             function proceedWithStepDisplay(stepIndex) {
+                  console.log(`Proceeding to display step: ${stepIndex}`);
+                 // Clear previous content & hide final step
+                 modalStepsContainer.innerHTML = '';
+                 modalStepFinal.style.display = 'none';
+                 modalStepFinal.classList.remove('active');
+
+                 try {
                     if (stepIndex >= 0 && stepIndex < config.modalQuestions.length) {
+                        // --- Display QUESTION ---
                         const questionData = config.modalQuestions[stepIndex];
                         console.log("Creating question step:", questionData.id);
                         const stepDiv = document.createElement('div');
-                        stepDiv.classList.add('modal-step'); // Base class only
+                        stepDiv.classList.add('modal-step');
                         stepDiv.id = `modal-step-${questionData.id}`;
                         stepDiv.innerHTML = `
                             <p class="question-text" id="modalStepTitle-${questionData.id}">${questionData.questionText}</p>
@@ -340,85 +349,91 @@
                             </div>`;
                         stepDiv.querySelectorAll('.modal-option-btn').forEach(button => button.addEventListener('click', handleAnswerClick));
                         modalStepsContainer.appendChild(stepDiv);
-                        // Use timeout to ensure DOM update before adding class
-                        setTimeout(() => { stepDiv.classList.add('active'); }, 10); // Short delay
+                         // Use timeout for reliable class addition
+                        setTimeout(() => { stepDiv.classList.add('active'); }, 10);
 
                     } else {
+                        // --- Display FINAL Thank You ---
                         console.log("Showing final step");
                         setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
                         setTextContent('modalRealtorName', config.realtor.fullName);
-                        modalStepFinal.style.display = 'block'; // Direct display
-                        // Add active class slightly after display change
+                        modalStepFinal.style.display = 'block';
+                         // Use timeout for reliable class addition
                         setTimeout(() => { modalStepFinal.classList.add('active'); }, 10);
                          fireCoolConfetti();
                     }
-                } catch(error) { console.error(`Error displaying modal step ${stepIndex}:`, error); hideSuccessModal(); }
-            }
+                 } catch(error) { console.error(`Error displaying modal step ${stepIndex}:`, error); hideSuccessModal(); }
+             }
+
 
             function handleAnswerClick(event) {
-                 console.log("Answer click handled");
-                 try {
-                     const button = event.currentTarget;
-                     const stepIndex = parseInt(button.dataset.step, 10);
-                     const questionId = button.dataset.questionId;
-                     const answerValue = button.dataset.answer;
-                     if (isNaN(stepIndex)) { console.error("Invalid step index"); return; }
+                console.log("Answer click handled");
+                try {
+                    const button = event.currentTarget;
+                    const stepIndex = parseInt(button.dataset.step, 10);
+                    const questionId = button.dataset.questionId;
+                    const answerValue = button.dataset.answer;
+                    if (isNaN(stepIndex)) { console.error("Invalid step index"); return; }
 
-                     collectedAnswers[questionId] = answerValue;
-                     console.log('Collected Answers:', collectedAnswers);
+                    collectedAnswers[questionId] = answerValue;
+                    console.log('Collected Answers:', collectedAnswers);
 
-                     const currentStep = document.getElementById(`modal-step-${questionId}`);
-                     if (currentStep) {
-                         currentStep.querySelectorAll('button').forEach(btn => btn.disabled = true);
-                         button.style.borderColor = 'var(--primary-color)'; button.style.backgroundColor = 'rgba(224, 197, 143, 0.2)';
-                         // Optional: Fade out current step smoothly
-                         // currentStep.style.transition = 'opacity 0.3s ease-out';
-                         // currentStep.style.opacity = '0';
-                         // setTimeout(() => displayModalStep(stepIndex + 1), 300);
-                         // --- Simplified Transition: ---
-                          setTimeout(() => displayModalStep(stepIndex + 1), 300); // Just delay before showing next
-                     } else {
-                          console.warn(`Could not find step ${questionId} to disable buttons.`);
-                          setTimeout(() => displayModalStep(stepIndex + 1), 300); // Still try to advance
-                     }
-                 } catch (error) { console.error("Error handling answer click:", error); hideSuccessModal(); }
-             }
+                    const currentStep = document.getElementById(`modal-step-${questionId}`);
+                    if (currentStep) {
+                        currentStep.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                        button.style.borderColor = 'var(--primary-color)'; button.style.backgroundColor = 'rgba(224, 197, 143, 0.2)';
+
+                        // Fade out current step (Optional but smoother)
+                        const activeStep = modalStepsContainer.querySelector('.modal-step.active');
+                        if (activeStep) {
+                             activeStep.style.transition = 'opacity 0.3s ease-out';
+                             activeStep.style.opacity = '0';
+                             setTimeout(() => displayModalStep(stepIndex + 1), 300); // Display next after fade
+                         } else {
+                              // Fallback if fade target not found
+                              setTimeout(() => displayModalStep(stepIndex + 1), 300);
+                         }
+
+                    } else { console.warn(`Could not find step ${questionId} to disable buttons.`); setTimeout(() => displayModalStep(stepIndex + 1), 300); }
+                } catch (error) { console.error("Error handling answer click:", error); hideSuccessModal(); }
+            }
 
             // --- Modal Control Functions ---
-             function showQuestionnaireModal() {
-                 console.log("showQuestionnaireModal called");
-                 if (!successModalOverlay) { console.error("Modal overlay element not found!"); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); } return; }
-                 currentStepIndex = 0; collectedAnswers = {};
-                 if(modalStepsContainer) modalStepsContainer.innerHTML = ''; // Clear previous steps
-                 if(modalStepFinal) modalStepFinal.style.display = 'none'; modalStepFinal.classList.remove('active');
+            function showQuestionnaireModal() {
+                console.log("showQuestionnaireModal called");
+                if (!successModalOverlay) { console.error("Modal overlay element not found for show!"); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); } return; }
+                currentStepIndex = 0; collectedAnswers = {};
+                if(modalStepsContainer) modalStepsContainer.innerHTML = ''; // Clear previous steps
+                if(modalStepFinal) modalStepFinal.style.display = 'none'; modalStepFinal.classList.remove('active');
 
-                 successModalOverlay.classList.add('visible');
-                 console.log("Overlay class 'visible' added.");
-                 setTimeout(() => displayModalStep(currentStepIndex), 50); // Display first step after overlay visible
-             }
+                successModalOverlay.classList.add('visible'); // Make overlay visible
+                console.log("Overlay class 'visible' added.");
 
-             function hideSuccessModal() {
-                 console.log("hideSuccessModal called");
-                 if(!successModalOverlay) return;
-                 successModalOverlay.classList.remove('visible');
-                 setTimeout(() => {
-                    signInForm?.reset();
-                    if (submitButton) {
-                        submitButton.disabled = false; submitButton.classList.remove('loading');
-                        const textSpan = submitButton.querySelector('.button-text');
-                        if (textSpan) { textSpan.textContent = "Request My Compendium"; }
-                        else if (!submitButton.querySelector('.button-text')) { submitButton.innerHTML = '<span class="button-text">Request My Compendium</span><div class="spinner"></div>'; }
-                    }
-                    if(modalStepsContainer) modalStepsContainer.innerHTML = '';
-                    if(modalStepFinal) { modalStepFinal.style.display = 'none'; modalStepFinal.classList.remove('active'); }
-                 }, 400);
-             }
+                // Display First Step *after* overlay transition has likely started
+                setTimeout(() => displayModalStep(currentStepIndex), 50);
+            }
+
+            function hideSuccessModal() {
+                console.log("hideSuccessModal called");
+                if(!successModalOverlay) return;
+                successModalOverlay.classList.remove('visible');
+                setTimeout(() => {
+                   signInForm?.reset();
+                   if (submitButton) {
+                       submitButton.disabled = false; submitButton.classList.remove('loading');
+                       const textSpan = submitButton.querySelector('.button-text');
+                       if (textSpan) { textSpan.textContent = "Request My Compendium"; }
+                       else if (!submitButton.querySelector('.button-text')) { submitButton.innerHTML = '<span class="button-text">Request My Compendium</span><div class="spinner"></div>'; }
+                   }
+                   if(modalStepsContainer) modalStepsContainer.innerHTML = '';
+                   if(modalStepFinal) { modalStepFinal.style.display = 'none'; modalStepFinal.classList.remove('active'); }
+                }, 400); // Match overlay fade duration
+            }
 
             // --- Event Listeners for Modal ---
              if (modalCloseBtn) { modalCloseBtn.addEventListener('click', hideSuccessModal); }
              if (successModalOverlay) { successModalOverlay.addEventListener('click', (event) => { if (event.target === successModalOverlay) { hideSuccessModal(); } }); }
              document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && successModalOverlay?.classList.contains('visible')) { hideSuccessModal(); } });
-
 
             // --- Sign In Form Submission Logic ---
             if (signInForm && submitButton) {
