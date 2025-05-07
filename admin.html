@@ -1,259 +1,424 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-T-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Configuration</title>
     <style>
-        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
-        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1, h2 { color: #333; }
-        h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 30px; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex; /* For password prompt centering if needed */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .admin-layout {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        #sideNav {
+            width: 240px;
+            background-color: #2c3e50; /* Darker sidebar */
+            color: #ecf0f1;
+            padding: 20px 0;
+            height: 100%;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        #sideNav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #sideNav li a {
+            display: block;
+            color: #ecf0f1;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 15px;
+            border-left: 3px solid transparent;
+            transition: background-color 0.2s ease, border-left-color 0.2s ease;
+        }
+
+        #sideNav li a:hover {
+            background-color: #34495e;
+        }
+
+        #sideNav li a.active {
+            background-color: #1abc9c; /* Accent color for active */
+            color: #fff;
+            font-weight: 500;
+            border-left-color: #16a085; /* Slightly darker accent */
+        }
+
+        #contentPanels {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background-color: #f9fafb; /* Lighter content background */
+        }
+        
+        #contentPanels h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 24px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .content-panel {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-panel h2 { /* Replaces fieldset legend */
+            font-size: 20px;
+            color: #34495e;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        /* Form element styling */
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+            color: #555;
+        }
+
         input[type="text"],
         input[type="url"],
         input[type="email"],
         input[type="tel"],
         input[type="date"],
         textarea {
-            width: calc(100% - 22px);
-            padding: 10px;
+            width: 100%; /* Full width within its container */
+            padding: 12px;
             margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #d1d5db; /* Softer border */
+            border-radius: 6px;
             box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
-        textarea { min-height: 80px; resize: vertical; }
-        button {
-            background-color: #007bff;
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            border-color: #1abc9c;
+            box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+            outline: none;
+        }
+
+
+        textarea { min-height: 100px; resize: vertical; }
+
+        button[type="submit"] {
+            background-color: #1abc9c; /* Primary action color */
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 20px;
+            margin-top: 30px;
+            transition: background-color 0.2s ease;
         }
-        button:hover { background-color: #0056b3; }
-        .hidden { display: none; }
-        fieldset { border: 1px solid #ddd; padding: 15px; margin-top: 20px; border-radius: 4px; }
-        legend { font-weight: bold; font-size: 1.1em; padding: 0 5px; }
-        .form-group { margin-bottom: 15px; }
+
+        button[type="submit"]:hover {
+            background-color: #16a085; /* Darker shade on hover */
+        }
+
+        .hidden { display: none !important; } /* Ensure password protection works */
+        
+        .form-group { margin-bottom: 20px; }
+
         .bundle-item, .modal-question-group {
-            border: 1px dashed #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
+            border: 1px solid #e0e0e0; /* Softer border */
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
         }
+        .bundle-item h4, .modal-question-group h4 { /* Sub-section titles */
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
         .modal-option-group {
             padding-left: 20px;
-            border-left: 2px solid #eee;
-            margin-top: 5px;
+            margin-top: 10px;
+            border-left: 3px solid #1abc9c; /* Accent border */
+            padding-top: 5px;
+            padding-bottom: 5px;
         }
-        #message { margin-top: 15px; padding: 10px; border-radius: 4px; }
-        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        #message {
+            margin-top: 20px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .success { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .error { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        /* Nested fieldset for social media */
+        fieldset {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+        legend {
+            font-weight: 500;
+            font-size: 16px;
+            padding: 0 10px;
+            color: #2c3e50;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container hidden" id="formContainer">
-        <h1>Admin Configuration</h1>
-        <form id="configForm">
-            <!-- Property Details -->
-            <fieldset>
-                <legend>Property Details</legend>
-                <div class="form-group">
-                    <label for="streetAddress">Street Address:</label>
-                    <input type="text" id="streetAddress" name="streetAddress">
-                </div>
-                <div class="form-group">
-                    <label for="city">City:</label>
-                    <input type="text" id="city" name="city">
-                </div>
-                <div class="form-group">
-                    <label for="cityStateZip">City, State/Province Zip/Postal:</label>
-                    <input type="text" id="cityStateZip" name="cityStateZip">
-                </div>
-                <div class="form-group">
-                    <label for="heroSubtitle">Hero Subtitle:</label>
-                    <textarea id="heroSubtitle" name="heroSubtitle"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="homeType">Home Type:</label>
-                    <input type="text" id="homeType" name="homeType">
-                </div>
-                <div class="form-group">
-                    <label for="listingPrice">Listing Price:</label>
-                    <input type="text" id="listingPrice" name="listingPrice">
-                </div>
-                <div class="form-group">
-                    <label for="beds">Beds:</label>
-                    <input type="text" id="beds" name="beds">
-                </div>
-                <div class="form-group">
-                    <label for="baths">Baths:</label>
-                    <input type="text" id="baths" name="baths">
-                </div>
-                <div class="form-group">
-                    <label for="backgroundImageUrl">Background Image URL:</label>
-                    <input type="url" id="backgroundImageUrl" name="backgroundImageUrl">
-                </div>
-                <div class="form-group">
-                    <label for="brandedMediaLink">Branded Media Link (e.g., Brokerage Site):</label>
-                    <input type="url" id="brandedMediaLink" name="brandedMediaLink">
-                </div>
-                <div class="form-group">
-                    <label for="listingUrl">Listing URL:</label>
-                    <input type="url" id="listingUrl" name="listingUrl">
-                </div>
-                <div class="form-group">
-                    <label for="floorplanUrl">Floorplan URL:</label>
-                    <input type="url" id="floorplanUrl" name="floorplanUrl">
-                </div>
-                <div class="form-group">
-                    <label for="comparables">Comparables (URLs, one per line):</label>
-                    <textarea id="comparables" name="comparables"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="virtualTourUrl">Virtual Tour URL:</label>
-                    <input type="url" id="virtualTourUrl" name="virtualTourUrl">
-                </div>
-                <div class="form-group">
-                    <label for="openHouseDate">Open House Date:</label>
-                    <input type="date" id="openHouseDate" name="openHouseDate">
-                </div>
-                <div class="form-group">
-                    <label for="benefits">Benefits (one per line):</label>
-                    <textarea id="benefits" name="benefits"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="keyFeature">Key Feature:</label>
-                    <input type="text" id="keyFeature" name="keyFeature">
-                </div>
-                <div class="form-group">
-                    <label for="neighbourhood">Neighbourhood Description:</label>
-                    <textarea id="neighbourhood" name="neighbourhood"></textarea>
-                </div>
-            </fieldset>
-
-            <!-- Realtor Details -->
-            <fieldset>
-                <legend>Realtor Details</legend>
-                <div class="form-group">
-                    <label for="realtorFullName">Full Name:</label>
-                    <input type="text" id="realtorFullName" name="realtorFullName">
-                </div>
-                <div class="form-group">
-                    <label for="realtorFirstName">First Name (for display):</label>
-                    <input type="text" id="realtorFirstName" name="realtorFirstName">
-                </div>
-                <div class="form-group">
-                    <label for="realtorTitle">Title:</label>
-                    <input type="text" id="realtorTitle" name="realtorTitle">
-                </div>
-                <div class="form-group">
-                    <label for="realtorPhone">Phone:</label>
-                    <input type="tel" id="realtorPhone" name="realtorPhone">
-                </div>
-                <div class="form-group">
-                    <label for="realtorEmail">Email:</label>
-                    <input type="email" id="realtorEmail" name="realtorEmail">
-                </div>
-                <div class="form-group">
-                    <label for="realtorBio">Bio:</label>
-                    <textarea id="realtorBio" name="realtorBio"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="realtorPhotoUrl">Photo URL:</label>
-                    <input type="url" id="realtorPhotoUrl" name="realtorPhotoUrl">
-                </div>
-                <fieldset>
-                    <legend>Social Media</legend>
+    <div class="admin-layout hidden" id="adminLayout">
+        <nav id="sideNav">
+            <ul>
+                <li><a href="#" data-target="propertySection" class="active">Property Details</a></li>
+                <li><a href="#" data-target="realtorSection">Realtor Details</a></li>
+                <li><a href="#" data-target="brokerageSection">Brokerage Details</a></li>
+                <li><a href="#" data-target="bundleItemsSection">Open House Items</a></li>
+                <li><a href="#" data-target="metaSection">Meta/Site Info</a></li>
+                <li><a href="#" data-target="settingsSection">Settings</a></li>
+                <li><a href="#" data-target="modalQuestionsSection">Modal Questions</a></li>
+            </ul>
+        </nav>
+        <main id="contentPanels">
+            <h1>Admin Configuration</h1>
+            <form id="configForm">
+                <!-- Property Details -->
+                <div id="propertySection" class="content-panel active">
+                    <h2>Property Details</h2>
                     <div class="form-group">
-                        <label for="socialFacebook">Facebook URL:</label>
-                        <input type="url" id="socialFacebook" name="socialFacebook">
+                        <label for="streetAddress">Street Address:</label>
+                        <input type="text" id="streetAddress" name="streetAddress">
                     </div>
                     <div class="form-group">
-                        <label for="socialInstagram">Instagram URL:</label>
-                        <input type="url" id="socialInstagram" name="socialInstagram">
+                        <label for="city">City:</label>
+                        <input type="text" id="city" name="city">
                     </div>
                     <div class="form-group">
-                        <label for="socialWebsite">Website URL:</label>
-                        <input type="url" id="socialWebsite" name="socialWebsite">
+                        <label for="cityStateZip">City, State/Province Zip/Postal:</label>
+                        <input type="text" id="cityStateZip" name="cityStateZip">
                     </div>
-                </fieldset>
-            </fieldset>
+                    <div class="form-group">
+                        <label for="heroSubtitle">Hero Subtitle:</label>
+                        <textarea id="heroSubtitle" name="heroSubtitle"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="homeType">Home Type:</label>
+                        <input type="text" id="homeType" name="homeType">
+                    </div>
+                    <div class="form-group">
+                        <label for="listingPrice">Listing Price:</label>
+                        <input type="text" id="listingPrice" name="listingPrice">
+                    </div>
+                    <div class="form-group">
+                        <label for="beds">Beds:</label>
+                        <input type="text" id="beds" name="beds">
+                    </div>
+                    <div class="form-group">
+                        <label for="baths">Baths:</label>
+                        <input type="text" id="baths" name="baths">
+                    </div>
+                    <div class="form-group">
+                        <label for="backgroundImageUrl">Background Image URL:</label>
+                        <input type="url" id="backgroundImageUrl" name="backgroundImageUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="brandedMediaLink">Branded Media Link (e.g., Brokerage Site):</label>
+                        <input type="url" id="brandedMediaLink" name="brandedMediaLink">
+                    </div>
+                    <div class="form-group">
+                        <label for="listingUrl">Listing URL:</label>
+                        <input type="url" id="listingUrl" name="listingUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="floorplanUrl">Floorplan URL:</label>
+                        <input type="url" id="floorplanUrl" name="floorplanUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="comparables">Comparables (URLs, one per line):</label>
+                        <textarea id="comparables" name="comparables"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="virtualTourUrl">Virtual Tour URL:</label>
+                        <input type="url" id="virtualTourUrl" name="virtualTourUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="openHouseDate">Open House Date:</label>
+                        <input type="date" id="openHouseDate" name="openHouseDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="benefits">Benefits (one per line):</label>
+                        <textarea id="benefits" name="benefits"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="keyFeature">Key Feature:</label>
+                        <input type="text" id="keyFeature" name="keyFeature">
+                    </div>
+                    <div class="form-group">
+                        <label for="neighbourhood">Neighbourhood Description:</label>
+                        <textarea id="neighbourhood" name="neighbourhood"></textarea>
+                    </div>
+                </div>
 
-            <!-- Brokerage Details -->
-            <fieldset>
-                <legend>Brokerage Details</legend>
-                <div class="form-group">
-                    <label for="brokerageName">Name:</label>
-                    <input type="text" id="brokerageName" name="brokerageName">
+                <!-- Realtor Details -->
+                <div id="realtorSection" class="content-panel">
+                    <h2>Realtor Details</h2>
+                    <div class="form-group">
+                        <label for="realtorFullName">Full Name:</label>
+                        <input type="text" id="realtorFullName" name="realtorFullName">
+                    </div>
+                    <div class="form-group">
+                        <label for="realtorFirstName">First Name (for display):</label>
+                        <input type="text" id="realtorFirstName" name="realtorFirstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="realtorTitle">Title:</label>
+                        <input type="text" id="realtorTitle" name="realtorTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="realtorPhone">Phone:</label>
+                        <input type="tel" id="realtorPhone" name="realtorPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="realtorEmail">Email:</label>
+                        <input type="email" id="realtorEmail" name="realtorEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="realtorBio">Bio:</label>
+                        <textarea id="realtorBio" name="realtorBio"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="realtorPhotoUrl">Photo URL:</label>
+                        <input type="url" id="realtorPhotoUrl" name="realtorPhotoUrl">
+                    </div>
+                    <fieldset>
+                        <legend>Social Media</legend>
+                        <div class="form-group">
+                            <label for="socialFacebook">Facebook URL:</label>
+                            <input type="url" id="socialFacebook" name="socialFacebook">
+                        </div>
+                        <div class="form-group">
+                            <label for="socialInstagram">Instagram URL:</label>
+                            <input type="url" id="socialInstagram" name="socialInstagram">
+                        </div>
+                        <div class="form-group">
+                            <label for="socialWebsite">Website URL:</label>
+                            <input type="url" id="socialWebsite" name="socialWebsite">
+                        </div>
+                    </fieldset>
                 </div>
-                <div class="form-group">
-                    <label for="brokerageLogoUrl">Logo URL:</label>
-                    <input type="url" id="brokerageLogoUrl" name="brokerageLogoUrl">
-                </div>
-                <div class="form-group">
-                    <label for="brokerageAddress">Address:</label>
-                    <input type="text" id="brokerageAddress" name="brokerageAddress">
-                </div>
-            </fieldset>
 
-            <!-- Open House Bundle Items -->
-            <fieldset>
-                <legend>Open House Bundle Items (Max 8)</legend>
-                <div id="bundleItemsContainer">
-                    <!-- JavaScript will populate this -->
+                <!-- Brokerage Details -->
+                <div id="brokerageSection" class="content-panel">
+                    <h2>Brokerage Details</h2>
+                    <div class="form-group">
+                        <label for="brokerageName">Name:</label>
+                        <input type="text" id="brokerageName" name="brokerageName">
+                    </div>
+                    <div class="form-group">
+                        <label for="brokerageLogoUrl">Logo URL:</label>
+                        <input type="url" id="brokerageLogoUrl" name="brokerageLogoUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="brokerageAddress">Address:</label>
+                        <input type="text" id="brokerageAddress" name="brokerageAddress">
+                    </div>
                 </div>
-            </fieldset>
 
-            <!-- Meta Information -->
-            <fieldset>
-                <legend>Meta/Site Information</legend>
-                <div class="form-group">
-                    <label for="metaPageTitlePrefix">Page Title Prefix:</label>
-                    <input type="text" id="metaPageTitlePrefix" name="metaPageTitlePrefix">
+                <!-- Open House Bundle Items -->
+                <div id="bundleItemsSection" class="content-panel">
+                    <h2>Open House Bundle Items (Max 8)</h2>
+                    <div id="bundleItemsContainer">
+                        <!-- JavaScript will populate this -->
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="metaNavBrandLogoText">Navigation Brand/Logo Text:</label>
-                    <input type="text" id="metaNavBrandLogoText" name="metaNavBrandLogoText">
-                </div>
-                <div class="form-group">
-                    <label for="metaPrivacyPolicyLink">Privacy Policy Link:</label>
-                    <input type="url" id="metaPrivacyPolicyLink" name="metaPrivacyPolicyLink">
-                </div>
-                <div class="form-group">
-                    <label for="metaTermsLink">Terms & Conditions Link:</label>
-                    <input type="url" id="metaTermsLink" name="metaTermsLink">
-                </div>
-            </fieldset>
 
-            <!-- Settings -->
-            <fieldset>
-                <legend>Settings</legend>
-                <div class="form-group">
-                    <label for="settingsWebhookUrl">Webhook URL (read-only):</label>
-                    <input type="url" id="settingsWebhookUrl" name="settingsWebhookUrl" readonly>
+                <!-- Meta Information -->
+                <div id="metaSection" class="content-panel">
+                    <h2>Meta/Site Information</h2>
+                    <div class="form-group">
+                        <label for="metaPageTitlePrefix">Page Title Prefix:</label>
+                        <input type="text" id="metaPageTitlePrefix" name="metaPageTitlePrefix">
+                    </div>
+                    <div class="form-group">
+                        <label for="metaNavBrandLogoText">Navigation Brand/Logo Text:</label>
+                        <input type="text" id="metaNavBrandLogoText" name="metaNavBrandLogoText">
+                    </div>
+                    <div class="form-group">
+                        <label for="metaPrivacyPolicyLink">Privacy Policy Link:</label>
+                        <input type="url" id="metaPrivacyPolicyLink" name="metaPrivacyPolicyLink">
+                    </div>
+                    <div class="form-group">
+                        <label for="metaTermsLink">Terms & Conditions Link:</label>
+                        <input type="url" id="metaTermsLink" name="metaTermsLink">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="settingsConfettiColors">Confetti Colors (hex codes, one per line):</label>
-                    <textarea id="settingsConfettiColors" name="settingsConfettiColors"></textarea>
-                </div>
-            </fieldset>
 
-            <!-- Modal Questions -->
-            <fieldset>
-                <legend>Modal Questions (First 2 Questions, Max 4 Options Each)</legend>
-                <div id="modalQuestionsContainer">
-                    <!-- JavaScript will populate this -->
+                <!-- Settings -->
+                <div id="settingsSection" class="content-panel">
+                    <h2>Settings</h2>
+                    <div class="form-group">
+                        <label for="settingsWebhookUrl">Webhook URL (read-only):</label>
+                        <input type="url" id="settingsWebhookUrl" name="settingsWebhookUrl" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="settingsConfettiColors">Confetti Colors (hex codes, one per line):</label>
+                        <textarea id="settingsConfettiColors" name="settingsConfettiColors"></textarea>
+                    </div>
                 </div>
-            </fieldset>
 
-            <button type="submit">Save Configuration</button>
-            <div id="message"></div>
-        </form>
+                <!-- Modal Questions -->
+                <div id="modalQuestionsSection" class="content-panel">
+                    <h2>Modal Questions (First 2 Questions, Max 4 Options Each)</h2>
+                    <div id="modalQuestionsContainer">
+                        <!-- JavaScript will populate this -->
+                    </div>
+                </div>
+
+                <button type="submit">Save Configuration</button>
+                <div id="message"></div>
+            </form>
+        </main>
     </div>
 
     <script>
@@ -316,7 +481,7 @@
               { icon: "fas fa-car", text: "3-Car Garage, 10 ft main ceilings, 9 ft 2nd/basement" },
               { icon: "fas fa-camera-retro", text: "High-Resolution Photo Album and Virtual Tour", link: "https://www.realtor.ca/l/bQDuo/ka" },
               { icon: "fas fa-film", text: "Cinematic Property Tour Video", link: "https://www.realtor.ca/l/bQDuo/ka" },
-              { icon: "fas fa-map-location-dot", text: "Kleinburg Neighbourhood Insights & Recent Sales", comparables: [ // This nested comparables will not be editable in the simple form
+              { icon: "fas fa-map-location-dot", text: "Kleinburg Neighbourhood Insights & Recent Sales", comparables: [
                 "https://www.realtor.ca/real-estate/27976844/71-nave-street-vaughan-kleinburg-kleinburg",
                 "https://www.realtor.ca/real-estate/28231738/49-appleyard-avenue-vaughan-kleinburg-kleinburg",
                 "https://www.realtor.ca/real-estate/27785830/52-rolling-green-court-vaughan-kleinburg-kleinburg"
@@ -348,7 +513,7 @@
           ]
         };
 
-        const formContainer = document.getElementById('formContainer');
+        const adminLayout = document.getElementById('adminLayout'); // Changed from formContainer
         const configForm = document.getElementById('configForm');
         const messageDiv = document.getElementById('message');
 
@@ -422,12 +587,18 @@
                 div.className = 'bundle-item';
                 div.innerHTML = `
                     <h4>Bundle Item ${i + 1}</h4>
-                    <label for="bundleIcon${i}">Icon (e.g., fas fa-star):</label>
-                    <input type="text" id="bundleIcon${i}" value="${item.icon || ''}">
-                    <label for="bundleText${i}">Text:</label>
-                    <input type="text" id="bundleText${i}" value="${item.text || ''}">
-                    <label for="bundleLink${i}">Link (optional):</label>
-                    <input type="url" id="bundleLink${i}" value="${item.link || ''}">
+                    <div class="form-group">
+                        <label for="bundleIcon${i}">Icon (e.g., fas fa-star):</label>
+                        <input type="text" id="bundleIcon${i}" value="${item.icon || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="bundleText${i}">Text:</label>
+                        <input type="text" id="bundleText${i}" value="${item.text || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="bundleLink${i}">Link (optional):</label>
+                        <input type="url" id="bundleLink${i}" value="${item.link || ''}">
+                    </div>
                 `;
                 bundleItemsContainer.appendChild(div);
             }
@@ -437,16 +608,11 @@
             modalQuestionsContainer.innerHTML = ''; // Clear previous
             for (let i = 0; i < 2; i++) { // Max 2 questions
                 const question = c.modalQuestions[i];
-                if (!question && i === 0 && c.modalQuestions.length > 0) { // Handle if first question exists but second doesn't
-                     // This case should not happen if c.modalQuestions[i] is used, but as a safeguard.
-                }
-
-
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'modal-question-group';
                 let optionsHTML = '';
                 for (let j = 0; j < 4; j++) { // Max 4 options
-                    const option = question && question.options[j] ? question.options[j] : {};
+                    const option = question && question.options && question.options[j] ? question.options[j] : {};
                     optionsHTML += `
                         <div class="modal-option-group">
                             <label for="modalQ${i}OptionText${j}">Option ${j + 1} Text:</label>
@@ -456,16 +622,16 @@
                 }
                 questionDiv.innerHTML = `
                     <h4>Modal Question ${i + 1}</h4>
-                    <label for="modalQ${i}Text">Question Text:</label>
-                    <input type="text" id="modalQ${i}Text" value="${question ? question.questionText : ''}">
+                    <div class="form-group">
+                        <label for="modalQ${i}Text">Question Text:</label>
+                        <input type="text" id="modalQ${i}Text" value="${question ? question.questionText : ''}">
+                    </div>
                     ${optionsHTML}
                 `;
-                if (question || i < c.modalQuestions.length) { // Only add if question exists or we are within bounds of original questions
+                // Only add if question exists in initialConfig or it's the first placeholder
+                if (question || (i === 0 && c.modalQuestions.length === 0) || (i === 1 && c.modalQuestions.length <= 1) ) {
                     modalQuestionsContainer.appendChild(questionDiv);
-                } else if (i === 0 && c.modalQuestions.length === 0) { // Add a blank first question if none exist
-                     modalQuestionsContainer.appendChild(questionDiv);
                 }
-
             }
         }
 
@@ -479,9 +645,8 @@
             messageDiv.textContent = '';
             messageDiv.className = '';
 
-            const updatedConfig = JSON.parse(JSON.stringify(initialConfig)); // Deep clone to preserve structure and original values
+            const updatedConfig = JSON.parse(JSON.stringify(initialConfig));
 
-            // Property
             updatedConfig.property.streetAddress = getVal('streetAddress');
             updatedConfig.property.city = getVal('city');
             updatedConfig.property.cityStateZip = getVal('cityStateZip');
@@ -501,7 +666,6 @@
             updatedConfig.property.keyFeature = getVal('keyFeature');
             updatedConfig.property.neighbourhood = getVal('neighbourhood');
 
-            // Realtor
             updatedConfig.realtor.fullName = getVal('realtorFullName');
             updatedConfig.realtor.firstName = getVal('realtorFirstName');
             updatedConfig.realtor.title = getVal('realtorTitle');
@@ -513,31 +677,25 @@
             updatedConfig.realtor.social.instagram = getVal('socialInstagram');
             updatedConfig.realtor.social.website = getVal('socialWebsite');
 
-            // Brokerage
             updatedConfig.brokerage.name = getVal('brokerageName');
             updatedConfig.brokerage.logoUrl = getVal('brokerageLogoUrl');
             updatedConfig.brokerage.address = getVal('brokerageAddress');
 
-            // Meta
             updatedConfig.meta.pageTitlePrefix = getVal('metaPageTitlePrefix');
             updatedConfig.meta.navBrandLogoText = getVal('metaNavBrandLogoText');
             updatedConfig.meta.privacyPolicyLink = getVal('metaPrivacyPolicyLink');
             updatedConfig.meta.termsLink = getVal('metaTermsLink');
 
-            // Settings
-            // webhookUrl is readonly, confettiColors are collected
             updatedConfig.settings.confettiColors = arrayFromTextarea('settingsConfettiColors');
 
-            // Open House Bundle Items
             updatedConfig.openHouse.bundleItems = [];
             for (let i = 0; i < 8; i++) {
                 const icon = getVal(`bundleIcon${i}`);
                 const text = getVal(`bundleText${i}`);
                 const link = getVal(`bundleLink${i}`);
-                if (icon || text || link) { // Only add if at least one field has a value
+                if (icon || text || link) {
                     const newItem = { icon, text };
                     if (link) newItem.link = link;
-                    // Preserve original comparables if they existed and we are within original item bounds
                     if (initialConfig.openHouse.bundleItems[i] && initialConfig.openHouse.bundleItems[i].comparables) {
                         newItem.comparables = initialConfig.openHouse.bundleItems[i].comparables;
                     }
@@ -545,41 +703,29 @@
                 }
             }
 
-            // Modal Questions
+            updatedConfig.modalQuestions = []; // Rebuild from scratch to handle additions/removals correctly
             for (let i = 0; i < 2; i++) {
-                if (updatedConfig.modalQuestions[i]) { // Only update if the question exists in the original config
-                    updatedConfig.modalQuestions[i].questionText = getVal(`modalQ${i}Text`);
-                    for (let j = 0; j < 4; j++) {
-                        if (updatedConfig.modalQuestions[i].options[j]) { // Only update if the option exists
-                            updatedConfig.modalQuestions[i].options[j].text = getVal(`modalQ${i}OptionText${j}`);
-                        } else if (getVal(`modalQ${i}OptionText${j}`).trim() !== '') { // Add new option if text is provided
-                             if (!updatedConfig.modalQuestions[i].options) updatedConfig.modalQuestions[i].options = [];
-                             // Create a placeholder value or decide how to handle new option values
-                             updatedConfig.modalQuestions[i].options[j] = { value: `new_option_${i}_${j}`, text: getVal(`modalQ${i}OptionText${j}`) };
-                        }
-                    }
-                     // Remove empty options that might have been cleared
-                    updatedConfig.modalQuestions[i].options = updatedConfig.modalQuestions[i].options.filter(opt => opt && opt.text && opt.text.trim() !== '');
-
-                } else if (getVal(`modalQ${i}Text`).trim() !== '') { // Potentially add a new question if text is provided for a slot
+                const questionText = getVal(`modalQ${i}Text`);
+                if (questionText.trim() !== '') {
                     const newQuestion = {
-                        id: `new_question_${i}`, // Generate a new ID
-                        questionText: getVal(`modalQ${i}Text`),
+                        id: initialConfig.modalQuestions[i] ? initialConfig.modalQuestions[i].id : `new_question_${i}`,
+                        questionText: questionText,
                         options: []
                     };
                     for (let j = 0; j < 4; j++) {
                         const optionText = getVal(`modalQ${i}OptionText${j}`);
                         if (optionText.trim() !== '') {
-                            newQuestion.options.push({ value: `new_option_${i}_${j}`, text: optionText });
+                            newQuestion.options.push({
+                                value: initialConfig.modalQuestions[i] && initialConfig.modalQuestions[i].options[j] ? initialConfig.modalQuestions[i].options[j].value : `new_option_${i}_${j}`,
+                                text: optionText
+                            });
                         }
                     }
-                    if (newQuestion.options.length > 0) {
-                        updatedConfig.modalQuestions.push(newQuestion);
+                    if (newQuestion.options.length > 0 || questionText.trim() !== '') { // Add if question has text or options
+                         updatedConfig.modalQuestions.push(newQuestion);
                     }
                 }
             }
-             // Filter out any completely empty questions that might have resulted from clearing fields
-            updatedConfig.modalQuestions = updatedConfig.modalQuestions.filter(q => q && q.questionText && q.questionText.trim() !== '');
 
 
             console.log("Submitting updated config:", updatedConfig);
@@ -587,18 +733,14 @@
             try {
                 const response = await fetch(updatedConfig.settings.webhookUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json', },
                     body: JSON.stringify(updatedConfig),
                 });
 
                 if (response.ok) {
                     messageDiv.textContent = 'Configuration saved successfully!';
                     messageDiv.className = 'success';
-                    // Optionally, re-populate form with potentially modified initialConfig if webhook returns it
-                    // For now, we assume the current state is the new "initial"
-                    Object.assign(initialConfig, JSON.parse(JSON.stringify(updatedConfig))); // Update in-memory initialConfig
+                    Object.assign(initialConfig, JSON.parse(JSON.stringify(updatedConfig)));
                 } else {
                     const errorData = await response.text();
                     messageDiv.textContent = `Error saving configuration: ${response.status} ${errorData}`;
@@ -610,16 +752,45 @@
             }
         }
 
+        function initSideNav() {
+            const navLinks = document.querySelectorAll('#sideNav a');
+            const contentPanels = document.querySelectorAll('.content-panel');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    const targetId = link.getAttribute('data-target');
+                    contentPanels.forEach(panel => {
+                        if (panel.id === targetId) {
+                            panel.classList.add('active');
+                        } else {
+                            panel.classList.remove('active');
+                        }
+                    });
+                });
+            });
+            // Ensure the first tab is active on load
+            if (navLinks.length > 0) {
+                navLinks[0].click();
+            }
+        }
 
         function init() {
             const password = prompt("Enter password to access admin page:", "");
             if (password === "123456") {
-                formContainer.classList.remove('hidden');
+                document.body.style.justifyContent = 'flex-start'; // Reset body alignment
+                document.body.style.alignItems = 'flex-start';
+                adminLayout.classList.remove('hidden');
                 populateForm();
+                initSideNav(); // Initialize side navigation
                 configForm.addEventListener('submit', handleFormSubmit);
             } else {
                 alert("Incorrect password. Access denied.");
-                document.body.innerHTML = '<p style="color:red; text-align:center; margin-top: 50px;">Access Denied</p>';
+                document.body.innerHTML = '<p style="color:red; text-align:center; margin-top: 50px; font-size:18px; width:100%;">Access Denied</p>';
             }
         }
 
