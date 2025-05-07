@@ -422,7 +422,7 @@
     </div>
 
     <script>
-        const initialConfig = {
+        const config = {
           property: {
             streetAddress: "11 Glen Abbey Tr",
             city: "Vaughan",
@@ -530,7 +530,7 @@
         }
 
         function populateForm() {
-            const c = initialConfig;
+            const c = config;
             // Property
             setVal('streetAddress', c.property.streetAddress);
             setVal('city', c.property.city);
@@ -645,7 +645,7 @@
             messageDiv.textContent = '';
             messageDiv.className = '';
 
-            const updatedConfig = JSON.parse(JSON.stringify(initialConfig));
+            const updatedConfig = JSON.parse(JSON.stringify(config));
 
             updatedConfig.property.streetAddress = getVal('streetAddress');
             updatedConfig.property.city = getVal('city');
@@ -696,8 +696,8 @@
                 if (icon || text || link) {
                     const newItem = { icon, text };
                     if (link) newItem.link = link;
-                    if (initialConfig.openHouse.bundleItems[i] && initialConfig.openHouse.bundleItems[i].comparables) {
-                        newItem.comparables = initialConfig.openHouse.bundleItems[i].comparables;
+                    if (config.openHouse.bundleItems[i] && config.openHouse.bundleItems[i].comparables) {
+                        newItem.comparables = config.openHouse.bundleItems[i].comparables;
                     }
                     updatedConfig.openHouse.bundleItems.push(newItem);
                 }
@@ -708,7 +708,7 @@
                 const questionText = getVal(`modalQ${i}Text`);
                 if (questionText.trim() !== '') {
                     const newQuestion = {
-                        id: initialConfig.modalQuestions[i] ? initialConfig.modalQuestions[i].id : `new_question_${i}`,
+                        id: config.modalQuestions[i] ? config.modalQuestions[i].id : `new_question_${i}`,
                         questionText: questionText,
                         options: []
                     };
@@ -716,7 +716,7 @@
                         const optionText = getVal(`modalQ${i}OptionText${j}`);
                         if (optionText.trim() !== '') {
                             newQuestion.options.push({
-                                value: initialConfig.modalQuestions[i] && initialConfig.modalQuestions[i].options[j] ? initialConfig.modalQuestions[i].options[j].value : `new_option_${i}_${j}`,
+                                value: config.modalQuestions[i] && config.modalQuestions[i].options[j] ? config.modalQuestions[i].options[j].value : `new_option_${i}_${j}`,
                                 text: optionText
                             });
                         }
@@ -740,7 +740,7 @@
                 if (response.ok) {
                     messageDiv.textContent = 'Configuration saved successfully!';
                     messageDiv.className = 'success';
-                    Object.assign(initialConfig, JSON.parse(JSON.stringify(updatedConfig)));
+                    Object.assign(config, JSON.parse(JSON.stringify(updatedConfig)));
                 } else {
                     const errorData = await response.text();
                     messageDiv.textContent = `Error saving configuration: ${response.status} ${errorData}`;
