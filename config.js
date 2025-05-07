@@ -42,7 +42,7 @@ const config = {
     privacyPolicyLink: "https://istreetrealty.ca/privacy-policy/"
   },
   settings: {
-    webhookUrl: "https://n8n.salesgenius.co/webhook/openhouseupdate",
+    webhookUrl: "https://n8n.salesgenius.co/webhook/openhouse",
     confettiColors: ['#6187a7', '#f0e9d6', '#ffffff', '#83a363', '#d9ac68']
   },
   modalQuestions: [
@@ -55,5 +55,12 @@ const config = {
         { value: "gathering_info", text: "Just gathering information at this stage." }
       ]
     }
-  ]
+  ],
+  deploymentInfo: {
+    repoName: "openhouse",
+    repoUrl: "https://github.com/arslvn93/openhouse",
+    tag: "Open House 168 Abbey",
+    netlifyUrl: "https://openhousetester.netlify.app/",
+    netlifyId: "547dc1ef-2c83-4d08-815f-344d40fc3ca2"
+  }
 };

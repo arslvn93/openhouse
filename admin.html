@@ -66,6 +66,8 @@
             padding: 30px;
             overflow-y: auto;
             background-color: #f9fafb; /* Lighter content background */
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack children vertically */
         }
 
         #contentPanels h1 {
@@ -75,7 +77,21 @@
             font-size: 24px;
             border-bottom: 1px solid #e0e0e0;
             padding-bottom: 15px;
+            flex-shrink: 0; /* Prevent header from shrinking */
         }
+
+        #configForm {
+             flex-grow: 1; /* Allow form to take remaining space */
+             display: flex;
+             flex-direction: column;
+        }
+
+        .content-panel-container {
+             flex-grow: 1; /* Allow panels container to grow */
+             overflow-y: auto; /* Add scroll to panels if needed, separate from main area */
+             margin-bottom: 20px; /* Space before save area */
+        }
+
 
         .content-panel {
             display: none;
@@ -139,6 +155,13 @@
 
         textarea { min-height: 100px; resize: vertical; }
 
+        .save-area {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0; /* Prevent save area from shrinking */
+        }
+
         button[type="submit"] {
             background-color: #1abc9c; /* Primary action color */
             color: white;
@@ -147,7 +170,7 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 30px;
+            /* margin-top removed, handled by save-area */
             transition: background-color 0.2s ease;
         }
 
@@ -218,148 +241,178 @@
                 <li><a href="#" data-target="metaSection">Meta/Site Info</a></li>
                 <li><a href="#" data-target="settingsSection">Settings</a></li>
                 <li><a href="#" data-target="modalQuestionsSection">Modal Questions</a></li>
+                <li><a href="#" data-target="deploymentSection">Deployment Info</a></li>
             </ul>
         </nav>
         <main id="contentPanels">
             <h1>Admin Configuration</h1>
             <form id="configForm">
-                <!-- Property Details -->
-                <div id="propertySection" class="content-panel active">
-                    <h2>Property Details</h2>
-                    <div class="form-group">
-                        <label for="streetAddress">Street Address:</label>
-                        <input type="text" id="streetAddress" name="streetAddress">
-                    </div>
-                    <div class="form-group">
-                        <label for="city">City:</label>
-                        <input type="text" id="city" name="city">
-                    </div>
-                    <div class="form-group">
-                        <label for="cityStateZip">City, State/Province Zip/Postal:</label>
-                        <input type="text" id="cityStateZip" name="cityStateZip">
-                    </div>
-                    <div class="form-group">
-                        <label for="heroSubtitle">Hero Subtitle:</label>
-                        <textarea id="heroSubtitle" name="heroSubtitle"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="backgroundImageUrl">Background Image URL:</label>
-                        <input type="url" id="backgroundImageUrl" name="backgroundImageUrl">
-                    </div>
-                    <!-- Removed unused property fields -->
-                </div>
-
-                <!-- Realtor Details -->
-                <div id="realtorSection" class="content-panel">
-                    <h2>Realtor Details</h2>
-                    <div class="form-group">
-                        <label for="realtorFullName">Full Name:</label>
-                        <input type="text" id="realtorFullName" name="realtorFullName">
-                    </div>
-                    <!-- Removed realtorFirstName -->
-                    <div class="form-group">
-                        <label for="realtorTitle">Title:</label>
-                        <input type="text" id="realtorTitle" name="realtorTitle">
-                    </div>
-                    <div class="form-group">
-                        <label for="realtorPhone">Phone:</label>
-                        <input type="tel" id="realtorPhone" name="realtorPhone">
-                    </div>
-                    <div class="form-group">
-                        <label for="realtorEmail">Email:</label>
-                        <input type="email" id="realtorEmail" name="realtorEmail">
-                    </div>
-                    <div class="form-group">
-                        <label for="realtorBio">Bio:</label>
-                        <textarea id="realtorBio" name="realtorBio"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="realtorPhotoUrl">Photo URL:</label>
-                        <input type="url" id="realtorPhotoUrl" name="realtorPhotoUrl">
-                    </div>
-                    <fieldset>
-                        <legend>Social Media</legend>
+                <div class="content-panel-container"> <!-- Wrapper for scrollable panels -->
+                    <!-- Property Details -->
+                    <div id="propertySection" class="content-panel active">
+                        <h2>Property Details</h2>
                         <div class="form-group">
-                            <label for="socialFacebook">Facebook URL:</label>
-                            <input type="url" id="socialFacebook" name="socialFacebook">
+                            <label for="streetAddress">Street Address:</label>
+                            <input type="text" id="streetAddress" name="streetAddress">
                         </div>
                         <div class="form-group">
-                            <label for="socialInstagram">Instagram URL:</label>
-                            <input type="url" id="socialInstagram" name="socialInstagram">
+                            <label for="city">City:</label>
+                            <input type="text" id="city" name="city">
                         </div>
                         <div class="form-group">
-                            <label for="socialWebsite">Website URL:</label>
-                            <input type="url" id="socialWebsite" name="socialWebsite">
+                            <label for="cityStateZip">City, State/Province Zip/Postal:</label>
+                            <input type="text" id="cityStateZip" name="cityStateZip">
                         </div>
-                    </fieldset>
-                </div>
+                        <div class="form-group">
+                            <label for="heroSubtitle">Hero Subtitle:</label>
+                            <textarea id="heroSubtitle" name="heroSubtitle"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="backgroundImageUrl">Background Image URL:</label>
+                            <input type="url" id="backgroundImageUrl" name="backgroundImageUrl">
+                        </div>
+                        <!-- Removed unused property fields -->
+                    </div>
 
-                <!-- Brokerage Details -->
-                <div id="brokerageSection" class="content-panel">
-                    <h2>Brokerage Details</h2>
-                    <div class="form-group">
-                        <label for="brokerageName">Name:</label>
-                        <input type="text" id="brokerageName" name="brokerageName">
+                    <!-- Realtor Details -->
+                    <div id="realtorSection" class="content-panel">
+                        <h2>Realtor Details</h2>
+                        <div class="form-group">
+                            <label for="realtorFullName">Full Name:</label>
+                            <input type="text" id="realtorFullName" name="realtorFullName">
+                        </div>
+                        <!-- Removed realtorFirstName -->
+                        <div class="form-group">
+                            <label for="realtorTitle">Title:</label>
+                            <input type="text" id="realtorTitle" name="realtorTitle">
+                        </div>
+                        <div class="form-group">
+                            <label for="realtorPhone">Phone:</label>
+                            <input type="tel" id="realtorPhone" name="realtorPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="realtorEmail">Email:</label>
+                            <input type="email" id="realtorEmail" name="realtorEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="realtorBio">Bio:</label>
+                            <textarea id="realtorBio" name="realtorBio"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="realtorPhotoUrl">Photo URL:</label>
+                            <input type="url" id="realtorPhotoUrl" name="realtorPhotoUrl">
+                        </div>
+                        <fieldset>
+                            <legend>Social Media</legend>
+                            <div class="form-group">
+                                <label for="socialFacebook">Facebook URL:</label>
+                                <input type="url" id="socialFacebook" name="socialFacebook">
+                            </div>
+                            <div class="form-group">
+                                <label for="socialInstagram">Instagram URL:</label>
+                                <input type="url" id="socialInstagram" name="socialInstagram">
+                            </div>
+                            <div class="form-group">
+                                <label for="socialWebsite">Website URL:</label>
+                                <input type="url" id="socialWebsite" name="socialWebsite">
+                            </div>
+                        </fieldset>
                     </div>
-                    <div class="form-group">
-                        <label for="brokerageLogoUrl">Logo URL:</label>
-                        <input type="url" id="brokerageLogoUrl" name="brokerageLogoUrl">
-                    </div>
-                    <div class="form-group">
-                        <label for="brokerageAddress">Address:</label>
-                        <input type="text" id="brokerageAddress" name="brokerageAddress">
-                    </div>
-                </div>
 
-                <!-- Open House Bundle Items -->
-                <div id="bundleItemsSection" class="content-panel">
-                    <h2>Open House Bundle Items (Max 8)</h2>
-                    <div id="bundleItemsContainer">
-                        <!-- JavaScript will populate this -->
+                    <!-- Brokerage Details -->
+                    <div id="brokerageSection" class="content-panel">
+                        <h2>Brokerage Details</h2>
+                        <div class="form-group">
+                            <label for="brokerageName">Name:</label>
+                            <input type="text" id="brokerageName" name="brokerageName">
+                        </div>
+                        <div class="form-group">
+                            <label for="brokerageLogoUrl">Logo URL:</label>
+                            <input type="url" id="brokerageLogoUrl" name="brokerageLogoUrl">
+                        </div>
+                        <div class="form-group">
+                            <label for="brokerageAddress">Address:</label>
+                            <input type="text" id="brokerageAddress" name="brokerageAddress">
+                        </div>
                     </div>
-                </div>
 
-                <!-- Meta Information -->
-                <div id="metaSection" class="content-panel">
-                    <h2>Meta/Site Information</h2>
-                    <div class="form-group">
-                        <label for="metaPageTitlePrefix">Page Title Prefix:</label>
-                        <input type="text" id="metaPageTitlePrefix" name="metaPageTitlePrefix">
+                    <!-- Open House Bundle Items -->
+                    <div id="bundleItemsSection" class="content-panel">
+                        <h2>Open House Bundle Items (Max 8)</h2>
+                        <div id="bundleItemsContainer">
+                            <!-- JavaScript will populate this -->
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="metaNavBrandLogoText">Navigation Brand/Logo Text:</label>
-                        <input type="text" id="metaNavBrandLogoText" name="metaNavBrandLogoText">
-                    </div>
-                    <div class="form-group">
-                        <label for="metaPrivacyPolicyLink">Privacy Policy Link:</label>
-                        <input type="url" id="metaPrivacyPolicyLink" name="metaPrivacyPolicyLink">
-                    </div>
-                    <!-- Removed metaTermsLink -->
-                </div>
 
-                <!-- Settings -->
-                <div id="settingsSection" class="content-panel">
-                    <h2>Settings</h2>
-                    <div class="form-group">
-                        <label for="settingsWebhookUrl">Webhook URL (read-only):</label>
-                        <input type="url" id="settingsWebhookUrl" name="settingsWebhookUrl" readonly>
+                    <!-- Meta Information -->
+                    <div id="metaSection" class="content-panel">
+                        <h2>Meta/Site Information</h2>
+                        <div class="form-group">
+                            <label for="metaPageTitlePrefix">Page Title Prefix:</label>
+                            <input type="text" id="metaPageTitlePrefix" name="metaPageTitlePrefix">
+                        </div>
+                        <div class="form-group">
+                            <label for="metaNavBrandLogoText">Navigation Brand/Logo Text:</label>
+                            <input type="text" id="metaNavBrandLogoText" name="metaNavBrandLogoText">
+                        </div>
+                        <div class="form-group">
+                            <label for="metaPrivacyPolicyLink">Privacy Policy Link:</label>
+                            <input type="url" id="metaPrivacyPolicyLink" name="metaPrivacyPolicyLink">
+                        </div>
+                        <!-- Removed metaTermsLink -->
                     </div>
-                    <div class="form-group">
-                        <label for="settingsConfettiColors">Confetti Colors (hex codes, one per line):</label>
-                        <textarea id="settingsConfettiColors" name="settingsConfettiColors"></textarea>
-                    </div>
-                </div>
 
-                <!-- Modal Questions -->
-                <div id="modalQuestionsSection" class="content-panel">
-                    <h2>Modal Questions (First 2 Questions, Max 4 Options Each)</h2>
-                    <div id="modalQuestionsContainer">
-                        <!-- JavaScript will populate this -->
+                    <!-- Settings -->
+                    <div id="settingsSection" class="content-panel">
+                        <h2>Settings</h2>
+                        <div class="form-group">
+                            <label for="settingsWebhookUrl">Webhook URL (read-only):</label>
+                            <input type="url" id="settingsWebhookUrl" name="settingsWebhookUrl" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="settingsConfettiColors">Confetti Colors (hex codes, one per line):</label>
+                            <textarea id="settingsConfettiColors" name="settingsConfettiColors"></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <button type="submit">Save Configuration</button>
-                <div id="message"></div>
+                    <!-- Modal Questions -->
+                    <div id="modalQuestionsSection" class="content-panel">
+                        <h2>Modal Questions (First 2 Questions, Max 4 Options Each)</h2>
+                        <div id="modalQuestionsContainer">
+                            <!-- JavaScript will populate this -->
+                        </div>
+                    </div>
+
+                    <!-- Deployment Info -->
+                    <div id="deploymentSection" class="content-panel">
+                        <h2>Deployment Info (Read-Only)</h2>
+                        <div class="form-group">
+                            <label for="deploymentRepoName">Repo Name:</label>
+                            <input type="text" id="deploymentRepoName" name="deploymentRepoName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="deploymentRepoUrl">Repo URL:</label>
+                            <input type="url" id="deploymentRepoUrl" name="deploymentRepoUrl" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="deploymentTag">Tag:</label>
+                            <input type="text" id="deploymentTag" name="deploymentTag" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="deploymentNetlifyUrl">Netlify URL:</label>
+                            <input type="url" id="deploymentNetlifyUrl" name="deploymentNetlifyUrl" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="deploymentNetlifyId">Netlify ID:</label>
+                            <input type="text" id="deploymentNetlifyId" name="deploymentNetlifyId" readonly>
+                        </div>
+                    </div>
+                </div> <!-- End content-panel-container -->
+
+                <div class="save-area"> <!-- Moved Save Button and Message Area Here -->
+                    <button type="submit">Save Configuration</button>
+                    <div id="message"></div>
+                </div>
             </form>
         </main>
     </div>
@@ -473,6 +526,15 @@
                 if (question || (i === 0 && c.modalQuestions.length === 0) || (i === 1 && c.modalQuestions.length <= 1) ) {
                     modalQuestionsContainer.appendChild(questionDiv);
                 }
+            }
+
+            // Deployment Info (Read-Only)
+            if (c.deploymentInfo) {
+                setVal('deploymentRepoName', c.deploymentInfo.repoName);
+                setVal('deploymentRepoUrl', c.deploymentInfo.repoUrl);
+                setVal('deploymentTag', c.deploymentInfo.tag);
+                setVal('deploymentNetlifyUrl', c.deploymentInfo.netlifyUrl);
+                setVal('deploymentNetlifyId', c.deploymentInfo.netlifyId);
             }
         }
 
