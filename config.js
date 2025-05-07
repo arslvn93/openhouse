@@ -42,7 +42,7 @@ const config = {
     privacyPolicyLink: "https://istreetrealty.ca/privacy-policy/"
   },
   settings: {
-    webhookUrl: "https://n8n.salesgenius.co/webhook/openhouse",
+    webhookUrl: "https://n8n.salesgenius.co/webhook/openhouseupdate",
     confettiColors: ['#6187a7', '#f0e9d6', '#ffffff', '#83a363', '#d9ac68']
   },
   modalQuestions: [
