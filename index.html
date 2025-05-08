@@ -544,6 +544,7 @@
                         propertyAddress: propertyAddress,
                         submittedAt: submittedAt,
                         questions: [], // Empty for initial contact
+                        agentEmail: config.realtor.email, // Add agent email
                         ...(config.deploymentInfo || {})
                     };
                     
