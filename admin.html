@@ -472,7 +472,7 @@
             // Removed setVal for metaTermsLink
 
             // Settings
-            setVal('settingsWebhookUrl', c.settings.webhookUrl);
+            setVal('settingsWebhookUrl', c.settings.adminWebhookUrl); // Use adminWebhookUrl
             setVal('settingsConfettiColors', c.settings.confettiColors.join('\n'));
 
             // Open House Bundle Items (Max 8)
@@ -637,7 +637,12 @@
             console.log("Submitting updated config:", updatedConfig);
 
             try {
-                const response = await fetch(updatedConfig.settings.webhookUrl, {
+                // Use the adminWebhookUrl from the config for the fetch call
+                const adminUrl = updatedConfig.settings.adminWebhookUrl;
+                if (!adminUrl) {
+                    throw new Error("Admin webhook URL is not defined in config.js settings.");
+                }
+                const response = await fetch(adminUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', },
                     body: JSON.stringify(updatedConfig),

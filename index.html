@@ -295,7 +295,7 @@
             // --- State Variables ---
             let currentStepIndex = 0;
             let collectedAnswers = {};
-            let initialFormData = {};
+            let storedInitialPayload = null; // Stores the entire initial payload for the second submission
 
             // --- Helper functions ---
              function setTextContent(id, text) { const el=document.getElementById(id); if(el) el.textContent=text||''; else console.warn(`ID '${id}' not found.`); }
@@ -350,7 +350,7 @@
 
 
             // --- Modal Step Display & Handling (Simplified CSS Focus) ---
-            function displayModalStep(stepIndex) {
+            async function displayModalStep(stepIndex) { // Made async
                 console.log(`Displaying step index: ${stepIndex}`);
                 if (!successModalContent || !modalStepsContainer || !modalStepFinal) { console.error("Modal structure elements missing!"); if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('loading'); } return; }
                 if (!successModalOverlay) { console.error("Modal overlay missing!"); return; }
@@ -384,12 +384,74 @@
                         setTimeout(() => { stepDiv.classList.add('active'); }, 10); // Make active *after* appending
 
                     } else {
-                        console.log("Showing final step");
+                        // All modal questions are done, now send the modal answers
+                        console.log("All modal questions answered. Preparing modal answers payload.");
+
+                        const modalQuestionResponsesText = [];
+                        if (typeof collectedAnswers === 'object' && collectedAnswers !== null) {
+                            for (const questionId in collectedAnswers) {
+                                if (Object.hasOwnProperty.call(collectedAnswers, questionId)) {
+                                    const answerValue = collectedAnswers[questionId];
+                                    const questionObj = config.modalQuestions.find(q => q.id === questionId);
+                                    if (questionObj) {
+                                        const optionObj = questionObj.options.find(opt => opt.value === answerValue);
+                                        modalQuestionResponsesText.push({
+                                            question: questionObj.questionText,
+                                            answer: optionObj ? optionObj.text : answerValue // Fallback to raw value
+                                        });
+                                    } else {
+                                        console.warn(`Question ID "${questionId}" not found in config.modalQuestions during modal answer processing.`);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Construct the comprehensive payload for modal answers
+                        const modalAnswersPayload = {
+                            ...(storedInitialPayload || {}),      // Spread fields from stored initial payload
+                            formType: "modal_answers",            // Override formType
+                            submittedAt: new Date().toISOString(), // Update timestamp for this event
+                            questions: modalQuestionResponsesText // Add the processed modal questions
+                        };
+                        
+                        // Safety check: If storedInitialPayload was somehow null, log an error but proceed
+                        if (!storedInitialPayload) {
+                             console.error("CRITICAL: storedInitialPayload was null when constructing modal_answers payload. Sending potentially incomplete data.");
+                             // The payload will still be sent, but might lack initial contact/deployment info.
+                             // The formType will indicate it's modal_answers.
+                        }
+
+
+                        const visitorUrl = config.settings.visitorWebhookUrl;
+                        if (visitorUrl) {
+                            console.log(`Sending modal answers data to webhook: ${visitorUrl}`);
+                            console.log('Modal Answers Payload:', JSON.stringify(modalAnswersPayload, null, 2));
+                            try {
+                                const response = await fetch(visitorUrl, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(modalAnswersPayload),
+                                    mode: 'cors'
+                                });
+                                if (!response.ok) {
+                                    console.warn('Modal answers webhook failure:', response.status, await response.text());
+                                } else {
+                                    console.log('Modal answers webhook success!');
+                                }
+                            } catch (error) {
+                                console.error('Modal answers webhook error:', error);
+                            }
+                        } else {
+                            console.log("No webhook URL for modal answers. Skipping submission.");
+                        }
+
+                        // Proceed to show the final "Thank You" message
+                        console.log("Showing final step (Thank You message)");
                         setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
                         setTextContent('modalRealtorName', config.realtor.fullName);
                         modalStepFinal.style.display = 'block'; // Make final step visible
                         setTimeout(() => { modalStepFinal.classList.add('active'); }, 10); // Add active class
-                         fireCoolConfetti();
+                        fireCoolConfetti();
                     }
                 } catch(error) { console.error(`Error displaying modal step ${stepIndex}:`, error); hideSuccessModal(); }
             }
@@ -466,18 +528,58 @@
                 signInForm.addEventListener('submit', async (event) => {
                     event.preventDefault();
                     submitButton.disabled = true; submitButton.classList.add('loading');
-                    initialFormData = { fullName: document.getElementById('fullName').value, email: document.getElementById('email').value, phone: document.getElementById('phone').value, propertyAddress: `${config.property.streetAddress}, ${config.property.cityStateZip}`, submittedAt: new Date().toISOString() };
+                    // Stage 1: Initial Contact Submission
+                    const fullName = document.getElementById('fullName').value;
+                    const email = document.getElementById('email').value;
+                    const phone = document.getElementById('phone').value;
+                    const propertyAddress = `${config.property.streetAddress}, ${config.property.cityStateZip}`;
+                    const submittedAt = new Date().toISOString();
 
-                    let webhookProcessed = false;
-                    if (config.settings.webhookUrl) {
-                        console.log(`Sending initial data to webhook: ${config.settings.webhookUrl}`);
-                        try { const response = await fetch(config.settings.webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(initialFormData), mode: 'cors' }); if (!response.ok) { console.warn('Webhook failure:', response.status, await response.text()); } else { console.log('Webhook success!'); } }
-                        catch (error) { console.error('Webhook error:', error); }
-                        finally { webhookProcessed = true; }
-                    } else { console.log("No webhook URL. Skipping."); await new Promise(resolve => setTimeout(resolve, 300)); webhookProcessed = true; }
+                    // Construct initialPayload
+                    const initialPayload = {
+                        formType: "initial_contact",
+                        email: email,
+                        fullName: fullName,
+                        phone: phone,
+                        propertyAddress: propertyAddress,
+                        submittedAt: submittedAt,
+                        questions: [], // Empty for initial contact
+                        ...(config.deploymentInfo || {})
+                    };
+                    
+                    storedInitialPayload = initialPayload; // Store the entire initial payload
 
-                    if (webhookProcessed) { console.log("Webhook processing complete. Calling showQuestionnaireModal."); showQuestionnaireModal(); }
-                    else { console.error("Webhook processing flag not set. Resetting button."); submitButton.disabled = false; submitButton.classList.remove('loading'); }
+                    const visitorUrl = config.settings.visitorWebhookUrl;
+                    if (visitorUrl) {
+                        console.log(`Sending initial contact data to webhook: ${visitorUrl}`);
+                        console.log('Initial Payload:', JSON.stringify(initialPayload, null, 2));
+                        try {
+                            // Not strictly awaiting here to show modal faster, but errors won't be caught to prevent modal.
+                            // For robust error handling that stops flow, `await` this.
+                            fetch(visitorUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(initialPayload),
+                                mode: 'cors'
+                            }).then(async response => {
+                                if (!response.ok) {
+                                    console.warn('Initial contact webhook failure:', response.status, await response.text());
+                                } else {
+                                    console.log('Initial contact webhook success!');
+                                }
+                            }).catch(error => {
+                                console.error('Initial contact webhook error:', error);
+                            });
+                        } catch (error) { // This catch might not be effective if fetch isn't awaited
+                            console.error('Outer error during initial contact submission:', error);
+                        }
+                    } else {
+                        console.log("No visitor webhook URL. Skipping initial contact submission.");
+                    }
+
+                    // Proceed to show the modal questionnaire
+                    showQuestionnaireModal();
+                    // The submitButton state is reset by hideSuccessModal or when showQuestionnaireModal is called.
                 });
              } else { console.error("Sign in form or submit button not found!"); }
 

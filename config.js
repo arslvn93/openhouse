@@ -1,180 +1,67 @@
 const config = {
-  "giveaway": {
-    "name": "Burger Jabs Feast",
-    "heroHeadline": "Win a <span class='highlight'>$100 Burger Feast</span> at Burger Jabs!",
-    "heroSubheadline": "Enter for a chance to indulge in a $100 meal at Burger Jabs—where family, flavor, and community come together!",
-    "promotionDates": "Promotion runs from May 9, 2025 until June 9, 2025.",
-    "endDate": "2025-06-10T03:59:00.000Z",
-    "heroBackgroundImageUrl": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1990&q=80",
-    "heroCtaText": "Enter Now for a Feast!",
-    "entryFormCtaText": "Count Me In!",
-    "successModalHeaderText": "🎉 You're In! 🎉",
-    "successModalMainMessage": "Your entry for the <strong>Burger Jabs $100 Feast Giveaway</strong> has been successfully submitted. Best of luck!",
-    "successModalEmailPrompt": "We'll announce the winner via email after the draw date. Keep an eye on your inbox!"
+  property: {
+    streetAddress: "11 Glen Abbey Tr",
+    city: "Vaughan",
+    cityStateZip: "Vaughan, ON L4H 4K4", // Used in form submission data
+    heroSubtitle: "Epitome of Luxury and Grandeur in the exclusive Kleinburg Area. Register to receive the complete property compendium, virtual tour, and comparables.",
+    backgroundImageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80"
   },
-  "prize": {
-    "images": [
-      {
-        "src": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
-        "alt": "Delicious Burger Combo"
-      },
-      {
-        "src": "https://images.unsplash.com/photo-1606131731446-5568087118aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80",
-        "alt": "Another view of burgers"
-      },
-      {
-        "src": "https://images.unsplash.com/photo-1550317138-10000687a72b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        "alt": "Fries and Burger"
-      }
-    ],
-    "includedItems": [
-      {
-        "icon": "fas fa-ticket-alt",
-        "text": "Exclusive $100 gift voucher for anything on the menu"
-      },
-      {
-        "icon": "fas fa-users",
-        "text": "Perfect for a family feast or a treat with friends"
-      },
-      {
-        "icon": "fas fa-store-alt",
-        "text": "Support a fantastic local business: Burger Jabs"
-      },
-      {
-        "icon": "fas fa-check-circle",
-        "text": "No purchase necessary to enter or win"
-      },
-      {
-        "icon": "fas fa-bolt",
-        "text": "Quick and easy online entry!"
-      }
-    ],
-    "name": "Burger Jabs $100 Family Feast Voucher",
-    "value": "$100 Value",
-    "description": "Get ready to treat your family (or yourself!) to an unforgettable meal. You're entering for a chance to win a $100 gift voucher to enjoy juicy burgers, crispy fries, refreshing drinks, and more at Burger Jabs—the newest local hotspot that brings community and incredible flavor together under one roof.",
-    "limitedTimeOfferText": "🎁 Limited Time Giveaway!",
-    "ctaButtonText": "I WANT TO WIN THIS!"
+  realtor: {
+    fullName: "iStreet Realty Group",
+    title: "Brokerage Team",
+    phone: "416-410-2880",
+    email: "rick@istreetrealty.ca",
+    bio: "At iStreet Realty Group we are built on integrity, insight, and innovation. We combine decades of real estate expertise with cutting-edge technology to deliver unmatched support, transparency, and results for our clients. With over 40 years of hands-on real estate experience and extensive corporate backgrounds, our managing partners provide a balanced and strategic approach to Residential, Commercial, and Investment properties. We prioritize clear communication and use the latest market insights to guide every client toward success—whether buying, selling, or investing. At iStreet Realty Inc., we’re more than real estate experts—we’re your trusted partner in building your future.",
+    photoUrl: "https://prod-files-secure.s3.us-west-2.amazonaws.com/8e0c10a0-da43-409c-b191-91135b7161ff/c68f7f74-a1cf-4af6-a787-cf6c973b557f/headshot.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466SHELW62K%2F20250507%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250507T170650Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjELn%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCICV%2BOaqi7RPztQxN5a%2FGejkDLIE3hxa2%2B5iGWHzFqEZNAiEAidVh%2F6%2Bjec4PhZIKX2ChTRekJv%2B3rnOHphQR4vg%2FCssq%2FwMIYhAAGgw2Mzc0MjMxODM4MDUiDA476Nbg%2BGT5dHgmqSrcA10aAxmAeT253CIIPiFG5yASIrwckicz31P6GjplCBkvpFVmdhWqxVS%2BDTmMhMwyVJbSBrZjjmjSSx8kuKkv3QvBlKFnbD3pPohdHohFWcJzAbKsJa3baU2HWtjIU5sk%2FMg96ImmUaa%2F5XjJ7UIh5FCj%2B%2B4jiKLddTwBI4mlYxoEmVC2ZlDyvdkc8Yxz7Wb9wFfT5HKCqRiIY8hFfgjt0Fj%2BQEVmLI3%2B0fPANaYm89ANwqk08QM2MCG1%2F4OG%2BEwCWyuQMpFC7IVFT%2BqZj5ETCokIYe8IOocy4BSPbpY3XEo8i66Wa0ExZAgIglx3TeDifd8LG1MZx%2FbPcCc6urXo84U3jRtVgmzxa5HZ4xUQAK%2BwHbSR4Lu%2F5Vy%2FXvIlSeLJv4lUynUGtUsWA67kVI%2BOmpYS1Cxa9DNqMhu4MUz7yEB%2BLhcGn6%2BGTpQXt%2BKLRxBRY1ugQmTs%2BuStJPQu2ZQ2Kq9XGdLcGV10zfNNE3wC2udbNSq7iMfprH5V8j5OXfUFbNZWW46Nc3HWUdTGcxndJbE%2BrF15eDMNNNxrl69zpSsJjI2evvIfqnINHwugRe5UF9Zaqun4WbFpnW6ir5nVV9qoRFpdwoLEO2xtV2Ue7iB2b8hukVf0fpeFNmnXMO%2Bc7sAGOqUBMcBGoVjWMPXnPEh2WdJxbMcBhGjqOP5dnDAYDKBlKDym8CzxPKjbdu02gbgQ%2FSG1UNowQWeRuqNgPpJ4NcE%2B2K6aBJ7bLGWeKrAc5b97%2Fj5ZChwGzXuzda%2B8xygpNWvAxVYlXb0eHzNgiCgOYSFgDfHu2iSjfXDjTJ3GAavRSSoP2fUdX9qi4btuZtUJKW8TYOmprId%2F1gVEiiPiJqLMS1j%2Bnkb%2B&X-Amz-Signature=333c98803bc8c782fbdda1c3837e1d40c35cfe3536b7f5c258cc50475bd5ab1c&X-Amz-SignedHeaders=host&x-id=GetObject",
+    social: {
+      facebook: "https://www.facebook.com/iStreetRealty",
+      instagram: "https://www.instagram.com/istreetrealtygroup",
+      website: "https://istreetrealty.ca/"
+    }
   },
-  "howToEnter": {
-    "steps": [
-      {
-        "icon": "fas fa-keyboard",
-        "title": "Fill the Form",
-        "description": "Simply enter your name and email address in the form below. It takes less than 30 seconds!"
-      },
-      {
-        "icon": "fas fa-share-alt",
-        "title": "Share (Optional)",
-        "description": "Spread the word on social media using the links after you enter. (Sharing is caring, but not required for entry!)"
-      },
-      {
-        "icon": "fas fa-envelope-open-text",
-        "title": "Check Your Email",
-        "description": "We'll contact the winner via email. Make sure you enter a valid email address and check your spam folder too!"
-      }
-    ],
-    "highlights": [
-      {
-        "icon": "fas fa-stopwatch",
-        "text": "Quick & Easy Entry"
-      },
-      {
-        "icon": "fas fa-gift",
-        "text": "Amazing $100 Prize"
-      },
-      {
-        "icon": "fas fa-smile",
-        "text": "Free to Enter!"
-      }
+  brokerage: {
+    name: "HomeLife Partners",
+    logoUrl: "https://prod-files-secure.s3.us-west-2.amazonaws.com/8e0c10a0-da43-409c-b191-91135b7161ff/2ad1f3a4-7cea-45f4-bef2-b56767bf550e/brokeragelogo.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466SHELW62K%2F20250507%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250507T170650Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjELn%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCICV%2BOaqi7RPztQxN5a%2FGejkDLIE3hxa2%2B5iGWHzFqEZNAiEAidVh%2F6%2Bjec4PhZIKX2ChTRekJv%2B3rnOHphQR4vg%2FCssq%2FwMIYhAAGgw2Mzc0MjMxODM4MDUiDA476Nbg%2BGT5dHgmqSrcA10aAxmAeT253CIIPiFG5yASIrwckicz31P6GjplCBkvpFVmdhWqxVS%2BDTmMhMwyVJbSBrZjjmjSSx8kuKkv3QvBlKFnbD3pPohdHohFWcJzAbKsJa3baU2HWtjIU5sk%2FMg96ImmUaa%2F5XjJ7UIh5FCj%2B%2B4jiKLddTwBI4mlYxoEmVC2ZlDyvdkc8Yxz7Wb9wFfT5HKCqRiIY8hFfgjt0Fj%2BQEVmLI3%2B0fPANaYm89ANwqk08QM2MCG1%2F4OG%2BEwCWyuQMpFC7IVFT%2BqZj5ETCokIYe8IOocy4BSPbpY3XEo8i66Wa0ExZAgIglx3TeDifd8LG1MZx%2FbPcCc6urXo84U3jRtVgmzxa5HZ4xUQAK%2BwHbSR4Lu%2F5Vy%2FXvIlSeLJv4lUynUGtUsWA67kVI%2BOmpYS1Cxa9DNqMhu4MUz7yEB%2BLhcGn6%2BGTpQXt%2BKLRxBRY1ugQmTs%2BuStJPQu2ZQ2Kq9XGdLcGV10zfNNE3wC2udbNSq7iMfprH5V8j5OXfUFbNZWW46Nc3HWUdTGcxndJbE%2BrF15eDMNNNxrl69zpSsJjI2evvIfqnINHwugRe5UF9Zaqun4WbFpnW6ir5nVV9qoRFpdwoLEO2xtV2Ue7iB2b8hukVf0fpeFNmnXMO%2Bc7sAGOqUBMcBGoVjWMPXnPEh2WdJxbMcBhGjqOP5dnDAYDKBlKDym8CzxPKjbdu02gbgQ%2FSG1UNowQWeRuqNgPpJ4NcE%2B2K6aBJ7bLGWeKrAc5b97%2Fj5ZChwGzXuzda%2B8xygpNWvAxVYlXb0eHzNgiCgOYSFgDfHu2iSjfXDjTJ3GAavRSSoP2fUdX9qi4btuZtUJKW8TYOmprId%2F1gVEiiPiJqLMS1j%2Bnkb%2B&X-Amz-Signature=e466bae68474221e32325602983600a018965c4df078456a0f297b44b54458c4&X-Amz-SignedHeaders=host&x-id=GetObject",
+    address: "3850 Steeles Avenue W. Unit 6, Woodbridge, Ontario"
+  },
+  openHouse: {
+    bundleItems: [
+      { icon: "fas fa-ruler-combined", text: "Architectural Floor Plan: " },
+      { icon: "fas fa-star", text: "Benefit: Completely finished Luxurious turn-key home with finished basement, pool, cabana/bathroom, landscaping" },
+      { icon: "fas fa-check-circle", text: "Benefit: New High-End Finishes: Kitchen, Herringbone flooring, SubZero/Wolf/Bosh appliances, 2 new furnaces & AC, interlock driveway" },
+      { icon: "fas fa-car", text: "3-Car Garage, 10 ft main ceilings, 9 ft 2nd/basement" },
+      { icon: "fas fa-camera-retro", text: "High-Resolution Photo Album and Virtual Tour" },
+      { icon: "fas fa-film", text: "Cinematic Property Tour Video" },
+      { icon: "fas fa-map-location-dot", text: "Kleinburg Neighbourhood Insights & Recent Sales" },
+      { icon: "fas fa-key", text: "Early Access Notifications for New Kleinburg Listings" }
     ]
   },
-  "entryForm": {
-    "sharePlatforms": {
-      "facebook": "https://www.facebook.com/sharer/sharer.php?u=file%3A%2F%2F%2FUsers%2Farslan%2FDocuments%2FSalesGenius%2FGiveaway%2Fgiveaway-admin.html",
-      "twitter": "https://twitter.com/intent/tweet?url=file%3A%2F%2F%2FUsers%2Farslan%2FDocuments%2FSalesGenius%2FGiveaway%2Fgiveaway-admin.html&text=Check%20out%20this%20amazing%20Burger%20Jabs%20giveaway!"
-    },
-    "subtitle": "Provide your details below for a chance to win this delicious prize!",
-    "entryCountText": "Over 500+ entries already! Don't miss out!",
-    "socialSharePrompt": "Tell your friends about this awesome giveaway:",
-    "termsText": "By entering, you agree to our <a href='YOUR_TERMS_LINK_HERE' target='_blank'>Terms & Conditions</a> and <a href='YOUR_PRIVACY_POLICY_LINK_HERE' target='_blank'>Privacy Policy</a>."
+  meta: {
+    pageTitlePrefix: "🏡 iStreet Open House",
+    navBrandLogoText: "iStreet Realty Group",
+    privacyPolicyLink: "https://istreetrealty.ca/privacy-policy/"
   },
-  "rules": {
-    "faq": [
-      {
-        "q": "Who is eligible to enter?",
-        "a": "This giveaway is open to legal residents of [Your City/Region/Country] who are 18 years of age or older at the time of entry."
-      },
-      {
-        "q": "How long does the giveaway run?",
-        "a": "The giveaway starts on May 9, 2025, and all entries must be received by June 9, 2025, at 11:59 PM [Your Timezone]."
-      },
-      {
-        "q": "How will the winner be selected?",
-        "a": "One (1) winner will be selected in a random drawing from all eligible entries received during the promotion period."
-      },
-      {
-        "q": "When and how will the winner be notified?",
-        "a": "The potential winner will be notified by email on or about June 12, 2025. They will have [e.g., 48 hours] to respond and claim their prize."
-      },
-      {
-        "q": "How many times can I enter?",
-        "a": "Limit one (1) entry per person/email address during the entire promotion period. Duplicate entries will be disqualified."
-      },
-      {
-        "q": "Is my information secure?",
-        "a": "We respect your privacy. Your information will be used solely for the purpose of this giveaway and in accordance with our Privacy Policy. We do not sell your data."
-      }
-    ],
-    "tips": [
-      "Double-check your email address for typos before submitting.",
-      "Add our contact email (if provided in footer) to your address book to ensure you receive notifications.",
-      "Follow [Organizer Name] on social media for winner announcements (optional)."
-    ],
-    "fairSelectionInfo": {
-      "title": "Fair & Square Selection",
-      "text": "Our winner selection process is completely random and unbiased, ensuring everyone has an equal chance. The draw will be conducted using a certified random number generator."
-    },
-    "importantNotice": {
-      "title": "Winner Notification - Check Your Email!",
-      "text": "The lucky winner will be contacted exclusively via the email address provided during entry. Please ensure your email is correct. We recommend checking your inbox, promotions tab, and spam/junk folder regularly after the giveaway concludes."
-    },
-    "fullRulesPdfLink": ""
+  settings: {
+    adminWebhookUrl: "https://n8n.salesgenius.co/webhook/openhouseupdate", // Endpoint for admin saves
+    visitorWebhookUrl: "https://n8n.salesgenius.co/webhook/openhouse", // Endpoint for visitor sign-ups
+    confettiColors: ['#6187a7', '#f0e9d6', '#ffffff', '#83a363', '#d9ac68']
   },
-  "footerContact": {
-    "social": {
-      "facebook": "",
-      "instagram": ""
-    },
-    "organizerName": "Burger Jabs Restaurant",
-    "organizerLogoUrl": "https://via.placeholder.com/200x60/FF7A00/4A3F35?text=Burger+Jabs",
-    "email": "hello@burgerjabs.com",
-    "phone": "(555) 123-BURGER",
-    "address": "123 Delicious Lane, Foodie Town, USA",
-    "copyrightOwner": "Burger Jabs Co."
-  },
-  "meta": {
-    "pageTitle": "Burger Jabs $100 Feast Giveaway!",
-    "navBrandLogoText": "Burger Jabs",
-    "privacyPolicyLink": "",
-    "termsLink": ""
-  },
-  "settings": {
-    "confettiColors": [
-      "#FF7A00",
-      "#FFC107",
-      "#4CAF50",
-      "#FFFFFF",
-      "#FFF5E6"
-    ],
-    "webhookUrl": "https://n8n.salesgenius.co/webhook/giveawayupdate",
-    "showCountdownInHero": true
-  },
-  "deploymentInfo": {
-    "repoName": "openhouse",
-    "repoUrl": "https://github.com/arslvn93/giveawayupdate",
-    "tag": "Open House 168 Abbey",
-    "netlifyUrl": "https://openhousetester.netlify.app/",
-    "netlifyId": "547dc1ef-2c83-4d08-815f-344d40fc3ca2"
-  },
-  "modalQuestions": []
+  modalQuestions: [
+    {
+      id: "agent_status",
+      questionText: "Are you currently exploring homes with a real estate agent?",
+      options: [
+        { value: "committed", text: "Yes, I'm committed to an agent." },
+        { value: "not_committed", text: "No, I'm not committed to an agent." },
+        { value: "gathering_info", text: "Just gathering information at this stage." }
+      ]
+    }
+  ],
+  deploymentInfo: {
+    repoName: "openhouse",
+    repoUrl: "https://github.com/arslvn93/openhouse",
+    tag: "Open House 168 Abbey",
+    netlifyUrl: "https://openhousetester.netlify.app/",
+    netlifyId: "547dc1ef-2c83-4d08-815f-344d40fc3ca2"
+  }
 };
