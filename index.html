@@ -7,12 +7,12 @@
 
     <!-- ★★★ START: SOCIAL SHARE META TAGS - EDIT MANUALLY FOR EACH PAGE ★★★ -->
     <meta property="og:title" content="🌟 Prestige Open House | 789 Diamond Crest Dr | Prestige Property Group" />
-    <meta property="og:description" content="Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Compendium..." />
+    <meta property="og:description" content="Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Home &amp; Neighbourhood Info Package..." />
     <meta property="og:image" content="https://via.placeholder.com/220x220/d4af37/101010?text=VA" /> <!-- Match Config -->
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="🌟 Prestige Open House | 789 Diamond Crest Dr | Prestige Property Group" />
-    <meta name="twitter:description" content="Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Compendium..." />
+    <meta name="twitter:description" content="Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Home &amp; Neighbourhood Info Package..." />
     <meta name="twitter:image" content="https://via.placeholder.com/220x220/d4af37/101010?text=VA" /> <!-- Match Config -->
     <!-- ★★★ END: SOCIAL SHARE META TAGS ★★★ -->
 
@@ -195,7 +195,7 @@
              </div>
              <ul id="navLinksList">
                 <li><a href="#hero" class="active">Welcome</a></li>
-                <li><a href="#whats-included">Compendium</a></li>
+                <li><a href="#whats-included"> Home Package</a></li>
                 <li><a href="#about-realtor">Your Host</a></li>
                 <li><a href="#signin">Register</a></li>
              </ul>
@@ -205,11 +205,11 @@
     <section id="hero" class="section visible">
         <div class="hero-title-line" id="heroTitle"></div>
         <p class="subtitle" id="heroSubtitle"></p>
-        <a href="#signin" class="cta-button" id="heroCta">Register & Receive Compendium <i class="fas fa-chevron-right"></i></a>
+        <a href="#signin" class="cta-button" id="heroCta">Register & Receive Home &amp; Neighbourhood Info Package <i class="fas fa-chevron-right"></i></a>
     </section>
 
     <main>
-        <section id="whats-included" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">The Property Compendium</h2> <ul id="bundleList"></ul> </div> </div> </section>
+        <section id="whats-included" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">The Property Home &amp; Neighbourhood Info Package</h2> <ul id="bundleList"></ul> </div> </div> </section>
         <section id="about-realtor" class="section"> <div class="container"> <div class="glass-card"> <h2 class="section-title">Your Dedicated Host</h2> <div class="realtor-content"> <div class="realtor-image-container"> <img src="" alt="Realtor Photo" id="realtorPhoto"> </div> <div class="realtor-bio"> <h3 id="realtorNameBio"></h3> <p id="realtorBioText"></p> </div> </div> </div> </div> </section>
         <section id="signin" class="section">
             <div class="container">
@@ -228,7 +228,15 @@
                                     <i class="fas fa-phone-volume"></i>
                                 </div>
                             </div>
-                            <div class="form-group"><button type="submit" class="submit-btn"><span class="button-text">Request My Compendium</span><div class="spinner"></div></button></div>
+                        <div class="form-group" style="grid-column: 1 / -1; text-align: left;">
+                            <div style="display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px; background-color: rgba(255,255,255,0.03);">
+                                <input type="checkbox" id="consentCheckbox" name="consent" required style="margin-top: 5px; width: auto; min-height: auto; flex-shrink: 0; accent-color: var(--primary-color);">
+                                <label for="consentCheckbox" style="font-size: clamp(0.75rem, 1.8vw + 0.3rem, 0.9rem); color: var(--medium-text-color); font-weight: 300; line-height: 1.6;">
+                                    I agree to be contacted by <strong id="consentBrokerageName" style="color: var(--light-text-color);">[Brokerage Name]</strong> via call, email, and text. To opt-out, you can reply ‘stop’ at any time or click the unsubscribe link in the emails. Message and data rates may apply. <a href="#" id="consentPrivacyLink" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: underline;">Privacy Policy</a>
+                                </label>
+                            </div>
+                        </div>
+                            <div class="form-group"><button type="submit" class="submit-btn"><span class="button-text">Request My Home &amp; Neighbourhood Info Package</span><div class="spinner"></div></button></div>
                          </div>
                      </form>
                  </div>
@@ -240,7 +248,7 @@
         <div class="container footer-content">
              <div class="brokerage-logo"> <img src="" alt="Brokerage Logo" id="footerBrokerageLogo"> </div>
             <h4 id="footerBrokerageName"></h4>
-            <p><strong id="footerRealtorName"></strong> | <span id="footerRealtorTitle"></span> | DRE #<span id="footerRealtorDre"></span></p>
+            <p><strong id="footerRealtorName"></strong> | <span id="footerRealtorTitle"></span></p>
             <p><i class="fas fa-mobile-alt" style="margin-right: 8px;"></i> <a href="" id="footerRealtorPhoneLink"><span id="footerRealtorPhone"></span></a> | <i class="fas fa-envelope" style="margin-left: 15px; margin-right: 8px;"></i> <a href="" id="footerRealtorEmailLink"><span id="footerRealtorEmail"></span></a></p>
             <p><i class="fas fa-map-pin" style="margin-right: 8px;"></i> <span id="footerBrokerageAddress"></span></p>
              <div class="social-icons" id="footerSocialIcons"></div>
@@ -319,9 +327,20 @@
                     setHTMLContent('realtorBioText', config.realtor.bio);
                     setTextContent('modalAddress', `${config.property.streetAddress}, ${config.property.city}`);
                     setTextContent('modalRealtorName', config.realtor.fullName);
+
+                    // Populate consent checkbox details
+                    const consentBrokerageNameEl = document.getElementById('consentBrokerageName');
+                    if (consentBrokerageNameEl) {
+                        consentBrokerageNameEl.textContent = config.brokerage.name || 'Your Company';
+                    }
+                    const consentPrivacyLinkEl = document.getElementById('consentPrivacyLink');
+                    if (consentPrivacyLinkEl) {
+                        consentPrivacyLinkEl.href = config.meta.privacyPolicyLink || '#';
+                    }
+
                     // **** FOOTER POPULATION RESTORED ****
                     setImage('footerBrokerageLogo', config.brokerage.logoUrl, config.brokerage.name);
-                    setTextContent('footerBrokerageName', `${config.brokerage.name} | Curators of Fine Real Estate`);
+                    setTextContent('footerBrokerageName', `${config.brokerage.name}`);
                     setTextContent('footerRealtorName', config.realtor.fullName);
                     setTextContent('footerRealtorTitle', config.realtor.title);
                     // setTextContent('footerRealtorDre', config.realtor.dreNumber); // DRE number removed
@@ -509,7 +528,7 @@
                     if (submitButton) {
                         submitButton.disabled = false; submitButton.classList.remove('loading');
                         const textSpan = submitButton.querySelector('.button-text');
-                        if (textSpan) { textSpan.textContent = "Request My Compendium"; }
+                        if (textSpan) { textSpan.textContent = "Request My Home &amp; Neighbourhood Info Package"; }
                         else if (!submitButton.querySelector('.button-text')) { submitButton.innerHTML = '<span class="button-text">Request My Compendium</span><div class="spinner"></div>'; }
                     }
                     if(modalStepsContainer) modalStepsContainer.innerHTML = '';
