@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading Open House...</title> <!-- Set by JS -->
+    <title>Open House</title> <!-- Set by JS -->
 
     <!-- ★★★ START: SOCIAL SHARE META TAGS - EDIT MANUALLY FOR EACH PAGE ★★★ -->
-    <meta property="og:title" content="🌟 Prestige Open House | 789 Diamond Crest Dr | Prestige Property Group" />
-    <meta property="og:description" content="Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Home &amp; Neighbourhood Info Package..." />
-    <meta property="og:image" content="https://via.placeholder.com/220x220/d4af37/101010?text=VA" /> <!-- Match Config -->
+    <meta property="og:title" content="Open House" />
+    <meta property="og:description" content="Welcome to the Open House" />
+    <meta property="og:image" content="https://www.gta-homes.com/wp-content/uploads/what-is-an-open-house-01.jpg" /> <!-- Match Config -->
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="🌟 Prestige Open House | 789 Diamond Crest Dr | Prestige Property Group" />
-    <meta name="twitter:description" content="Explore this exquisite Beverly Hills estate. Register today to receive the bespoke Property Home &amp; Neighbourhood Info Package..." />
-    <meta name="twitter:image" content="https://via.placeholder.com/220x220/d4af37/101010?text=VA" /> <!-- Match Config -->
+    <meta name="twitter:title" content="Open House" />
+    <meta name="twitter:description" content="Welcome to the Open House" />
+    <meta name="twitter:image" content="https://www.gta-homes.com/wp-content/uploads/what-is-an-open-house-01.jpg" /> <!-- Match Config -->
     <!-- ★★★ END: SOCIAL SHARE META TAGS ★★★ -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -176,6 +176,10 @@
         footer .copyright a:hover { color: #fff2d8; opacity: 1; }
 
         @media (max-width: 767px) { /* Target typical mobile device widths */
+            body {
+                background-attachment: fixed; /* Reverting to fixed as per user feedback to abandon scroll */
+                background-size: cover;  
+            }
             #signInForm input[type="text"],
             #signInForm input[type="email"],
             #signInForm input[type="tel"] {
