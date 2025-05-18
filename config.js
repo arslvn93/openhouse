@@ -10,7 +10,7 @@ const config = {
     "fullName": "Amy Caughlin",
     "title": "REALTOR®",
     "phone": "15874391618",
-    "email": "amy@caughlinrealestate.ca",
+    "email": "arslan@salesgenius.co",
     "bio": "A former risk manager turned Realtor, proptech co-founder, podcast host, and passionate community advocate. I help busy professionals and families find homes that truly fit their lives, while working behind the scenes to make real estate better for everyone involved. With a background in risk management, I bring a strategic lens to every transaction, ensuring my clients make informed, confident decisions. I’m also the co-founder of Jazzberry, a platform designed by realtors, for realtors. A proud Maritimer, I lead with authenticity, hospitality, and heart. Whether I’m running along the Bow River, adventuring in the mountains with my family, or hosting FutureRE — The Future of Real Estate, I’m always driven by curiosity, connection, and impact.",
     "photoUrl": "https://static.showit.co/800/TUEDlhwVYAO5v1iU87fE1w/264146/headshot.jpg",
     "social": {
