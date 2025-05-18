@@ -120,6 +120,6 @@ const config = {
     "repoUrl": "https://github.com/arslvn93/Open-House-957",
     "tag": "Open House 142 Valley Glen Heights NW",
     "netlifyUrl": "https://services.leadconnectorhq.com/hooks/zpjvSoJ3TMkdq8pcj7VJ/webhook-trigger/GIJI1X6L1zS4PxcScJqY",
-    "siteId": "dc35cadf-51e9-4ca8-843c-a084dd57add1"
+    "netlifyId": "dc35cadf-51e9-4ca8-843c-a084dd57add1"
   }
 };
