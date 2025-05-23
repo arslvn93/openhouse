@@ -403,10 +403,6 @@
                             <input type="url" id="deploymentRepoUrl" name="deploymentRepoUrl" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="deploymentTag">Tag:</label>
-                            <input type="text" id="deploymentTag" name="deploymentTag">
-                        </div>
-                        <div class="form-group">
                             <label for="deploymentNetlifyId">Netlify ID:</label>
                             <input type="text" id="deploymentNetlifyId" name="deploymentNetlifyId" readonly>
                         </div>
@@ -591,6 +587,19 @@
             // Settings
             // webhookUrl is readonly
             if (updatedConfig.settings.hasOwnProperty('confettiColors')) updatedConfig.settings.confettiColors = arrayFromTextarea('settingsConfettiColors');
+// Deployment Info
+            if (updatedConfig.hasOwnProperty('deploymentInfo') && updatedConfig.deploymentInfo) {
+                // Update editable fields from form
+                if (updatedConfig.deploymentInfo.hasOwnProperty('netlifyUrl')) { // Corresponds to 'deploymentNetlifyUrl' input (Webhook URL GHL)
+                    updatedConfig.deploymentInfo.netlifyUrl = getVal('deploymentNetlifyUrl');
+                }
+                if (updatedConfig.deploymentInfo.hasOwnProperty('tag')) { // Corresponds to 'deploymentTag' input (CRM Tag)
+                    updatedConfig.deploymentInfo.tag = getVal('deploymentTag');
+                }
+                // Readonly fields (deploymentRepoName, deploymentRepoUrl, deploymentNetlifyId)
+                // are preserved in updatedConfig.deploymentInfo from the initial clone of 'config'
+                // if they were present in the original config.deploymentInfo.
+            }
 
             // Open House Bundle Items
             if (updatedConfig.openHouse.hasOwnProperty('bundleItems')) {
