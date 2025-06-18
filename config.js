@@ -10,7 +10,7 @@ const config = {
     "entryFormCtaText": "Count Me In!",
     "successModalHeaderText": "🎉 You're In! 🎉",
     "successModalMainMessage": "Your entry for the <strong>Burger Jabs $100 Feast Giveaway</strong> has been successfully submitted. Best of luck!",
-    "successModalEmailPrompt": "We'll announce the winner via email after the draw date. Keep an eye on your inbox!"
+    "successModalEmailPrompt": "We'll announce the winner via email after the draw date. Keep an eye on your inbox! "
   },
   "prize": {
     "images": [
@@ -19,7 +19,7 @@ const config = {
         "alt": "Delicious Burger Combo"
       },
       {
-        "src": "https://images.unsplash.com/photo-1550317138-10000687a72b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+        "src": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
         "alt": "Another view of burgers"
       },
       {
@@ -140,15 +140,25 @@ const config = {
   },
   "footerContact": {
     "social": {
-      "facebook": "",
-      "instagram": ""
+      "facebook": "https://via.placeholder.com/200x60/FF7A00/4A3F35?text=Burger+Jabs",
+      "instagram": "https://via.placeholder.com/200x60/FF7A00/4A3F35?text=Burger+Jabs"
     },
     "organizerName": "Burger Jabs Restaurant",
+    "brokerageName": "Burger Jabs Realty (Placeholder)",
     "organizerLogoUrl": "https://via.placeholder.com/200x60/FF7A00/4A3F35?text=Burger+Jabs",
+    "secondaryLogoUrl": "https://via.placeholder.com/100x50/eee/999?text=Secondary+Logo",
+    "secondaryLogoAlt": "Secondary Company Logo",
     "email": "hello@burgerjabs.com",
     "phone": "(555) 123-BURGER",
     "address": "123 Delicious Lane, Foodie Town, USA",
-    "copyrightOwner": "Burger Jabs Co."
+    "footerDisclaimer": "This is a placeholder for the important legal disclaimer text that will appear at the top of the footer.",
+    "copyrightOwner": "Burger Jabs Co.",
+    "agentContact": {
+      "name": "Jab Burger",
+      "title": "Chief Burger Officer",
+      "phone": "(555) JAB-MEAL",
+      "email": "jab@burgerjabs.com"
+    }
   },
   "meta": {
     "pageTitle": "Burger Jabs $100 Feast Giveaway!",
@@ -164,7 +174,8 @@ const config = {
       "#FFF5E6"
     ],
     "ghlWebhookUrl": "",
-    "theme": "dark",
+    "theme": "light",
+    "primaryColorOverride": "",
     "webhookUrl": "https://n8n.salesgenius.co/webhook/giveawayupdate",
     "showCountdownInHero": true
   },
@@ -177,7 +188,7 @@ const config = {
   },
   "modalQuestions": [
     {
-      "id": "q_auto_1750129645276_0",
+      "id": "q_auto_1750286677863_0",
       "questionText": "Are you currently exploring homes with a real estate agent?",
       "options": [
         {
@@ -195,7 +206,7 @@ const config = {
       ]
     },
     {
-      "id": "q_auto_1750129645276_1",
+      "id": "q_auto_1750286677863_1",
       "questionText": "How interested are you in properties like this?",
       "options": [
         {
@@ -213,7 +224,7 @@ const config = {
       ]
     },
     {
-      "id": "q_auto_1750129645276_2",
+      "id": "q_auto_1750286677863_2",
       "questionText": "How do you usually enjoy the neighborhood?",
       "options": [
         {
@@ -231,7 +242,7 @@ const config = {
       ]
     },
     {
-      "id": "q_auto_1750129645276_3",
+      "id": "q_auto_1750286677863_3",
       "questionText": "What feature attracted you to this home?",
       "options": [
         {
