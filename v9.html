@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Open House Party</title>
+
+    <!-- FONTS: CHUNKY & LOUD -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- LIBRARIES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- LOAD CONFIG -->
+    <script src="config.js"></script>
+
+    <style>
+        /* 
+         * 1. THE DOPAMINE PALETTE
+         */
+        :root {
+            --c-bg: #fff9f0; /* Cream Canvas */
+            --c-ink: #121212;
+            
+            --pop-pink: #ff6b9d;
+            --pop-blue: #4d96ff;
+            --pop-lime: #ccff00;
+            --pop-yell: #ffce00;
+            --pop-purp: #b388ff;
+
+            --border: 3px solid var(--c-ink);
+            --shadow: 8px 8px 0px var(--c-ink);
+            --shadow-hover: 12px 12px 0px var(--c-ink);
+            --shadow-active: 0px 0px 0px var(--c-ink);
+            
+            --font-head: 'Dela Gothic One', display;
+            --font-body: 'Outfit', sans-serif;
+            
+            --radius-pill: 100px;
+            --radius-card: 24px;
+        }
+
+        * { box-sizing: border-box; cursor: none; }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--c-bg);
+            background-image: radial-gradient(var(--c-ink) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: var(--c-ink);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* CUSTOM CURSOR (The Blob) */
+        #cursor {
+            position: fixed; top: 0; left: 0; width: 30px; height: 30px;
+            background: var(--pop-lime); border: 2px solid var(--c-ink); border-radius: 50%;
+            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+        #cursor.hover {
+            width: 80px; height: 80px; background: var(--pop-pink); opacity: 0.8;
+            animation: blob 3s infinite linear;
+        }
+        @keyframes blob { 0%, 100% { border-radius: 50%; } 50% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; } }
+
+        /* UTILS */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5vw; position: relative; z-index: 5; }
+        h1, h2, h3 { font-family: var(--font-head); text-transform: uppercase; margin: 0; line-height: 0.9; }
+        img { width: 100%; display: block; }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 20px; left: 0; width: 100%; z-index: 100; padding: 0 5vw;
+            pointer-events: none;
+        }
+        .nav-pill {
+            background: #fff; border: var(--border); padding: 15px 30px; border-radius: var(--radius-pill);
+            display: flex; justify-content: space-between; align-items: center;
+            pointer-events: all; box-shadow: var(--shadow); max-width: 1200px; margin: 0 auto;
+        }
+        .brand { font-family: var(--font-head); font-size: 1.2rem; color: var(--c-ink); text-decoration: none; }
+        
+        /* BUTTONS (Arcade Style) */
+        .btn-pop {
+            display: inline-block; background: var(--pop-blue); color: #fff;
+            font-family: var(--font-head); font-size: 1rem; text-transform: uppercase; text-decoration: none;
+            padding: 15px 30px; border: var(--border); border-radius: var(--radius-pill);
+            box-shadow: var(--shadow); transition: 0.1s; cursor: none; transform: translate(-4px, -4px);
+        }
+        .btn-pop:hover { background: var(--pop-yell); color: var(--c-ink); transform: translate(-6px, -6px); box-shadow: var(--shadow-hover); }
+        .btn-pop:active { transform: translate(0, 0); box-shadow: var(--shadow-active); }
+
+        /* HERO */
+        .hero { min-height: 100vh; padding-top: 150px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .eyebrow {
+            display: inline-block; background: var(--c-ink); color: #fff; padding: 5px 15px;
+            border-radius: 10px; font-weight: 900; text-transform: uppercase; transform: rotate(-3deg); margin-bottom: 1rem;
+        }
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 8rem); color: var(--pop-pink);
+            -webkit-text-stroke: 3px var(--c-ink); text-shadow: 6px 6px 0px var(--c-ink);
+            margin-bottom: 2rem;
+        }
+        .hero-img-frame {
+            width: 90%; max-width: 800px; aspect-ratio: 16/9;
+            border: var(--border); border-radius: 30px; background: var(--c-ink);
+            overflow: hidden; position: relative; box-shadow: 20px 20px 0px var(--pop-lime);
+            transform: rotate(2deg); transition: 0.3s;
+        }
+        .hero-img-frame:hover { transform: rotate(0deg) scale(1.02); box-shadow: 10px 10px 0px var(--pop-purp); }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* MARQUEE */
+        .marquee {
+            background: var(--pop-yell); border-top: var(--border); border-bottom: var(--border);
+            padding: 20px 0; margin: 100px 0; transform: rotate(-2deg) scale(1.05); overflow: hidden;
+        }
+        .marquee-inner { display: flex; white-space: nowrap; gap: 50px; font-family: var(--font-head); font-size: 2rem; }
+
+        /* GOODIE BAG (Amenities) */
+        .goodie-section { padding: 50px 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; margin-top: 50px; }
+        .card {
+            background: #fff; border: var(--border); border-radius: 20px; padding: 30px;
+            text-align: center; box-shadow: var(--shadow); transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-10px); box-shadow: var(--shadow-hover); }
+        .card:nth-child(1) { background: var(--pop-pink); }
+        .card:nth-child(2) { background: var(--pop-blue); }
+        .card:nth-child(3) { background: var(--pop-lime); }
+        .card-icon { font-size: 3rem; background: #fff; width: 80px; height: 80px; border-radius: 50%; border: var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; }
+
+        /* THE HYPE PERSON (Agent) */
+        .host-section { padding: 100px 0; }
+        .host-wrapper {
+            background: #fff; border: var(--border); border-radius: 50px; padding: 60px;
+            box-shadow: 20px 20px 0px var(--c-ink); display: flex; align-items: center; gap: 50px; flex-wrap: wrap;
+        }
+        .host-star {
+            width: 300px; height: 300px; position: relative;
+            background: var(--pop-purp); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            display: flex; align-items: center; justify-content: center;
+            animation: spin 20s linear infinite;
+        }
+        @keyframes spin { to {transform: rotate(360deg);} }
+        .host-img {
+            width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: var(--border);
+            position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        .host-links a {
+            font-size: 2rem; color: var(--c-ink); margin-right: 20px; transition: 0.2s;
+        }
+        .host-links a:hover { color: var(--pop-pink); }
+
+        /* THE GUEST LIST (Form) */
+        .rsvp-section { padding: 100px 0; }
+        .clipboard {
+            max-width: 600px; margin: 0 auto; background: var(--pop-blue);
+            border: var(--border); border-radius: 30px; padding: 40px;
+            box-shadow: 20px 20px 0px var(--pop-lime); text-align: center;
+        }
+        .input-pop {
+            width: 100%; padding: 20px; margin-bottom: 15px; border: var(--border); border-radius: 15px;
+            font-family: var(--font-head); font-size: 1.2rem; outline: none;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2); transition: 0.2s;
+        }
+        .input-pop:focus { transform: translate(-4px, -4px); box-shadow: 8px 8px 0px var(--c-ink); background: var(--pop-yell); }
+        
+        .check-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; font-weight: 700; }
+        .check-wrap input { width: 20px; height: 20px; accent-color: var(--c-ink); border: 3px solid #000; }
+
+        /* FOOTER */
+        footer { background: var(--c-ink); color: #fff; padding: 60px; text-align: center; font-family: var(--font-head); }
+
+        /* MODAL */
+        .modal-takeover {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--pop-purp); z-index: 5000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .modal-takeover.active { transform: translateY(0); }
+        
+        .vibe-btn {
+            width: 80%; max-width: 400px; background: #fff; border: var(--border); border-radius: 20px;
+            padding: 20px; margin: 10px 0; font-family: var(--font-head); font-size: 1.2rem;
+            box-shadow: var(--shadow); cursor: none; transition: 0.2s; text-transform: uppercase;
+        }
+        .vibe-btn:hover { transform: scale(1.05) rotate(-2deg); background: var(--pop-lime); }
+
+        @media(max-width: 768px) {
+            .hero-title { font-size: 14vw; -webkit-text-stroke: 1.5px var(--c-ink); }
+            .host-wrapper { flex-direction: column; padding: 30px; text-align: center; }
+            .nav-pill { flex-direction: column; gap: 10px; border-radius: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:6000;"></canvas>
+
+    <!-- PRELOADER -->
+    <div class="modal-takeover" id="loader" style="background:var(--pop-yell); transform:translateY(0); z-index:10000;">
+        <h1 style="font-size:10vw; color:var(--c-ink);">LOADING<br>THE VIBE</h1>
+    </div>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-pill">
+            <a href="#" class="brand hover-target" id="navBrand"></a>
+            <button onclick="document.getElementById('rsvp').scrollIntoView({behavior:'smooth'})" class="btn-pop hover-target">
+                GET ON THE LIST
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        
+        <!-- HERO -->
+        <section class="hero">
+            <div class="container">
+                <div class="eyebrow">OPEN HOUSE PARTY</div>
+                <h1 class="hero-title" id="propTitle"></h1>
+                
+                <div class="hero-img-frame hover-target">
+                    <img src="" id="heroImg">
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <div style="background:#fff; border:var(--border); border-radius:50px; padding:10px 30px; display:inline-block; box-shadow:5px 5px 0px var(--c-ink); font-weight:900;">
+                        📍 <span id="propAddress"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARQUEE -->
+        <div class="marquee">
+            <div class="marquee-inner">
+                <!-- Content duplicated by JS for loop -->
+                <span id="scrollingText">★ GOOD VIBES ONLY ★ CHECK THE SPECS ★ ACCESS GRANTED ★ WELCOME HOME ★</span>
+            </div>
+        </div>
+
+        <!-- GOODIE BAG (Bundle) -->
+        <section class="goodie-section">
+            <div class="container">
+                <h2 style="text-align:center; font-size:3rem; margin-bottom:20px;">THE GOODIE BAG</h2>
+                <p style="text-align:center; font-weight:700;">Digital Assets Included with RSVP</p>
+                
+                <div class="grid" id="bundleGrid">
+                    <!-- JS Injected -->
+                </div>
+            </div>
+        </section>
+
+        <!-- THE HYPE PERSON (Agent) -->
+        <section class="host-section">
+            <div class="container">
+                <div class="host-wrapper">
+                    <div style="position:relative; width:300px; height:300px; margin:0 auto;">
+                        <div class="host-star"></div>
+                        <img src="" id="realtorPhoto" class="host-img">
+                    </div>
+                    <div style="flex:1; min-width:300px;">
+                        <div class="eyebrow" style="background:var(--pop-blue);">YOUR HYPE PERSON</div>
+                        <h2 style="font-size:3rem; margin-bottom:20px;" id="realtorName"></h2>
+                        <div style="background:var(--c-ink); color:#fff; padding:20px; border-radius:20px 20px 20px 0; margin-bottom:20px;">
+                            <p id="realtorBio" style="font-size:1.1rem; margin:0;"></p>
+                        </div>
+                        <div class="host-links" id="socialLinks">
+                            <!-- JS Injected -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE GUEST LIST (Form) -->
+        <section class="rsvp-section" id="rsvp">
+            <div class="container">
+                <div class="clipboard">
+                    <h2 style="color:#fff; font-size:2.5rem; text-shadow:4px 4px 0px var(--c-ink);">GET ON THE LIST</h2>
+                    <p style="margin-bottom:30px; font-weight:700;">Unlock the floorplans & price deets.</p>
+                    
+                    <form id="popForm">
+                        <input type="text" id="fullName" class="input-pop hover-target" placeholder="YOUR NAME" required>
+                        <input type="email" id="email" class="input-pop hover-target" placeholder="YOUR EMAIL" required>
+                        <input type="tel" id="phone" class="input-pop hover-target" placeholder="YOUR DIGITS (PHONE)" required inputmode="numeric">
+                        
+                        <div class="check-wrap">
+                            <input type="checkbox" id="consentCheckbox" required>
+                            <label for="consentCheckbox">I'm cool with texts from <span id="consentBrokerage"></span>.</label>
+                        </div>
+
+                        <button type="submit" class="btn-pop hover-target" style="width:100%; font-size:1.5rem; background:var(--pop-lime);" id="submitBtn">
+                            LET'S GOOOO
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <h2 id="footerBrand"></h2>
+            <p id="footerAddress" style="margin:20px 0; opacity:0.7;"></p>
+            <a href="#" id="privacyLink" style="color:#fff;">PRIVACY STUFF</a>
+        </footer>
+
+    </main>
+
+    <!-- VIBE CHECK MODAL -->
+    <div class="modal-takeover" id="modal">
+        <h1 style="font-size:4rem; color:#fff; text-shadow:6px 6px 0px var(--c-ink); text-align:center; margin-bottom:40px;">VIBE CHECK</h1>
+        <div id="modalContent" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>
+    </div>
+
+    <script>
+        /**
+         * ==================================================================
+         * 1. SAFETY CONFIG
+         * ==================================================================
+         */
+        if (typeof window.config === 'undefined') {
+            window.config = {
+                meta: { titlePrefix: "Party", privacyPolicyLink: "#" },
+                property: { streetAddress: "777 Electric Ave", heroSubtitle: "Main Stage Energy.", backgroundImageUrl: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=2070&auto=format&fit=crop" },
+                realtor: { fullName: "Zoe Miller", bio: "I sell cool houses to cool people.", phone: "555-0123", email: "zoe@party.com", photoUrl: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=80&w=800", social: { instagram: "#" } },
+                brokerage: { name: "Neon Realty", address: "Venice Beach, CA", logoUrl: "" },
+                openHouse: { bundleItems: [{ icon: "fa-music", text: "Playlist" }, { icon: "fa-map", text: "Hotspots" }] },
+                settings: { visitorWebhookUrl: "", confettiColors: ['#ff6b9d', '#ccff00', '#4d96ff'] },
+                modalQuestions: [{ id: "vibe", questionText: "What's the move?", options: [{ text: "Buying ASAP", value: "buy" }] }]
+            };
+        }
+
+        /**
+         * ==================================================================
+         * 2. INIT
+         * ==================================================================
+         */
+        document.addEventListener("DOMContentLoaded", () => {
+            populateData();
+            
+            // Loader Animation
+            setTimeout(() => {
+                gsap.to("#loader", { yPercent: -100, duration: 0.8, ease: "back.in(1.7)" });
+                document.body.style.opacity = 1;
+                initAnimations();
+            }, 800);
+
+            setupFormLogic();
+        });
+
+        function populateData() {
+            const cfg = window.config;
+
+            // Basic Text
+            document.title = `${cfg.meta.titlePrefix} | POP EDITION`;
+            document.getElementById('navBrand').innerText = cfg.brokerage.name.toUpperCase();
+            document.getElementById('propTitle').innerText = cfg.property.streetAddress;
+            document.getElementById('propAddress').innerText = cfg.property.streetAddress;
+            document.getElementById('heroImg').src = cfg.property.backgroundImageUrl;
+            
+            // Scroller Text
+            const scroller = document.getElementById('scrollingText');
+            if(cfg.property.heroSubtitle) scroller.innerText = `★ ${cfg.property.heroSubtitle.toUpperCase()} ★ ${scroller.innerText}`;
+
+            // Bundle Grid
+            const grid = document.getElementById('bundleGrid');
+            if(cfg.openHouse && cfg.openHouse.bundleItems) {
+                cfg.openHouse.bundleItems.forEach(item => {
+                    grid.innerHTML += `
+                        <div class="card hover-target">
+                            <div class="card-icon"><i class="fas ${item.icon}"></i></div>
+                            <h3>${item.text}</h3>
+                            <p>INCLUDED</p>
+                        </div>
+                    `;
+                });
+            }
+
+            // Host
+            const r = cfg.realtor;
+            document.getElementById('realtorName').innerText = r.fullName;
+            document.getElementById('realtorBio').innerText = r.bio;
+            document.getElementById('realtorPhoto').src = r.photoUrl;
+            
+            const links = document.getElementById('socialLinks');
+            links.innerHTML = `
+                <a href="tel:${r.phone}" class="hover-target"><i class="fas fa-phone-alt"></i></a>
+                <a href="mailto:${r.email}" class="hover-target"><i class="fas fa-envelope"></i></a>
+            `;
+            if(r.social) {
+                Object.values(r.social).forEach(url => {
+                    if(url) links.innerHTML += `<a href="${url}" target="_blank" class="hover-target"><i class="fas fa-link"></i></a>`;
+                });
+            }
+
+            // Footer
+            document.getElementById('consentBrokerage').innerText = cfg.brokerage.name;
+            document.getElementById('privacyLink').href = cfg.meta.privacyPolicyLink;
+            document.getElementById('footerBrand').innerText = cfg.brokerage.name;
+            document.getElementById('footerAddress').innerText = cfg.brokerage.address;
+        }
+
+        function initAnimations() {
+            // Lenis
+            const lenis = new Lenis();
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+            requestAnimationFrame(raf);
+
+            // Marquee Loop
+            const marqueeInner = document.querySelector('.marquee-inner');
+            marqueeInner.innerHTML += marqueeInner.innerHTML; // Duplicate
+            gsap.to(marqueeInner, { xPercent: -50, duration: 15, ease: "none", repeat: -1 });
+
+            // Scroll Triggers
+            gsap.registerPlugin(ScrollTrigger);
+            
+            gsap.from(".hero-img-frame", {
+                rotation: -10, y: 100, opacity: 0, duration: 1, ease: "elastic.out(1, 0.5)", delay: 0.5
+            });
+
+            gsap.utils.toArray('.card').forEach((card, i) => {
+                gsap.from(card, {
+                    y: 100, rotation: i%2===0 ? -5 : 5, opacity: 0, duration: 0.8,
+                    scrollTrigger: { trigger: card, start: "top 85%" }
+                });
+            });
+        }
+
+        // --- FORM LOGIC ---
+        let storedPayload = null;
+        let collectedAnswers = {};
+
+        function setupFormLogic() {
+            const cfg = window.config;
+            
+            // Phone Mask
+            document.getElementById('phone').addEventListener('input', function (e) {
+                var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+            });
+
+            document.getElementById('popForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('submitBtn');
+                btn.innerText = "SENDING IT...";
+                
+                storedPayload = {
+                    formType: "initial_contact",
+                    fullName: document.getElementById('fullName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    propertyAddress: cfg.property.streetAddress,
+                    agentEmail: cfg.realtor.email,
+                    submittedAt: new Date().toISOString()
+                };
+
+                if(cfg.settings.visitorWebhookUrl) {
+                    try {
+                        await fetch(cfg.settings.visitorWebhookUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(storedPayload),
+                            mode: 'cors'
+                        });
+                    } catch(err) {}
+                }
+
+                setTimeout(() => showModalStep(0), 1000);
+            });
+        }
+
+        function showModalStep(index) {
+            const cfg = window.config;
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modalContent');
+            modal.classList.add('active');
+            content.innerHTML = '';
+
+            if (index < cfg.modalQuestions.length) {
+                const q = cfg.modalQuestions[index];
+                let html = `
+                    <h3 style="color:#fff; font-size:2rem; margin-bottom:30px; text-transform:uppercase;">${q.questionText}</h3>
+                `;
+                q.options.forEach(opt => {
+                    const txt = opt.text || opt;
+                    const val = opt.value || opt;
+                    html += `<button class="vibe-btn hover-target" onclick="handleAnswer('${q.id}', '${val}', ${index})">${txt}</button>`;
+                });
+                content.innerHTML = html;
+            } else {
+                finishSequence();
+            }
+        }
+
+        window.handleAnswer = (qid, val, idx) => {
+            collectedAnswers[qid] = val;
+            showModalStep(idx + 1);
+        };
+
+        function finishSequence() {
+            const cfg = window.config;
+            const finalPayload = {
+                ...storedPayload,
+                formType: "modal_answers",
+                questions: Object.keys(collectedAnswers).map(k => ({ questionId: k, answer: collectedAnswers[k] }))
+            };
+
+            if(cfg.settings.visitorWebhookUrl) {
+                fetch(cfg.settings.visitorWebhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(finalPayload),
+                    mode: 'cors'
+                });
+            }
+
+            document.getElementById('modalContent').innerHTML = `
+                <h1 style="font-size:5rem; color:#fff; text-shadow:6px 6px 0px var(--c-ink);">BOOM! 💥</h1>
+                <p style="color:#fff; font-size:1.5rem; margin:20px 0; font-weight:700;">YOU'RE ON THE LIST.</p>
+                <button onclick="location.reload()" class="btn-pop hover-target" style="margin-top:20px; font-size:1.5rem;">PEACE OUT ✌️</button>
+            `;
+            
+            // Confetti
+            const colors = cfg.settings.confettiColors || ['#ff6b9d', '#ccff00'];
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, colors: colors, shapes: ['circle', 'square'] });
+        }
+
+        // CURSOR
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.left = e.clientX + 'px';
+        });
+        document.addEventListener('mouseover', (e) => {
+            if(e.target.classList.contains('hover-target') || e.target.tagName === 'BUTTON') {
+                cursor.classList.add('hover');
+            } else {
+                cursor.classList.remove('hover');
+            }
+        });
+
+    </script>
+</body>
+</html>
