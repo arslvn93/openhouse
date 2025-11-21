@@ -70,10 +70,7 @@
             position: fixed; left: 50%; top: 0; height: 100%; width: 1px;
             background: rgba(0, 240, 255, 0.3); pointer-events: none; z-index: 9000;
         }
-        .coords {
-            position: fixed; top: 20px; right: 20px; color: var(--accent);
-            font-size: 0.7rem; z-index: 9001; pointer-events: none;
-        }
+        /* Coords removed as requested */
         
         /* Custom Mouse Target */
         .cursor-target {
@@ -162,6 +159,11 @@
         .data-val a { color: var(--text-main); text-decoration: none; }
         .data-val a:hover { color: var(--accent); }
 
+        /* Social Links */
+        .social-links { margin-top: 20px; display: flex; gap: 15px; }
+        .social-icon { color: var(--text-dim); font-size: 1.5rem; text-decoration: none; transition: 0.3s; }
+        .social-icon:hover { color: var(--accent); transform: translateY(-2px); }
+
         /* INPUT TERMINAL */
         .terminal-section { padding: 15vh 0; max-width: 100%; margin: 0 auto; }
         .cmd-line {
@@ -214,12 +216,37 @@
             align-items: center;
         }
 
+        /* Footer Elements */
+        .broker-logo { max-width: 150px; margin-bottom: 20px; opacity: 0.8; filter: grayscale(100%); transition: 0.3s; display: block; margin-left: auto; margin-right: auto; }
+        .broker-logo:hover { filter: grayscale(0%); opacity: 1; }
+        .privacy-link { display: inline-block; margin-top: 15px; color: var(--text-dim); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+        .privacy-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
         @media(max-width: 900px) {
             .split-grid { grid-template-columns: 1fr; gap: 50px; }
             .profile-section { grid-template-columns: 1fr; }
         }
 
         @media(max-width: 768px) {
+            /* Hide Nav Bar on Mobile */
+            header { display: none; }
+
+            /* Mobile Hero Layout (Photo BELOW Text - Default behavior) */
+            /* Removed flex-direction: column-reverse */
+            .hero .container {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            /* Adjust margin since we are not reversing anymore */
+            .title-block {
+                margin-top: 0;
+                margin-bottom: 50px; /* Restored to default */
+            }
+            
+            /* Adjust top padding since header is gone and we want space */
+            .hero { padding-top: 40px; }
+
             .hero-title { font-size: 3rem; }
             .profile-section { grid-template-columns: 1fr; }
             .hairline-x, .hairline-y { display: none; } /* Hide crosshairs on touch */
@@ -234,16 +261,16 @@
     <div class="hairline-x"></div>
     <div class="hairline-y"></div>
     <div class="cursor-target"></div>
-    <div class="coords">X: 000 Y: 000</div>
+    <!-- Coords Removed -->
     <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:6000;"></canvas>
 
     <!-- HUD -->
     <header>
         <div>
-            <span class="hud-item">PROJECT:</span> <span class="hud-val" id="hudProject">RESIDENCE</span>
+            <span class="hud-item">AGENT:</span> <span class="hud-val" id="hudRealtor"></span>
         </div>
         <div>
-            <span class="hud-item">STATUS:</span> <span class="hud-val" style="color:var(--accent);">LIVE</span>
+            <span class="hud-item">LOC:</span> <span class="hud-val" id="hudAddress" style="color:var(--accent);"></span>
         </div>
     </header>
 
@@ -253,7 +280,7 @@
         <section class="hero">
             <div class="container">
                 <div class="title-block">
-                    <div class="spec-label">Structural Overview</div>
+                    <div class="spec-label">The Property</div>
                     <h1 class="hero-title" id="propTitle"></h1>
                     <p class="hero-sub" id="heroSubtitle"></p>
                 </div>
@@ -270,8 +297,8 @@
         <!-- SPECS (Bundle) -->
         <section class="specs-section">
             <div class="container">
-                <div class="spec-label">Technical Specifications</div>
-                <h2 style="font-size: 2rem; margin-bottom: 40px;">ASSET BUNDLE</h2>
+                <div class="spec-label">Package Includes</div>
+                <h2 style="font-size: 2rem; margin-bottom: 40px;">FULL HOME PACKAGE</h2>
                 
                 <div class="specs-grid" id="specsGrid">
                     <!-- JS Generated -->
@@ -293,52 +320,51 @@
                         </div>
                         
                         <div>
-                            <div class="spec-label">Lead Architect / Agent</div>
-                            <h2 id="realtorName" style="margin-bottom: 20px;"></h2>
+                            <h2 id="realtorName" style="margin-bottom: 5px;"></h2>
+                            <div id="realtorTitle" style="color:var(--accent); font-family:var(--font-tech); font-size:0.9rem; margin-bottom: 20px; text-transform:uppercase; letter-spacing:1px;"></div>
                             <p id="realtorBio" style="color:var(--text-dim); margin-bottom: 30px; line-height:1.6;"></p>
                             
                             <div class="data-row">
-                                <span class="data-label">FREQUENCY (PHONE)</span>
+                                <span class="data-label">CALL ME</span>
                                 <span class="data-val"><a href="#" id="linkPhone"></a></span>
                             </div>
                             <div class="data-row">
-                                <span class="data-label">UPLINK (EMAIL)</span>
+                                <span class="data-label">EMAIL ME</span>
                                 <span class="data-val"><a href="#" id="linkEmail"></a></span>
                             </div>
-                            <div class="data-row">
-                                <span class="data-label">AFFILIATION</span>
-                                <span class="data-val" id="brokerName"></span>
-                            </div>
+                            <!-- Affiliation Removed -->
+                            
+                            <div id="socialLinks" class="social-links"></div>
                         </div>
                     </div>
 
                     <!-- RIGHT: INPUT TERMINAL -->
                     <div>
                         <div style="margin-bottom: 30px;">
-                            <h2 style="font-size: 2rem;">INITIALIZE DOWNLOAD</h2>
-                            <p style="color: var(--text-dim); font-family: var(--font-tech);">// ENTER CREDENTIALS TO UNLOCK SCHEMATICS</p>
+                            <h2 style="font-size: 2rem;">RECEIVE FULL PACKAGE</h2>
+                            <p style="color: var(--text-dim); font-family: var(--font-tech);">// ENTER DETAILS TO RECEIVE FULL HOME PACKAGE</p>
                         </div>
 
                         <form id="cadForm">
                             <div class="cmd-line">
                                 <span class="cmd-prompt">> ID.NAME_</span>
-                                <input type="text" id="fullName" class="cmd-input hover-target" placeholder="ENTER FULL NAME" required>
+                                <input type="text" id="fullName" class="cmd-input hover-target" placeholder="FULL NAME" required>
                             </div>
                             <div class="cmd-line">
                                 <span class="cmd-prompt">> ID.EMAIL_</span>
-                                <input type="email" id="email" class="cmd-input hover-target" placeholder="ENTER EMAIL ADDRESS" required>
+                                <input type="email" id="email" class="cmd-input hover-target" placeholder="EMAIL ADDRESS" required>
                             </div>
                             <div class="cmd-line">
                                 <span class="cmd-prompt">> ID.PHONE_</span>
-                                <input type="tel" id="phone" class="cmd-input hover-target" placeholder="ENTER CONTACT NUMBER" required inputmode="numeric">
+                                <input type="tel" id="phone" class="cmd-input hover-target" placeholder="NUMBER" required inputmode="numeric">
                             </div>
 
-                            <div style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 20px;">
-                                <input type="checkbox" id="consent" required style="accent-color: var(--accent);">
-                                ACKNOWLEDGE DATA TRANSFER PROTOCOLS WITH <span id="consentBroker" style="color:#fff;"></span>.
+                            <div style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px;">
+                                <input type="checkbox" id="consent" required style="accent-color: var(--accent); margin-top: 3px;">
+                                <span id="consentLabel"></span>
                             </div>
 
-                            <button type="submit" class="btn-exec hover-target" id="submitBtn">EXECUTE</button>
+                            <button type="submit" class="btn-exec hover-target" id="submitBtn">GET PACKAGE</button>
                         </form>
                     </div>
 
@@ -347,8 +373,10 @@
         </section>
 
         <footer style="padding: 50px; text-align:center; color: var(--text-dim); font-size: 0.7rem; border-top: 1px solid var(--line);">
+            <img id="brokerLogo" src="" alt="Brokerage Logo" class="broker-logo" style="display:none;">
             <div id="footerAddress"></div>
             <div style="margin-top: 10px;">SYSTEM STATUS: ONLINE | © <span id="year"></span></div>
+            <a id="privacyLink" href="#" target="_blank" class="privacy-link">Privacy Policy</a>
         </footer>
 
     </main>
@@ -370,7 +398,7 @@
             window.config = {
                 meta: { titlePrefix: "Project", privacyPolicyLink: "#" },
                 property: { streetAddress: "1400 Pacific Heights", heroSubtitle: "Structural integrity 100%. Modern design parameters exceeded.", backgroundImageUrl: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2671" },
-                realtor: { fullName: "Alex Sterling", bio: "Architectural specialist.", phone: "555-0199", email: "alex@design.com", photoUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800", social: {} },
+                realtor: { fullName: "Alex Sterling", title: "Architect", bio: "Architectural specialist.", phone: "555-0199", email: "alex@design.com", photoUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800", social: {} },
                 brokerage: { name: "Structure Real Estate", address: "SF, CA", logoUrl: "" },
                 openHouse: { bundleItems: [{ icon: "fa-layer-group", text: "Blueprints" }, { icon: "fa-cube", text: "3D Models" }] },
                 settings: { visitorWebhookUrl: "", confettiColors: ['#00f0ff', '#ffffff'] },
@@ -396,8 +424,11 @@
             const cfg = window.config;
 
             // Meta & HUD
-            document.title = `PROJECT: ${cfg.meta.titlePrefix}`;
-            document.getElementById('hudProject').innerText = (cfg.brokerage.name || "PROJECT").toUpperCase();
+            document.title = cfg.meta.pageTitlePrefix || `PROJECT: ${cfg.meta.titlePrefix}`;
+            
+            // Nav Bar: Realtor Name & Property Address
+            document.getElementById('hudRealtor').innerText = cfg.realtor.fullName ? cfg.realtor.fullName.toUpperCase() : "AGENT";
+            document.getElementById('hudAddress').innerText = cfg.property.streetAddress.toUpperCase();
 
             // Hero
             document.getElementById('propTitle').innerText = cfg.property.streetAddress.toUpperCase();
@@ -410,10 +441,19 @@
                 cfg.openHouse.bundleItems.forEach((item, i) => {
                     // Generate a fake "tech code"
                     const code = `SPC-${Math.floor(Math.random()*900)+100}`;
+                    // Handle FontAwesome class - if it lacks "fa-" prefix in config, you might need to adjust, but assuming config has full classes like "fas fa-home" or just "fa-home"
+                    // The template used "fas ${item.icon}". If config has "fas fa-home", it becomes "fas fas fa-home".
+                    // Let's clean it up.
+                    let iconClass = item.icon;
+                    if(!iconClass.includes('fa-')) iconClass = `fa-${iconClass}`; // fallback
+                    // If config has "fas fa-home", using "fas ${iconClass}" is redundant but usually works. 
+                    // Better: just use class="${item.icon}" if it contains the full set, or append if not.
+                    // Standardizing:
+                    
                     grid.innerHTML += `
                         <div class="spec-card hover-target">
                             <div class="spec-code">${code}</div>
-                            <i class="fas ${item.icon} spec-icon"></i>
+                            <i class="${iconClass} spec-icon"></i>
                             <div class="spec-title">${item.text}</div>
                             <div style="font-size:0.8rem; color:var(--text-dim);">AVAILABLE</div>
                         </div>
@@ -424,18 +464,76 @@
             // Agent
             const r = cfg.realtor;
             document.getElementById('realtorName').innerText = r.fullName;
+            
+            // Realtor Title
+            const rTitle = document.getElementById('realtorTitle');
+            if(r.title) {
+                rTitle.innerText = r.title;
+            } else {
+                rTitle.style.display = 'none';
+            }
+
             document.getElementById('realtorBio').innerText = r.bio;
             document.getElementById('realtorPhoto').src = r.photoUrl;
             document.getElementById('linkPhone').innerText = r.phone;
             document.getElementById('linkPhone').href = `tel:${r.phone}`;
             document.getElementById('linkEmail').innerText = r.email;
             document.getElementById('linkEmail').href = `mailto:${r.email}`;
-            document.getElementById('brokerName').innerText = cfg.brokerage.name.toUpperCase();
+            
+            // Social Links
+            const socialContainer = document.getElementById('socialLinks');
+            socialContainer.innerHTML = '';
+            if(r.social) {
+                // Map keys to FontAwesome
+                const iconMap = {
+                    facebook: 'fa-brands fa-facebook',
+                    instagram: 'fa-brands fa-instagram',
+                    linkedin: 'fa-brands fa-linkedin',
+                    twitter: 'fa-brands fa-twitter',
+                    youtube: 'fa-brands fa-youtube',
+                    tiktok: 'fa-brands fa-tiktok',
+                    website: 'fas fa-globe'
+                };
 
-            // Footer/Form
-            document.getElementById('consentBroker').innerText = cfg.brokerage.name.toUpperCase();
+                for(const [key, url] of Object.entries(r.social)) {
+                    if(!url) continue;
+                    // Normalize key
+                    const k = key.toLowerCase();
+                    const iconClass = iconMap[k] || 'fas fa-link';
+                    
+                    socialContainer.innerHTML += `
+                        <a href="${url}" target="_blank" class="social-icon hover-target">
+                            <i class="${iconClass}"></i>
+                        </a>
+                    `;
+                }
+            }
+
+            // Footer Address & Year
             document.getElementById('footerAddress').innerText = cfg.brokerage.address.toUpperCase();
             document.getElementById('year').innerText = new Date().getFullYear();
+
+            // Brokerage Logo
+            const bLogo = document.getElementById('brokerLogo');
+            if(cfg.brokerage.logoUrl) {
+                bLogo.src = cfg.brokerage.logoUrl;
+                bLogo.style.display = 'block';
+            }
+
+            // Privacy Policy Link
+            const ppLink = document.getElementById('privacyLink');
+            if(cfg.meta.privacyPolicyLink) {
+                ppLink.href = cfg.meta.privacyPolicyLink;
+            } else {
+                ppLink.style.display = 'none';
+            }
+
+            // Consent Text
+            const consentLabel = document.getElementById('consentLabel');
+            const ppUrl = cfg.meta.privacyPolicyLink || "#";
+            const brokerageName = cfg.brokerage.name || "the brokerage";
+            
+            consentLabel.innerHTML = `I agree to be contacted by ${brokerageName} via call, email, and text. To opt-out, you can reply ‘stop’ at any time or click the unsubscribe link in the emails. Message and data rates may apply. <a href="${ppUrl}" target="_blank" style="color:var(--accent); text-decoration:none;">Privacy Policy</a>`;
         }
 
         function initAnimations() {
@@ -472,7 +570,7 @@
             document.getElementById('cadForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const btn = document.getElementById('submitBtn');
-                btn.innerText = "COMPILING...";
+                btn.innerText = "SENDING...";
                 btn.style.background = "#fff";
 
                 storedPayload = {
@@ -547,8 +645,8 @@
             }
 
             document.getElementById('modalContent').innerHTML = `
-                <h1 style="color:var(--accent); font-size:3rem; margin-bottom:20px;">DOWNLOAD COMPLETE</h1>
-                <p style="color:var(--text-dim); margin-bottom:30px;">THE SCHEMATICS HAVE BEEN SENT TO YOUR TERMINAL.</p>
+                <h1 style="color:var(--accent); font-size:3rem; margin-bottom:20px;">PACKAGE UNLOCKED</h1>
+                <p style="color:var(--text-dim); margin-bottom:30px;">THE FULL HOME PACKAGE HAS BEEN SENT TO YOUR INBOX.</p>
                 <button onclick="location.reload()" class="btn-exec hover-target" style="clip-path:none;">REBOOT</button>
             `;
 
@@ -562,7 +660,7 @@
             const target = document.querySelector('.cursor-target');
             const hairlineX = document.querySelector('.hairline-x');
             const hairlineY = document.querySelector('.hairline-y');
-            const coords = document.querySelector('.coords');
+            // Coords element removed, so no update needed.
 
             document.addEventListener('mousemove', (e) => {
                 const x = e.clientX;
@@ -572,9 +670,8 @@
                 gsap.set(target, { x: x, y: y });
                 gsap.set(hairlineX, { top: y });
                 gsap.set(hairlineY, { left: x });
-
-                // Update Numbers
-                coords.innerText = `X: ${x.toString().padStart(4,'0')} Y: ${y.toString().padStart(4,'0')}`;
+                
+                // Removed coords.innerText update
             });
 
             // Hover Effects

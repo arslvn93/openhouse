@@ -8,7 +8,7 @@
     <!-- FONTS: Classic Authority -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <!-- ANIMATION ENGINE -->
@@ -17,6 +17,37 @@
     <script src="config.js"></script>
 
     <style>
+        /* 
+         * ----------------------------------------------------------
+         * 0. PRELOADER
+         * ----------------------------------------------------------
+         */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--navy-deep);
+            z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .preloader-text {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--white);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            position: relative;
+            opacity: 0; /* Controlled by GSAP */
+            transform: translateY(20px);
+        }
+        .preloader-line {
+            width: 0%;
+            height: 2px;
+            background: var(--gold-accent);
+            margin-top: 15px;
+        }
+
         /* 
          * ----------------------------------------------------------
          * 1. THE "PLATINUM" PALETTE
@@ -77,9 +108,12 @@
             margin: 20px auto 0;
         }
 
-        /* The "Executive" Button */
+        /* Button Adjustment */
         .btn-classic {
             display: inline-block;
+            width: auto; /* Reset width for desktop */
+            min-width: 250px; /* Ensure minimum width */
+            text-align: center;
             background: var(--navy-deep);
             color: var(--white);
             padding: 18px 40px;
@@ -94,6 +128,21 @@
             overflow: hidden;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(10, 25, 47, 0.2);
+            text-decoration: none;
+        }
+        
+        /* Hero-Specific Button (Gold) */
+        #hero .btn-classic {
+            background: var(--gold-accent);
+            color: var(--navy-deep);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            z-index: 10; /* Ensure top layer */
+            border: 1px solid var(--gold-accent);
+        }
+        #hero .btn-classic:hover {
+            background: var(--white);
+            color: var(--navy-deep);
+            transform: translateY(-3px);
         }
         
         /* Metallic Shine Effect */
@@ -107,6 +156,24 @@
         }
         .btn-classic:hover::before { left: 100%; }
         .btn-classic:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(10, 25, 47, 0.3); }
+
+        /* Social Icons */
+        .social-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            background: var(--white);
+            color: var(--navy-deep);
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .social-icon:hover {
+            background: var(--navy-deep);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
 
         /* 
          * ----------------------------------------------------------
@@ -146,34 +213,103 @@
 
         /* 
          * ----------------------------------------------------------
-         * 4. HERO
+         * 4. HERO (Redesigned: Cinematic Panel)
          * ----------------------------------------------------------
          */
         #hero {
-            height: 85vh;
+            height: 90vh; /* Taller */
             position: relative;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center;
+            display: flex; align-items: center;
             overflow: hidden;
             color: var(--white);
         }
         .hero-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            filter: brightness(0.6);
             z-index: 1;
         }
-        .hero-content { position: relative; z-index: 2; max-width: 800px; opacity: 0; transform: translateY(30px); }
+        /* Dark gradient overlay for depth */
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(10,25,47,0.8) 0%, rgba(10,25,47,0.4) 50%, rgba(10,25,47,0.1) 100%);
+            z-index: 2;
+        }
+        
+        .hero-content-wrapper {
+            position: relative; z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .hero-panel {
+            background: rgba(10, 25, 47, 0.95); /* Nearly solid navy */
+            padding: 60px;
+            max-width: 650px;
+            border-left: 5px solid var(--gold-accent);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            position: relative;
+            clip-path: inset(0 100% 0 0); /* Hidden initially for wipe effect */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 30px; /* Space for button below */
+        }
+        
+        .hero-cta-container {
+            max-width: 650px;
+            width: 100%;
+            opacity: 0; /* Hidden initially */
+            transform: translateY(20px);
+        }
+        
+        /* Decorative "Watermark" text behind */
+        .hero-panel::before {
+            content: '';
+            position: absolute; top: 0; right: 0; width: 100px; height: 100px;
+            background: linear-gradient(135deg, transparent 50%, var(--gold-accent) 50%);
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        /* Ensure content sits above watermark */
+        .hero-panel > * { position: relative; z-index: 1; }
+
         .hero-badge {
             display: inline-block;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 8px 20px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 700;
             letter-spacing: 3px;
-            font-size: 0.8rem;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(5px);
+            text-transform: uppercase;
+            color: var(--gold-accent);
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 40px;
+        }
+        .hero-badge::before {
+            content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+            width: 30px; height: 1px; background: var(--gold-accent);
+        }
+
+        #heroTitle {
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1;
+            margin-bottom: 30px;
+            color: var(--white);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        #heroSubtitle {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 40px;
+            border-left: 1px solid rgba(255,255,255,0.2);
+            padding-left: 25px;
         }
 
         /* 
@@ -219,13 +355,16 @@
             background: url('https://www.transparenttextures.com/patterns/cream-paper.png'); /* Subtle texture */
         }
         
-        /* SVG Signature */
-        .signature-svg {
-            width: 200px; height: auto; margin-top: 30px;
-        }
-        .signature-path {
-            fill: none; stroke: var(--navy-deep); stroke-width: 2;
-            stroke-dasharray: 1000; stroke-dashoffset: 1000;
+        /* Signature Font */
+        .signature-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: var(--navy-deep);
+            margin-top: 20px;
+            transform: rotate(-5deg);
+            display: inline-block;
+            position: relative;
+            opacity: 0; /* Hidden initially for animation */
         }
 
         /* 
@@ -306,23 +445,63 @@
         }
         .modal-btn:hover { background: var(--navy-deep); color: var(--white); border-color: var(--navy-deep); }
 
+        /* 
+         * ----------------------------------------------------------
+         * 10. MOBILE OPTIMIZATION
+         * ----------------------------------------------------------
+         */
         @media (max-width: 768px) {
+            nav { display: none !important; }
+            
+            /* Mobile Preloader */
+            .preloader-text { font-size: 1.5rem; letter-spacing: 2px; text-align: center; padding: 0 20px; line-height: 1.4; }
+            .preloader-line { width: 50px; }
+
+            /* Mobile Hero */
+            #hero { height: 100dvh; /* Use dynamic viewport height for mobile */ }
+            .hero-panel {
+                width: 90%;
+                max-width: none;
+                padding: 30px;
+                margin: 0 auto;
+                background: rgba(10, 25, 47, 0.85); /* Slightly more transparent on mobile */
+                backdrop-filter: blur(5px); /* Add blur for readability */
+                border-left: 3px solid var(--gold-accent);
+            }
+            
+            #heroTitle { font-size: 2.5rem; margin-bottom: 15px; }
+            #heroSubtitle { font-size: 1rem; margin-bottom: 25px; line-height: 1.6; }
+            .hero-badge { font-size: 0.7rem; margin-bottom: 15px; }
+            
+            /* Button Adjustment */
+            .btn-classic { width: 100%; padding: 15px 20px; font-size: 0.8rem; margin-top: 10px; }
+
+            /* Section Adjustments */
             .section-header h2 { font-size: 2rem; }
             .agent-card { flex-direction: column; }
-            .agent-photo { min-height: 300px; }
-            .form-container { padding: 30px; }
+            .agent-photo { min-height: 350px; }
+            .form-container { padding: 30px 20px; }
+            
+            /* Modal */
+            .modal-card { padding: 30px 20px; width: 95%; }
         }
 
     </style>
 </head>
 <body>
 
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="preloader-text" id="preloaderText">AGENT NAME</div>
+        <div class="preloader-line" id="preloaderLine"></div>
+    </div>
+
     <!-- CONFETTI CANVAS -->
     <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:3000;"></canvas>
 
     <!-- TOP TICKER -->
     <div class="top-bar">
-        <div class="container">
+        <div class="container" id="topBarText">
             Global Luxury Division &nbsp;&nbsp;|&nbsp;&nbsp; Offering Memorandum No. 4921 &nbsp;&nbsp;|&nbsp;&nbsp; Strictly Confidential
         </div>
     </div>
@@ -330,24 +509,28 @@
     <!-- NAVIGATION -->
     <nav id="navbar">
         <div class="container nav-inner">
-            <a href="#" class="brand-logo">
-                <i class="fas fa-landmark"></i>
-                <span id="navBrandText">STERLING &amp; CO.</span>
-            </a>
-            <a href="tel:+" class="nav-contact" id="navPhone">
-                <i class="fas fa-phone-alt"></i> <span id="phoneDisplay">Inquire</span>
-            </a>
+            <div class="brand-logo">
+                <span id="navRealtorName">REALTOR NAME</span>
+            </div>
+            <div class="nav-contact">
+                <i class="fas fa-map-marker-alt"></i> <span id="navAddressText">Address</span>
+            </div>
         </div>
     </nav>
 
     <!-- HERO -->
     <div id="hero">
         <div class="hero-bg" id="heroBg"></div>
-        <div class="container hero-content">
-            <span class="hero-badge">Exclusive Listing</span>
-            <h1 style="font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 20px;" id="heroTitle">THE ESTATE</h1>
-            <p style="font-size: 1.2rem; color: #ddd; max-width: 600px; margin: 0 auto 40px;" id="heroSubtitle">An architectural triumph set upon the coast.</p>
-            <a href="#contact" class="btn-classic">Request Private Showing</a>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content-wrapper">
+            <div class="hero-panel" id="heroPanel">
+                <div class="hero-badge">Exclusive Listing</div>
+                <h1 id="heroTitle">THE ESTATE</h1>
+                <p id="heroSubtitle">An architectural triumph set upon the coast.</p>
+            </div>
+            <div class="hero-cta-container" id="heroCta">
+                <a href="#contact" class="btn-classic">Get Full Home Package</a>
+            </div>
         </div>
     </div>
 
@@ -356,7 +539,7 @@
         <div class="container">
             <div class="section-header">
                 <span>The Property</span>
-                <h2>A Legacy Asset</h2>
+                <h2>Receive the Full Home Package</h2>
             </div>
             <div class="features-grid" id="amenitiesGrid">
                 <!-- JS Injected -->
@@ -375,16 +558,24 @@
                     <h4 style="color: var(--gold-accent); margin-bottom: 20px;" id="agentTitle">Executive Director</h4>
                     <p id="agentBio" style="margin-bottom: 30px;">Bio text...</p>
                     
-                    <!-- Signature SVG -->
-                    <svg class="signature-svg" viewBox="0 0 250 80">
-                        <path class="signature-path" d="M10,50 Q40,10 70,50 T130,50 T190,50" />
-                        <!-- Simplified visual squiggle for effect -->
-                        <path class="signature-path" d="M20,60 C50,60 50,30 80,40 S150,20 180,50" style="animation-delay: 0.5s" />
-                    </svg>
+                    <!-- Cursive Signature -->
+                    <div id="agentSignature" class="signature-text">Agent Name</div>
 
-                    <div style="margin-top: 30px;">
-                        <a href="#" id="agentEmail" style="color: var(--navy-deep); text-decoration: none; font-weight: 700; margin-right: 20px;"><i class="fas fa-envelope"></i> Email</a>
-                        <a href="#" id="agentSocial" style="color: var(--navy-deep); text-decoration: none; font-weight: 700;"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <div style="margin-top: 30px; font-size: 1rem;">
+                         <div style="margin-bottom: 12px;">
+                            <a href="#" id="agentEmail" style="color: var(--navy-deep); text-decoration: none; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-envelope" style="color: var(--gold-accent);"></i> <span id="agentEmailText">Email</span>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#" id="agentPhone" style="color: var(--navy-deep); text-decoration: none; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-phone-alt" style="color: var(--gold-accent);"></i> <span id="agentPhoneText">Phone</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="agentSocials" style="margin-top: 30px; display: flex; gap: 15px;">
+                        <!-- JS Injected -->
                     </div>
                 </div>
             </div>
@@ -395,12 +586,12 @@
     <section class="bg-white" id="contact">
         <div class="container">
             <div class="section-header">
-                <span>Acquisition</span>
-                <h2>Register Interest</h2>
+                <span>Access Details</span>
+                <h2>Unlock Full Home Package</h2>
             </div>
 
             <div class="form-container">
-                <p style="text-align:center; margin-bottom: 30px; font-style: italic;">Please complete the form below to access the full digital brochure and floor plans.</p>
+                <p style="text-align:center; margin-bottom: 30px; font-style: italic;">Please complete the form below to immediately receive the full digital brochure, floor plans, and listing details.</p>
                 
                 <form id="leadForm">
                     <div class="form-group">
@@ -420,13 +611,13 @@
 
                     <div class="checkbox-wrapper">
                         <input type="checkbox" id="consent" required>
-                        <label for="consent">
-                            I authorize <strong id="consentBrokerage">[Brokerage]</strong> to contact me regarding this property listing via phone or email.
+                        <label for="consent" id="consentLabel" style="font-size: 0.75rem; line-height: 1.5; display: block;">
+                            I agree to be contacted... <!-- JS Injected -->
                         </label>
                     </div>
 
                     <button type="submit" class="btn-classic" style="width:100%;" id="submitBtn">
-                        <span>Submit Inquiry</span>
+                        <span>Send Me the Package</span>
                     </button>
                 </form>
             </div>
@@ -435,15 +626,20 @@
 
     <!-- FOOTER -->
     <footer>
-        <div class="container">
-            <span class="footer-logo" id="footerBrand">STERLING &amp; CO.</span>
-            <p id="footerAddress" style="color: rgba(255,255,255,0.6);">123 Luxury Lane</p>
-            <div class="footer-links">
-                <a href="#" id="privacyLink">Privacy Policy</a>
-                <a href="#" id="termsLink">Terms of Service</a>
-                <a href="#">Fair Housing</a>
+        <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; text-align: left;">
+            <div style="flex: 1; padding-right: 20px;">
+                <span class="footer-logo" id="footerBrand">STERLING &amp; CO.</span>
+                <p id="footerAddress" style="color: rgba(255,255,255,0.6); margin-bottom: 15px;">123 Luxury Lane</p>
+                <div class="footer-links" style="margin: 0;">
+                    <a href="#" id="privacyLink" style="margin-left: 0;">Privacy Policy</a>
+                </div>
             </div>
-            <p style="margin-top: 30px; font-size: 0.7rem; opacity: 0.4;">&copy; <span id="year"></span> Global Luxury Division. All Rights Reserved.</p>
+            <div style="margin-top: 20px;">
+                <img id="footerLogo" src="" alt="Brokerage Logo" style="max-width: 120px; display: none;">
+            </div>
+        </div>
+        <div class="container" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+            <p style="margin: 0; font-size: 0.7rem; opacity: 0.4;">&copy; <span id="year"></span> Global Luxury Division. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -484,19 +680,63 @@
 
             // 2. Populate Content
             populateV4Data();
-
+            
             // 3. GSAP Animations
             gsap.registerPlugin(ScrollTrigger);
 
-            // Hero Reveal
-            gsap.to(".hero-content", { opacity: 1, y: 0, duration: 1.5, ease: "power3.out", delay: 0.2 });
-            
-            // Parallax Hero
+            // PRELOADER ANIMATION
+            const tl = gsap.timeline();
+
+            tl.to("#preloaderText", { opacity: 1, y: 0, duration: 1, ease: "power3.out" })
+              .to("#preloaderLine", { width: "100px", duration: 1, ease: "power2.out" }, "-=0.5")
+              .to("#preloaderText, #preloaderLine", { opacity: 0, y: -20, duration: 0.8, delay: 0.5, ease: "power2.in" })
+              .to("#preloader", { yPercent: -100, duration: 1, ease: "power2.inOut" }); // Curtain up effect
+
+            // HERO ANIMATION (New Sequence)
+            // 1. Background Zoom starts immediately
             gsap.to("#heroBg", {
-                yPercent: 30,
-                ease: "none",
-                scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+                scale: 1.1,
+                duration: 10,
+                ease: "none"
             });
+
+            // 2. Panel Wipe In (starts after preloader curtain rises ~3s mark)
+            // Mobile adjustment: Slightly faster or simpler if needed, but wipe works well.
+            gsap.to("#heroPanel", {
+                clipPath: "inset(0 0% 0 0)",
+                duration: 1.5,
+                ease: "power3.out",
+                delay: 2.8 // Sync with preloader exit
+            });
+
+            // 3. Content Reveal inside panel (Staggered) + CTA button
+            const heroElements = document.querySelectorAll("#heroPanel > *");
+            gsap.from(heroElements, {
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                delay: 3.2,
+                ease: "power2.out"
+            });
+            
+            // Reveal CTA Button separate
+            gsap.to("#heroCta", {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                delay: 3.8, // After panel content
+                ease: "power3.out"
+            });
+            
+            // Parallax Hero Scroll Effect (Disable on mobile to save battery/performance or reduce intensity)
+            if (window.innerWidth > 768) {
+                gsap.to("#heroBg", {
+                    yPercent: 30,
+                    ease: "none",
+                    scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+                });
+            }
 
             // Reveal Sections
             gsap.utils.toArray(".section-header, .feature-item, .agent-card").forEach(el => {
@@ -506,33 +746,41 @@
                 });
             });
 
-            // Signature Animation (Draws when agent card appears)
-            gsap.to(".signature-path", {
-                strokeDashoffset: 0,
-                duration: 2,
-                ease: "power2.inOut",
-                scrollTrigger: { trigger: ".agent-card", start: "top 70%" }
-            });
+            // Signature Animation (Cursive Write-on effect)
+            // We simulate writing by masking or simple opacity if clip-path is too complex for dynamic text width
+            // Here using a simple wipe effect
+            gsap.fromTo("#agentSignature", 
+                { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+                { 
+                    clipPath: "inset(0 0% 0 0)", 
+                    opacity: 1, 
+                    duration: 2.5, 
+                    ease: "power2.out",
+                    scrollTrigger: { trigger: ".agent-card", start: "top 70%" }
+                }
+            );
         });
 
         function populateV4Data() {
             // Meta
             document.title = `${config.meta.pageTitlePrefix} | Sterling & Co.`;
             
-            // Nav
-            const navBrandText = document.getElementById('navBrandText');
-            if (navBrandText) navBrandText.textContent = (config.brokerage.name || 'STERLING & CO.').toUpperCase();
-            
-            const navPhone = document.getElementById('navPhone');
-            const phoneDisplay = document.getElementById('phoneDisplay');
-            if (navPhone && phoneDisplay && config.realtor.phone) {
-                phoneDisplay.textContent = config.realtor.phone;
-                navPhone.href = `tel:${config.realtor.phone.replace(/\D/g,'')}`;
+            // Preloader
+            const preloaderText = document.getElementById('preloaderText');
+            if(preloaderText) preloaderText.textContent = (config.realtor.fullName || 'THE ESTATE').toUpperCase();
+
+            // Top Bar
+            const topBarText = document.getElementById('topBarText');
+            if(topBarText) {
+                topBarText.innerHTML = `${(config.brokerage.name || '').toUpperCase()} &nbsp;&nbsp;|&nbsp;&nbsp; ${(config.realtor.fullName || '').toUpperCase()}`;
             }
 
+            // Nav
+            setText('navRealtorName', (config.realtor.fullName || 'REALTOR').toUpperCase());
+            setText('navAddressText', config.property.streetAddress);
+            
             // Hero
             const heroTitle = document.getElementById('heroTitle');
-            // Use address for title if available
             if (heroTitle) heroTitle.textContent = (config.property.streetAddress || 'THE ESTATE').toUpperCase();
             
             const heroSubtitle = document.getElementById('heroSubtitle');
@@ -552,7 +800,6 @@
                         <div class="feature-item">
                             <i class="${item.icon} feature-icon"></i>
                             <div class="feature-title">${item.text}</div>
-                            <p style="font-size:0.9rem; margin:0;">&nbsp;</p> <!-- Desc removed in simplified model -->
                         </div>`;
                 });
             }
@@ -561,6 +808,7 @@
             setText('agentName', config.realtor.fullName);
             setText('agentTitle', config.realtor.title);
             setText('agentBio', config.realtor.bio);
+            setText('agentSignature', config.realtor.fullName); // Set signature text
             
             const agentPhotoBg = document.getElementById('agentPhotoBg');
             if (agentPhotoBg && config.realtor.photoUrl) {
@@ -568,42 +816,68 @@
             }
 
             // Agent Contact
+            setText('agentEmailText', config.realtor.email);
             const agentEmail = document.getElementById('agentEmail');
-            if (agentEmail) {
-                agentEmail.href = `mailto:${config.realtor.email}`;
-            }
+            if (agentEmail) agentEmail.href = `mailto:${config.realtor.email}`;
+
+            setText('agentPhoneText', config.realtor.phone);
+            const agentPhone = document.getElementById('agentPhone');
+            if (agentPhone) agentPhone.href = `tel:${config.realtor.phone.replace(/\D/g,'')}`;
             
-            // Agent Social (Loop to find first available or default)
-            const agentSocial = document.getElementById('agentSocial');
-            if (agentSocial && config.realtor.social) {
-                // Find first non-empty social link
-                const firstSocial = Object.entries(config.realtor.social).find(([k, v]) => v && v.length > 0);
-                if (firstSocial) {
-                    const [platform, url] = firstSocial;
-                    const iconMap = { linkedin: 'fab fa-linkedin', instagram: 'fab fa-instagram', facebook: 'fab fa-facebook-f', twitter: 'fab fa-twitter', website: 'fas fa-globe' };
-                    agentSocial.innerHTML = `<i class="${iconMap[platform] || 'fas fa-link'}"></i> ${platform.charAt(0).toUpperCase() + platform.slice(1)}`;
-                    agentSocial.href = url;
-                    agentSocial.target = "_blank";
-                } else {
-                    agentSocial.style.display = 'none';
-                }
+            // Agent Socials
+            const agentSocials = document.getElementById('agentSocials');
+            if (agentSocials && config.realtor.social) {
+                agentSocials.innerHTML = '';
+                Object.entries(config.realtor.social).forEach(([platform, url]) => {
+                    if (url) {
+                        const iconMap = { 
+                            linkedin: 'fab fa-linkedin-in', 
+                            instagram: 'fab fa-instagram', 
+                            facebook: 'fab fa-facebook-f', 
+                            twitter: 'fab fa-twitter', 
+                            website: 'fas fa-globe',
+                            youtube: 'fab fa-youtube',
+                            tiktok: 'fab fa-tiktok'
+                        };
+                        const iconClass = iconMap[platform.toLowerCase()] || 'fas fa-link';
+                        agentSocials.innerHTML += `
+                            <a href="${url}" target="_blank" class="social-icon">
+                                <i class="${iconClass}"></i>
+                            </a>
+                        `;
+                    }
+                });
             }
 
             // Footer / Consent
-            setText('consentBrokerage', config.brokerage.name);
-            setText('footerBrand', config.brokerage.name); // Updates .footer-logo text if ID matches
-            // Also update class-based footer logo text just in case ID didn't catch it
-            const footerLogoClass = document.querySelector('.footer-logo');
-            if (footerLogoClass) footerLogoClass.textContent = (config.brokerage.name || 'STERLING & CO.').toUpperCase();
-
+            setText('footerBrand', config.brokerage.name);
             setText('footerAddress', config.brokerage.address);
             setText('year', new Date().getFullYear());
 
-            // Legal Links
+             // Brokerage Logo
+            const footerLogo = document.getElementById('footerLogo');
+            if (footerLogo && config.brokerage.logoUrl) {
+                footerLogo.src = config.brokerage.logoUrl;
+                footerLogo.style.display = 'block';
+            }
+
+            // Legal Links & Consent
             const privacyLink = document.getElementById('privacyLink');
-            if (privacyLink && config.meta.privacyPolicyLink) {
-                privacyLink.href = config.meta.privacyPolicyLink;
-                privacyLink.target = "_blank";
+            let privacyUrl = "#";
+            if (config.meta.privacyPolicyLink) {
+                privacyUrl = config.meta.privacyPolicyLink;
+                if(privacyLink) {
+                    privacyLink.href = privacyUrl;
+                    privacyLink.target = "_blank";
+                }
+            }
+            
+            const consentLabel = document.getElementById('consentLabel');
+            if (consentLabel) {
+                const brokerage = config.brokerage.name || 'the brokerage';
+                const privacyHtml = `<a href="${privacyUrl}" target="_blank" style="color:inherit; text-decoration:underline;">Privacy Policy</a>`;
+                
+                consentLabel.innerHTML = `I agree to be contacted by ${brokerage} via call, email, and text. To opt-out, you can reply ‘stop’ at any time or click the unsubscribe link in the emails. Message and data rates may apply. ${privacyHtml}`;
             }
         }
 

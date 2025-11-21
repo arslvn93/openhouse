@@ -170,11 +170,11 @@
 
         /* MOBILE */
         @media(max-width: 768px) {
-            .hero-image-wrap { width: 100%; height: 50vh; top: auto; bottom: 0; opacity: 0.4; }
-            .host-section { flex-direction: column; }
-            .host-img-wrap { width: 100%; height: 100vw; }
+            .hero-image-wrap { width: 100%; height: 80vh; top: auto; bottom: 0; opacity: 0.4; }
+            .host-section { flex-direction: column-reverse; }
+            .host-img-wrap { width: 100%; height: 100vw; margin-bottom: 2rem; }
             .amenity-grid { grid-template-columns: 1fr; }
-            .hero-title { font-size: 14vw; }
+            .hero-title { font-size: 18vw; }
             footer { flex-direction: column; align-items: center; text-align: center; }
         }
     </style>
@@ -228,7 +228,8 @@
         <section class="host-section">
             <div class="host-info">
                 <div class="hero-eyebrow" style="opacity:1; color:var(--accent);">Your Curator</div>
-                <h2 style="font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 1rem;" id="realtorName"></h2>
+                <h2 style="font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 0.5rem;" id="realtorName"></h2>
+                <div id="realtorTitle" style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.2em;"></div>
                 <p style="font-size: 1.1rem; line-height: 1.6; color: #888; max-width: 500px;" id="realtorBio"></p>
                 
                 <div class="host-contact-grid" id="realtorContactInfo">
@@ -266,8 +267,8 @@
 
                 <div class="consent-row">
                     <input type="checkbox" id="consentCheckbox" required class="hover-target">
-                    <label for="consentCheckbox">
-                        I agree to be contacted by <strong id="consentBrokerage" style="color:#fff;"></strong>. <a href="#" id="privacyLink">Privacy Policy</a>.
+                    <label for="consentCheckbox" id="consentLabel" style="line-height: 1.4;">
+                        <!-- Injected via JS -->
                     </label>
                 </div>
 
@@ -280,6 +281,7 @@
         <footer>
             <div id="footerBrand"></div>
             <div id="footerAddress"></div>
+            <a href="#" id="footerPrivacy" style="color:inherit; text-decoration:none; transition:0.3s;" class="hover-target">PRIVACY POLICY</a>
             <div><img src="" id="footerLogo" style="display:none;"></div>
             <div>© <span id="year"></span></div>
         </footer>
@@ -336,12 +338,12 @@
 
         function populateV3Data() {
             // META
-            document.title = `${config.meta.titlePrefix} | ${config.property.streetAddress}`;
+            document.title = `${config.meta.pageTitlePrefix || config.meta.titlePrefix} | ${config.property.streetAddress}`;
 
             // NAV & BRANDING
-            document.getElementById('navBrand').innerText = config.brokerage.name || config.meta.navBrandText;
+            document.getElementById('navBrand').innerText = config.realtor.fullName || config.meta.navBrandText;
             document.getElementById('navAddress').innerText = config.property.streetAddress;
-            document.getElementById('loaderBrand').innerText = (config.brokerage.name || "RESIDENCE").split(" ")[0];
+            document.getElementById('loaderBrand').innerText = config.realtor.fullName;
 
             // HERO TITLE (Split Logic)
             const titleContainer = document.getElementById('dynamicTitle');
@@ -380,31 +382,44 @@
             // REALTOR
             const r = config.realtor;
             document.getElementById('realtorName').innerText = r.fullName;
+            document.getElementById('realtorTitle').innerText = r.title;
             document.getElementById('realtorBio').innerHTML = r.bio;
             document.getElementById('realtorPhoto').src = r.photoUrl;
             
             // Realtor Contact Block
             const contactInfo = document.getElementById('realtorContactInfo');
             contactInfo.innerHTML = `
-                <div class="host-contact-item"><span style="display:block; color:#666; font-size:0.6rem;">TITLE</span>${r.title}</div>
                 <div class="host-contact-item"><span style="display:block; color:#666; font-size:0.6rem;">DIRECT</span><a href="tel:${r.phone}">${r.phone}</a></div>
-                <div class="host-contact-item"><span style="display:block; color:#666; font-size:0.6rem;">EMAIL</span><a href="mailto:${r.email}">CONNECT</a></div>
+                <div class="host-contact-item"><span style="display:block; color:#666; font-size:0.6rem;">EMAIL</span><a href="mailto:${r.email}">${r.email}</a></div>
             `;
 
             // Socials
             const socials = document.getElementById('socialLinks');
             if(r.social) {
-                Object.values(r.social).forEach(link => {
-                    if(link) socials.innerHTML += `<a href="${link}" target="_blank" class="hover-target"><i class="fas fa-link"></i></a>`;
+                const iconMap = {
+                    facebook: 'fab fa-facebook-f',
+                    instagram: 'fab fa-instagram',
+                    linkedin: 'fab fa-linkedin-in',
+                    twitter: 'fab fa-twitter',
+                    x: 'fab fa-twitter',
+                    website: 'fas fa-globe'
+                };
+
+                Object.entries(r.social).forEach(([key, link]) => {
+                    if(link) {
+                        const iconClass = iconMap[key.toLowerCase()] || 'fas fa-link';
+                        socials.innerHTML += `<a href="${link}" target="_blank" class="hover-target"><i class="${iconClass}"></i></a>`;
+                    }
                 });
             }
 
             // FORM & FOOTER
-            document.getElementById('consentBrokerage').innerText = config.brokerage.name;
-            document.getElementById('privacyLink').href = config.meta.privacyPolicyLink;
+            const consentLabel = document.getElementById('consentLabel');
+            consentLabel.innerHTML = `I agree to be contacted by <strong style="color:#fff;">${config.brokerage.name}</strong> via call, email, and text. To opt-out, you can reply ‘stop’ at any time or click the unsubscribe link in the emails. Message and data rates may apply. <a href="${config.meta.privacyPolicyLink}" target="_blank" style="color:var(--accent); text-decoration:none;">Privacy Policy</a>`;
             
             document.getElementById('footerBrand').innerText = config.brokerage.name;
             document.getElementById('footerAddress').innerText = config.brokerage.address;
+            document.getElementById('footerPrivacy').href = config.meta.privacyPolicyLink;
             if(config.brokerage.logoUrl) {
                 const logo = document.getElementById('footerLogo');
                 logo.src = config.brokerage.logoUrl;
@@ -454,14 +469,21 @@
                 scrollTrigger: { trigger: '.manifesto', start: "top 70%", end: "bottom 50%", scrub: true }
             });
 
-            // Amenities Stagger
+            // Amenities Fade In Effect (Scroll Down)
             if (typeof ScrollTrigger !== 'undefined') {
-                gsap.from('.amenity-card', {
-                    y: 50, opacity: 0, stagger: 0.1, duration: 1,
+                // Start hidden
+                gsap.set('.amenity-card', { opacity: 0, y: 50 });
+                
+                gsap.to('.amenity-card', {
+                    y: 0, 
+                    opacity: 1, 
+                    stagger: 0.1, 
+                    ease: "power2.out",
                     scrollTrigger: { 
                         trigger: '.amenity-grid', 
-                        start: "top 80%",
-                        onEnter: () => gsap.to('.amenity-card', { opacity: 1, y: 0 }) // Fail-safe
+                        start: "top 80%", // Starts fading in when top of grid hits 80% down viewport
+                        end: "bottom 60%", // Fully visible when bottom hits 60% down
+                        scrub: 0.5
                     }
                 });
             } else {

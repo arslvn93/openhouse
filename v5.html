@@ -199,8 +199,8 @@
 
         /* The Curator (Agent) */
         .curator-grid { display: grid; grid-template-columns: 1fr 1fr; }
-        .curator-img-box { height: 100%; min-height: 600px; overflow: hidden; border-right: var(--border-heavy); }
-        .curator-img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s; }
+        .curator-img-box { height: 100%; min-height: 600px; overflow: hidden; border-right: var(--border-heavy); position: relative; }
+        .curator-img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s; display: block; }
         .curator-info { padding: var(--pad); display: flex; flex-direction: column; justify-content: center; }
 
         /* Ticket Machine (Form) */
@@ -210,6 +210,12 @@
             padding: var(--pad);
             position: relative;
         }
+        
+        @media (max-width: 768px) {
+            #formHeading { font-size: 2.5rem !important; line-height: 1.1; }
+            #formSubtitle { font-size: 0.9rem !important; margin-top: 10px; display: block; }
+        }
+
         .input-brutal {
             width: 100%;
             background: transparent;
@@ -291,7 +297,7 @@
 
     <!-- NAV -->
     <nav>
-        <div class="nav-item">EXHIBITION NO. 882</div>
+        <div class="nav-item" id="navRealtorName">EXHIBITION NO. 882</div>
         <div class="nav-item" id="navDate"></div>
     </nav>
 
@@ -344,7 +350,8 @@
             </div>
             <div class="curator-info">
                 <span class="label">THE CURATOR</span>
-                <h2 style="font-size: 4rem; margin-bottom: 30px; line-height: 0.9;" id="realtorName">NAME</h2>
+                <h2 style="font-size: 4rem; margin-bottom: 5px; line-height: 0.9;" id="realtorName">NAME</h2>
+                <h4 id="realtorTitle" style="font-family: var(--font-tech); font-size: 1.5rem; margin-bottom: 30px; margin-top: 0; font-weight: 400;">TITLE</h4>
                 <p style="font-size: 1.5rem; line-height: 1.4; max-width: 400px; margin-bottom: 50px;" id="realtorBio"></p>
                 
                 <div style="display: flex; gap: 20px;">
@@ -358,8 +365,8 @@
         <section class="ticket-machine" id="register">
             <div style="max-width: 800px; margin: 0 auto;">
                 <div style="border-bottom: 2px solid #333; margin-bottom: 60px; padding-bottom: 20px;">
-                    <h2 style="color: white;">Acquire Entry Ticket</h2>
-                    <span class="label" style="color: #666;">FILL DATA TO GENERATE QR CODE</span>
+                    <h2 style="color: white;" id="formHeading">Receive Full Home Package</h2>
+                    <span class="label" style="color: #666;" id="formSubtitle">ENTER DETAILS TO UNLOCK COMPREHENSIVE PROPERTY DOSSIER</span>
                 </div>
 
                 <form id="signInForm">
@@ -370,18 +377,18 @@
                         <input type="email" id="email" class="input-brutal hover-target" placeholder="EMAIL ADDRESS" required>
                     </div>
                     <div style="position:relative;">
-                        <input type="tel" id="phone" class="input-brutal hover-target" placeholder="COMMUNICATION ID (PHONE)" required inputmode="numeric">
+                        <input type="tel" id="phone" class="input-brutal hover-target" placeholder="PHONE NUMBER" required inputmode="numeric">
                     </div>
 
                     <div style="margin-bottom: 40px; display: flex; align-items: center; gap: 20px;">
-                        <div style="width: 20px; height: 20px; border: 1px solid white; display: flex; align-items: center; justify-content: center;">
+                        <div style="width: 20px; height: 20px; border: 1px solid white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <input type="checkbox" id="consent" required style="opacity: 0; width: 100%; height: 100%; cursor: none;">
                             <div id="check-visual" style="width: 10px; height: 10px; background: var(--neon); display: none;"></div>
                         </div>
-                        <label for="consent" style="font-size: 0.8rem; color: #999;">I CONSENT TO DATA PROCESSING BY <span id="consentBrokerage" style="color:white;">BROKERAGE</span>.</label>
+                        <label for="consent" style="font-size: 0.8rem; color: #999; line-height: 1.4;">I agree to be contacted by <span id="consentBrokerage" style="color:white;">BROKERAGE</span> via call, email, and text. To opt-out, you can reply ‘stop’ at any time or click the unsubscribe link in the emails. Message and data rates may apply. <a id="consentPrivacy" href="#" target="_blank" style="color:white; text-decoration:underline;">Privacy Policy</a></label>
                     </div>
 
-                    <button type="submit" class="btn-ticket hover-target" id="submitBtn">GENERATE TICKET</button>
+                    <button type="submit" class="btn-ticket hover-target" id="submitBtn">SEND PACKAGE</button>
                 </form>
             </div>
         </section>
@@ -397,8 +404,12 @@
                 </p>
             </div>
             <div style="text-align: right;">
+                <img id="footerBrokerageLogo" src="" alt="Brokerage Logo" style="height: 40px; margin-bottom: 10px; display: block; margin-left: auto;">
                 <p style="font-size: 0.8rem;" id="footerAddress"></p>
-                <p style="font-size: 0.8rem; margin-top: 5px;">&copy; <span id="year"></span></p>
+                <p style="font-size: 0.8rem; margin-top: 5px;">
+                    &copy; <span id="year"></span> 
+                    <a href="#" id="footerPrivacyPolicy" style="color: inherit; text-decoration: none; margin-left: 10px;">Privacy Policy</a>
+                </p>
             </div>
         </footer>
 
@@ -470,8 +481,9 @@
 
         function populateV7Data() {
             // Meta
-            document.title = `EXHIBITION | ${config.property.streetAddress}`;
-            document.getElementById('navDate').innerText = new Date().toLocaleDateString().toUpperCase();
+            document.title = config.meta.pageTitlePrefix;
+            document.getElementById('navRealtorName').innerText = config.realtor.fullName.toUpperCase();
+            document.getElementById('navDate').innerText = config.property.streetAddress.toUpperCase();
             
             // Property
             document.getElementById('propAddress').innerText = config.property.streetAddress.toUpperCase();
@@ -498,6 +510,7 @@
 
             // Curator
             document.getElementById('realtorName').innerText = config.realtor.fullName.toUpperCase();
+            document.getElementById('realtorTitle').innerText = config.realtor.title.toUpperCase();
             document.getElementById('realtorBio').innerText = config.realtor.bio.toUpperCase();
             document.getElementById('realtorImg').src = config.realtor.photoUrl;
             
@@ -519,11 +532,26 @@
 
             // Footer
             document.getElementById('consentBrokerage').innerText = config.brokerage.name.toUpperCase();
+            const consentPrivacy = document.getElementById('consentPrivacy');
+            if(consentPrivacy && config.meta.privacyPolicyLink) {
+                consentPrivacy.href = config.meta.privacyPolicyLink;
+            }
+
             document.getElementById('footerAddress').innerText = config.brokerage.address.toUpperCase();
             document.getElementById('year').innerText = new Date().getFullYear();
             
             document.getElementById('footerRealtorName').innerText = config.realtor.fullName.toUpperCase();
-            document.getElementById('footerRealtorTitle').innerText = `${config.realtor.title.toUpperCase()} | ${config.brokerage.name.toUpperCase()}`;
+            document.getElementById('footerRealtorTitle').innerText = config.realtor.title.toUpperCase();
+            
+            const footerLogo = document.getElementById('footerBrokerageLogo');
+            if(footerLogo && config.brokerage.logoUrl) {
+                footerLogo.src = config.brokerage.logoUrl;
+            }
+
+            const footerPrivacy = document.getElementById('footerPrivacyPolicy');
+            if(footerPrivacy && config.meta.privacyPolicyLink) {
+                footerPrivacy.href = config.meta.privacyPolicyLink;
+            }
             
             const footerPhone = document.getElementById('footerRealtorPhone');
             if(footerPhone) {
@@ -554,7 +582,7 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerText = "GENERATING...";
+            btn.innerText = "SENDING...";
             btn.style.background = "var(--neon)";
             
             const fullName = document.getElementById('fullName').value;
@@ -663,8 +691,8 @@
             const modal = document.getElementById('modalOverlay');
             modal.innerHTML = `
                 <div class="modal-inner" style="text-align:center; border:none; background:black; color:white;">
-                    <h1 style="color: var(--neon); font-size: 8rem;">ADMIT<br>ONE</h1>
-                    <p style="font-family: var(--font-tech); margin-top: 20px;">DIGITAL TICKET ISSUED TO DEVICE.</p>
+                    <h1 style="color: var(--neon); font-size: 6rem;">PACKAGE<br>SENT</h1>
+                    <p style="font-family: var(--font-tech); margin-top: 20px;">COMPLETE PROPERTY DOSSIER SENT TO EMAIL.</p>
                     <button onclick="location.reload()" class="btn-ticket hover-target" style="margin-top: 40px; background: white; color: black;">CLOSE SEQUENCE</button>
                 </div>
             `;

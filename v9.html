@@ -101,7 +101,7 @@
         .btn-pop:active { transform: translate(0, 0); box-shadow: var(--shadow-active); }
 
         /* HERO */
-        .hero { min-height: 100vh; padding-top: 150px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .hero {  padding-top: 150px; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .eyebrow {
             display: inline-block; background: var(--c-ink); color: #fff; padding: 5px 15px;
             border-radius: 10px; font-weight: 900; text-transform: uppercase; transform: rotate(-3deg); margin-bottom: 1rem;
@@ -109,21 +109,47 @@
         .hero-title {
             font-size: clamp(3rem, 10vw, 8rem); color: var(--pop-pink);
             -webkit-text-stroke: 3px var(--c-ink); text-shadow: 6px 6px 0px var(--c-ink);
-            margin-bottom: 2rem;
+            margin-bottom: -50px; position: relative; z-index: 2;
         }
         .hero-img-frame {
             width: 90%; max-width: 800px; aspect-ratio: 16/9;
             border: var(--border); border-radius: 30px; background: var(--c-ink);
             overflow: hidden; position: relative; box-shadow: 20px 20px 0px var(--pop-lime);
-            transform: rotate(2deg); transition: 0.3s;
+            transform: rotate(-1deg); transition: 0.3s;
+            margin: 0 auto 60px auto;
+            display: flex; /* Fix for extra space/black bar */
         }
         .hero-img-frame:hover { transform: rotate(0deg) scale(1.02); box-shadow: 10px 10px 0px var(--pop-purp); }
-        .hero-img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .hero-address-pill {
+            position: relative; z-index: 10;
+            background: #fff; border: var(--border); border-radius: 50px; 
+            padding: 15px 40px; display: inline-block; 
+            box-shadow: 5px 5px 0px var(--c-ink); font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        /* VIBE CHECK SECTION */
+        .vibe-section { padding: 80px 0; position: relative; }
+        .vibe-card {
+            background: var(--pop-lime); border: var(--border); border-radius: 30px;
+            padding: 50px; box-shadow: 15px 15px 0px var(--c-ink);
+            transform: rotate(1deg); max-width: 900px; margin: 0 auto;
+            text-align: center;
+        }
+        .vibe-card h2 {
+            font-size: 3rem; margin-bottom: 30px; color: var(--c-ink);
+            text-shadow: 3px 3px 0px #fff;
+        }
+        .vibe-text {
+            font-size: 1.4rem; line-height: 1.6; font-weight: 500;
+        }
 
         /* MARQUEE */
         .marquee {
             background: var(--pop-yell); border-top: var(--border); border-bottom: var(--border);
-            padding: 20px 0; margin: 100px 0; transform: rotate(-2deg) scale(1.05); overflow: hidden;
+            padding: 20px 0; margin: 120px 0 0px 0; transform: rotate(-2deg) scale(1.05); overflow: hidden;
         }
         .marquee-inner { display: flex; white-space: nowrap; gap: 50px; font-family: var(--font-head); font-size: 2rem; }
 
@@ -162,6 +188,19 @@
         }
         .host-links a:hover { color: var(--pop-pink); }
 
+        /* CONTACT DETAILS */
+        .contact-social-wrapper {
+            display: flex; align-items: center; justify-content: space-between; gap: 30px; flex-wrap: wrap;
+        }
+        .contact-details {
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .contact-item {
+            font-size: 1.2rem; color: var(--c-ink); text-decoration: none; 
+            font-weight: 700; display: flex; align-items: center; gap: 10px;
+        }
+        .contact-item:hover { color: var(--pop-pink); }
+
         /* THE GUEST LIST (Form) */
         .rsvp-section { padding: 100px 0; }
         .clipboard {
@@ -180,7 +219,13 @@
         .check-wrap input { width: 20px; height: 20px; accent-color: var(--c-ink); border: 3px solid #000; }
 
         /* FOOTER */
-        footer { background: var(--c-ink); color: #fff; padding: 60px; text-align: center; font-family: var(--font-head); }
+        footer { 
+            background: var(--c-ink); color: #fff; padding: 60px; 
+            font-family: var(--font-head);
+            display: flex; justify-content: space-between; align-items: center; text-align: left;
+        }
+        .footer-content { flex: 1; }
+        .footer-logo { max-width: 150px; height: auto; margin-left: 30px; border-radius: 10px; }
 
         /* MODAL */
         .modal-takeover {
@@ -199,9 +244,65 @@
         .vibe-btn:hover { transform: scale(1.05) rotate(-2deg); background: var(--pop-lime); }
 
         @media(max-width: 768px) {
+            .hero { padding-top: 50px; min-height: 10vh; }
             .hero-title { font-size: 14vw; -webkit-text-stroke: 1.5px var(--c-ink); }
+            .hero-img-frame {
+                width: 90%;
+                aspect-ratio: 16/9;
+                height: auto;
+                margin-bottom: 0;
+                background: var(--c-ink);
+            }
+            .hero-img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                min-height: auto;
+                min-width: auto;
+            }
+            .hero-address-pill { display: none; }
+            
+            /* MOBILE VIBE OPTIMIZATION */
+            .vibe-section { padding: 40px 5vw; }
+            .vibe-card {
+                padding: 30px 25px;
+                transform: rotate(0deg) !important; /* Reset rotation to save space */
+                border-radius: 25px;
+                box-shadow: 8px 8px 0px var(--c-ink);
+                width: 100%;
+                margin: 0;
+                text-align: left; /* Better readability on mobile */
+            }
+            .vibe-card h2 {
+                font-size: 2.2rem; 
+                margin-bottom: 15px;
+                line-height: 1;
+                text-align: center;
+            }
+            .vibe-text {
+                font-size: 1.1rem;
+                line-height: 1.5;
+                font-weight: 400;
+            }
+            .vibe-card .eyebrow {
+                transform: rotate(0deg) !important;
+                font-size: 0.9rem;
+                padding: 5px 12px;
+                margin-bottom: 20px;
+                display: inline-block;
+                /* Center eyebrow on mobile */
+                position: relative; left: 50%; translate: -50%;
+            }
+
             .host-wrapper { flex-direction: column; padding: 30px; text-align: center; }
+            .contact-social-wrapper { flex-direction: column; gap: 20px; align-items: center; justify-content: center; }
             .nav-pill { flex-direction: column; gap: 10px; border-radius: 20px; }
+            nav { top: auto; bottom: 20px; transition: transform 0.3s ease; }
+            nav.nav-hidden { transform: translateY(150%); }
+            .contact-details { align-items: center; }
+            footer { flex-direction: column; text-align: center; gap: 30px; }
+            .footer-logo { margin-left: 0; }
+            #cursor { display: none !important; }
         }
     </style>
 </head>
@@ -237,8 +338,8 @@
                     <img src="" id="heroImg">
                 </div>
 
-                <div style="margin-top: 40px;">
-                    <div style="background:#fff; border:var(--border); border-radius:50px; padding:10px 30px; display:inline-block; box-shadow:5px 5px 0px var(--c-ink); font-weight:900;">
+                <div>
+                    <div class="hero-address-pill">
                         📍 <span id="propAddress"></span>
                     </div>
                 </div>
@@ -252,6 +353,17 @@
                 <span id="scrollingText">★ GOOD VIBES ONLY ★ CHECK THE SPECS ★ ACCESS GRANTED ★ WELCOME HOME ★</span>
             </div>
         </div>
+
+        <!-- VIBE CHECK CONTENT -->
+        <section class="vibe-section">
+            <div class="container">
+                <div class="vibe-card hover-target">
+                    <div class="eyebrow" style="background:var(--pop-pink); transform:rotate(-2deg);">THE VIBE CHECK</div>
+                    <h2>WHAT'S THE DEAL?</h2>
+                    <p id="heroSubtitleText" class="vibe-text"></p>
+                </div>
+            </div>
+        </section>
 
         <!-- GOODIE BAG (Bundle) -->
         <section class="goodie-section">
@@ -279,8 +391,11 @@
                         <div style="background:var(--c-ink); color:#fff; padding:20px; border-radius:20px 20px 20px 0; margin-bottom:20px;">
                             <p id="realtorBio" style="font-size:1.1rem; margin:0;"></p>
                         </div>
-                        <div class="host-links" id="socialLinks">
-                            <!-- JS Injected -->
+                        <div class="contact-social-wrapper">
+                            <div id="contactDetails"></div>
+                            <div class="host-links" id="socialLinks">
+                                <!-- JS Injected -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -301,7 +416,7 @@
                         
                         <div class="check-wrap">
                             <input type="checkbox" id="consentCheckbox" required>
-                            <label for="consentCheckbox">I'm cool with texts from <span id="consentBrokerage"></span>.</label>
+                            <label for="consentCheckbox" id="consentLabel" style="font-size: 0.8rem; text-align: left; display: block; line-height: 1.4;"></label>
                         </div>
 
                         <button type="submit" class="btn-pop hover-target" style="width:100%; font-size:1.5rem; background:var(--pop-lime);" id="submitBtn">
@@ -313,9 +428,12 @@
         </section>
 
         <footer>
-            <h2 id="footerBrand"></h2>
-            <p id="footerAddress" style="margin:20px 0; opacity:0.7;"></p>
-            <a href="#" id="privacyLink" style="color:#fff;">PRIVACY STUFF</a>
+            <div class="footer-content">
+                <h2 id="footerBrand"></h2>
+                <p id="footerAddress" style="margin:20px 0; opacity:0.7;"></p>
+                <a href="#" id="privacyLink" style="color:#fff;">PRIVACY STUFF</a>
+            </div>
+            <img id="footerLogo" class="footer-logo" alt="Brokerage Logo">
         </footer>
 
     </main>
@@ -356,25 +474,68 @@
             setTimeout(() => {
                 gsap.to("#loader", { yPercent: -100, duration: 0.8, ease: "back.in(1.7)" });
                 document.body.style.opacity = 1;
+                
+                // Ensure hero image is visible if GSAP fails or delay causes issue
+                const heroImgFrame = document.querySelector('.hero-img-frame');
+                if (heroImgFrame) heroImgFrame.style.opacity = 1;
+
                 initAnimations();
             }, 800);
 
             setupFormLogic();
+            setupMobileNavScroll();
         });
+
+        function setupMobileNavScroll() {
+            const nav = document.querySelector('nav');
+            const contactSection = document.querySelector('.host-section'); // "Hype Person" section
+            
+            if (!contactSection) return;
+
+            window.addEventListener('scroll', () => {
+                // Only run on mobile width
+                if (window.innerWidth <= 768) {
+                    const triggerBottom = contactSection.getBoundingClientRect().bottom;
+                    // If we've scrolled past the bottom of the contact section (triggerBottom < windowHeight)
+                    // actually, let's say if the bottom of contact section is above the viewport bottom
+                    // or simpler: if we are looking at the RSVP section or footer.
+                    
+                    // Logic: hide nav when the bottom of the contact section leaves the viewport (goes up)
+                    // triggerBottom is relative to viewport. If < 0, it's way above. 
+                    // We want to hide it when we are scrolling down into the form.
+                    
+                    // Let's try: if triggerBottom < window.innerHeight - 100
+                    if (triggerBottom < window.innerHeight - 100) {
+                        nav.classList.add('nav-hidden');
+                    } else {
+                        nav.classList.remove('nav-hidden');
+                    }
+                } else {
+                    nav.classList.remove('nav-hidden');
+                }
+            });
+        }
 
         function populateData() {
             const cfg = window.config;
 
             // Basic Text
-            document.title = `${cfg.meta.titlePrefix} | POP EDITION`;
-            document.getElementById('navBrand').innerText = cfg.brokerage.name.toUpperCase();
+            document.title = cfg.meta.pageTitlePrefix;
+            document.getElementById('navBrand').innerText = cfg.property.streetAddress.toUpperCase();
             document.getElementById('propTitle').innerText = cfg.property.streetAddress;
             document.getElementById('propAddress').innerText = cfg.property.streetAddress;
             document.getElementById('heroImg').src = cfg.property.backgroundImageUrl;
             
             // Scroller Text
             const scroller = document.getElementById('scrollingText');
-            if(cfg.property.heroSubtitle) scroller.innerText = `★ ${cfg.property.heroSubtitle.toUpperCase()} ★ ${scroller.innerText}`;
+            scroller.innerText = "★ OPEN HOUSE ".repeat(15);
+
+            // Vibe Check Text
+            if(cfg.property.heroSubtitle) {
+                document.getElementById('heroSubtitleText').innerText = cfg.property.heroSubtitle;
+            } else {
+                document.querySelector('.vibe-section').style.display = 'none';
+            }
 
             // Bundle Grid
             const grid = document.getElementById('bundleGrid');
@@ -382,7 +543,7 @@
                 cfg.openHouse.bundleItems.forEach(item => {
                     grid.innerHTML += `
                         <div class="card hover-target">
-                            <div class="card-icon"><i class="fas ${item.icon}"></i></div>
+                            <div class="card-icon"><i class="${item.icon}"></i></div>
                             <h3>${item.text}</h3>
                             <p>INCLUDED</p>
                         </div>
@@ -396,22 +557,47 @@
             document.getElementById('realtorBio').innerText = r.bio;
             document.getElementById('realtorPhoto').src = r.photoUrl;
             
-            const links = document.getElementById('socialLinks');
-            links.innerHTML = `
-                <a href="tel:${r.phone}" class="hover-target"><i class="fas fa-phone-alt"></i></a>
-                <a href="mailto:${r.email}" class="hover-target"><i class="fas fa-envelope"></i></a>
+            // Contact Details
+            const contactDiv = document.getElementById('contactDetails');
+            contactDiv.innerHTML = `
+                <div class="contact-details">
+                    <a href="mailto:${r.email}" class="contact-item hover-target"><i class="fas fa-envelope"></i> ${r.email}</a>
+                    <a href="tel:${r.phone}" class="contact-item hover-target"><i class="fas fa-phone-alt"></i> ${r.phone}</a>
+                </div>
             `;
+
+            // Social Links
+            const links = document.getElementById('socialLinks');
+            links.innerHTML = '';
+            const iconMap = {
+                facebook: 'fab fa-facebook',
+                instagram: 'fab fa-instagram',
+                linkedin: 'fab fa-linkedin',
+                twitter: 'fab fa-twitter',
+                youtube: 'fab fa-youtube',
+                tiktok: 'fab fa-tiktok',
+                website: 'fas fa-globe'
+            };
+
             if(r.social) {
-                Object.values(r.social).forEach(url => {
-                    if(url) links.innerHTML += `<a href="${url}" target="_blank" class="hover-target"><i class="fas fa-link"></i></a>`;
+                Object.keys(r.social).forEach(key => {
+                    const url = r.social[key];
+                    if(url) {
+                        const iconClass = iconMap[key.toLowerCase()] || 'fas fa-link';
+                        links.innerHTML += `<a href="${url}" target="_blank" class="hover-target"><i class="${iconClass}"></i></a>`;
+                    }
                 });
             }
 
-            // Footer
-            document.getElementById('consentBrokerage').innerText = cfg.brokerage.name;
+            // Footer & Consent
+            const privacyLink = `<a href="${cfg.meta.privacyPolicyLink}" target="_blank" style="color:inherit; text-decoration:underline;">Privacy Policy</a>`;
+            document.getElementById('consentLabel').innerHTML = 
+                `I agree to be contacted by ${cfg.brokerage.name} via call, email, and text. To opt-out, you can reply ‘stop’ at any time or click the unsubscribe link in the emails. Message and data rates may apply. ${privacyLink}`;
+
             document.getElementById('privacyLink').href = cfg.meta.privacyPolicyLink;
             document.getElementById('footerBrand').innerText = cfg.brokerage.name;
             document.getElementById('footerAddress').innerText = cfg.brokerage.address;
+            document.getElementById('footerLogo').src = cfg.brokerage.logoUrl;
         }
 
         function initAnimations() {
@@ -422,12 +608,16 @@
 
             // Marquee Loop
             const marqueeInner = document.querySelector('.marquee-inner');
-            marqueeInner.innerHTML += marqueeInner.innerHTML; // Duplicate
-            gsap.to(marqueeInner, { xPercent: -50, duration: 15, ease: "none", repeat: -1 });
+            if (marqueeInner) {
+                marqueeInner.innerHTML += marqueeInner.innerHTML; // Duplicate
+                gsap.to(marqueeInner, { xPercent: -50, duration: 15, ease: "none", repeat: -1 });
+            }
 
             // Scroll Triggers
             gsap.registerPlugin(ScrollTrigger);
             
+            // Removing the opacity: 0 from logic here to rely on CSS or default state if this fails, 
+            // but keeping the animation. We set opacity to 1 in the timeout above to be safe.
             gsap.from(".hero-img-frame", {
                 rotation: -10, y: 100, opacity: 0, duration: 1, ease: "elastic.out(1, 0.5)", delay: 0.5
             });

@@ -122,16 +122,20 @@
 
         /* THE ASSETS (Bundle) */
         .assets-section { background: var(--bg-subtle); }
-        .assets-header { text-align: center; max-width: 600px; margin: 0 auto 4rem auto; }
+        .assets-header { text-align: center; max-width: 600px; margin: 0 auto 2rem auto; }
         
         .asset-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: flex; flex-wrap: wrap; justify-content: center;
             gap: 1.5rem; background: transparent; border: none;
         }
         .asset-card {
             background: var(--bg); padding: 4rem 2rem; text-align: center;
             transition: 0.4s; cursor: pointer; border: 1px solid var(--border);
+            flex: 1 1 300px; max-width: 400px;
         }
+        
+        /* Initial State for Animation */
+        .fade-up-entry { opacity: 0; transform: translateY(30px); }
         .asset-card:hover { background: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.05); z-index: 2; }
         .asset-icon { font-size: 2rem; margin-bottom: 2rem; color: var(--text); opacity: 0.8; }
         .asset-title { font-family: var(--font-sans); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; }
@@ -223,11 +227,13 @@
 
         /* MOBILE */
         @media(max-width: 768px) {
+            nav { display: none; }
             .hero-title { font-size: 14vw; }
             .hero-meta { flex-direction: column; text-align: center; gap: 10px; }
             .host-layout { flex-direction: column-reverse; }
             .input-clean { font-size: 1.5rem; }
-            footer { flex-direction: column; align-items: center; gap: 20px; }
+            footer { flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+            .footer-right { align-items: center !important; }
         }
     </style>
 </head>
@@ -257,13 +263,17 @@
                 <h1 class="hero-title" id="propTitle"></h1> <!-- Populated -->
                 
                 <div class="hero-meta">
-                    <div class="meta-item" id="propAddress"></div>
+                    <div class="meta-item" id="propCity"></div>
                     <div class="meta-item" id="brokerageName"></div>
                 </div>
 
                 <div class="hero-visual">
                     <div class="hero-overlay"></div>
                     <img src="" id="heroImg" class="hero-img"> <!-- Populated -->
+                </div>
+                
+                <div id="heroSubtitleContainer" style="margin-top: 4rem; text-align: center; max-width: 1000px; margin-left: auto; margin-right: auto;">
+                     <p id="heroSubtitle" style="font-size: 1.1rem; color: var(--text); line-height: 1.6; opacity: 0;"></p> <!-- Populated -->
                 </div>
             </div>
         </section>
@@ -273,8 +283,7 @@
             <div class="container">
                 <div class="assets-header">
                     <span class="label">The Collection</span>
-                    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Digital Assets</h2>
-                    <p id="heroSubtitle"></p> <!-- Populated -->
+                    <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Digital Assets</h2>
                 </div>
 
                 <div class="asset-grid" id="assetGrid">
@@ -293,11 +302,13 @@
                 <div class="host-content">
                     <span class="label">The Liaison</span>
                     <h2 class="host-name" id="realtorName"></h2> <!-- Populated -->
+                    <div id="realtorTitle" style="font-family:var(--font-sans); font-size:0.9rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:2rem; color:var(--text-grey);"></div>
                     <p class="host-bio" id="realtorBio"></p> <!-- Populated -->
                     
                     <div class="contact-list" id="contactList">
                         <!-- Populated -->
                     </div>
+                    <div id="liaisonSocials" style="margin-top: 2rem; display: flex; gap: 1.5rem; font-size: 1.2rem;"></div>
                 </div>
                 <div class="host-image-container">
                     <div class="host-frame"></div>
@@ -309,8 +320,8 @@
         <!-- REQUEST ACCESS (Form) -->
         <section class="access-section" id="registry">
             <div class="form-box">
-                <span class="label">Private Registry</span>
-                <h2 style="font-size: 3rem; margin-bottom: 3rem;">Request Access</h2>
+                <span class="label">Guest Registry</span>
+                <h2 style="font-size: 3rem; margin-bottom: 3rem;">Unlock the Package</h2>
                 
                 <form id="whiteForm">
                     <input type="text" id="fullName" class="input-clean hover-target" placeholder="Your Name" required autocomplete="name">
@@ -319,7 +330,7 @@
 
                     <div class="consent">
                         <input type="checkbox" id="consentCheckbox" required style="accent-color: #000;">
-                        I authorize <span id="consentBrokerage"></span> to contact me regarding this property. <a href="#" id="privacyLink">Privacy</a>.
+                        <span id="consentText"></span>
                     </div>
 
                     <button type="submit" class="btn-lux hover-target" id="submitBtn">
@@ -331,10 +342,18 @@
 
         <!-- FOOTER -->
         <footer>
-            <div id="footerBrand"></div>
-            <div id="footerAddress"></div>
-            <div id="socialIcons" class="social-icons"></div>
-            <div style="opacity:0.5;">© <span id="year"></span></div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div id="footerBrand"></div>
+                <div id="footerAddress"></div>
+                <div style="opacity:0.5;">© <span id="year"></span></div>
+            </div>
+            
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:20px;" class="footer-right">
+                 <img id="footerLogoImg" style="height: 40px; width: auto; object-fit: contain;" alt="Brokerage Logo">
+                 <div>
+                    <a href="#" id="footerPrivacyLink" style="text-decoration:none; color:inherit; margin-right:20px;">Privacy Policy</a>
+                 </div>
+            </div>
         </footer>
 
     </main>
@@ -374,22 +393,38 @@
             const cfg = config;
 
             // Meta
-            document.title = `${cfg.meta.titlePrefix} | White Onyx`;
+            document.title = cfg.meta.pageTitlePrefix;
             
             // Nav & Footer
-            document.getElementById('navBrand').innerText = (cfg.brokerage.name || "").toUpperCase();
+            document.getElementById('navBrand').innerText = (cfg.realtor.fullName || "").toUpperCase();
+            document.querySelector('.nav-info').innerText = (cfg.property.streetAddress || "OPEN HOUSE").toUpperCase();
+            
             document.getElementById('footerBrand').innerText = cfg.brokerage.name;
             document.getElementById('footerAddress').innerText = cfg.brokerage.address;
             document.getElementById('year').innerText = new Date().getFullYear();
-            document.getElementById('consentBrokerage').innerText = cfg.brokerage.name;
-            document.getElementById('privacyLink').href = cfg.meta.privacyPolicyLink;
+            
+            if(cfg.brokerage.logoUrl) {
+                document.getElementById('footerLogoImg').src = cfg.brokerage.logoUrl;
+            } else {
+                document.getElementById('footerLogoImg').style.display = 'none';
+            }
+            
+            document.getElementById('footerPrivacyLink').href = cfg.meta.privacyPolicyLink || "#";
+
+            // Consent
+            const consentHtml = `I agree to be contacted by ${cfg.brokerage.name} via call, email, and text. To opt-out, you can reply ‘stop’ at any time or click the unsubscribe link in the emails. Message and data rates may apply. <a href="${cfg.meta.privacyPolicyLink || '#'}" target="_blank">Privacy Policy</a>`;
+            document.getElementById('consentText').innerHTML = consentHtml;
 
             // Hero
             document.getElementById('propTitle').innerText = cfg.property.streetAddress;
-            document.getElementById('propAddress').innerText = cfg.property.streetAddress;
-            document.getElementById('brokerageName').innerText = cfg.brokerage.name;
+            document.getElementById('propCity').innerText = cfg.property.city;
+            document.getElementById('brokerageName').innerText = cfg.realtor.fullName;
             document.getElementById('heroImg').src = cfg.property.backgroundImageUrl;
-            document.getElementById('loaderText').innerText = (cfg.brokerage.name || "RESIDENCE").split(' ')[0].toUpperCase();
+            
+            // Preloader: Agent Full Name
+            const agentFullName = (cfg.realtor.fullName || "AGENT").toUpperCase();
+            document.getElementById('loaderText').innerText = agentFullName;
+            
             document.getElementById('heroSubtitle').innerText = cfg.property.heroSubtitle;
 
             // Assets (Bundle)
@@ -398,18 +433,22 @@
             if (cfg.openHouse && cfg.openHouse.bundleItems) {
                 cfg.openHouse.bundleItems.forEach(item => {
                     grid.innerHTML += `
-                        <div class="asset-card hover-target" onclick="document.getElementById('registry').scrollIntoView({behavior:'smooth'})">
+                        <div class="asset-card fade-up-entry hover-target" onclick="document.getElementById('registry').scrollIntoView({behavior:'smooth'})">
                             <i class="fas ${item.icon} asset-icon"></i>
                             <div class="asset-title">${item.text}</div>
                             <div class="asset-desc">Digital Download</div>
                         </div>
                     `;
                 });
+                
+                // Animate assets after population
+                animateAssets();
             }
 
             // Realtor
             const r = cfg.realtor;
             document.getElementById('realtorName').innerText = r.fullName;
+            if(r.title) document.getElementById('realtorTitle').innerText = r.title;
             document.getElementById('realtorBio').innerHTML = r.bio;
             document.getElementById('realtorPhoto').src = r.photoUrl;
             
@@ -420,11 +459,27 @@
                 <div><span style="display:block; color:#aaa; font-size:0.6rem;">PHONE</span><a href="tel:${r.phone}" class="contact-link hover-target">${r.phone}</a></div>
             `;
 
-            // Socials
+            // Socials (Liaison Section)
             if (r.social) {
-                const sIcons = document.getElementById('socialIcons');
-                Object.values(r.social).forEach(url => {
-                    if (url) sIcons.innerHTML += `<a href="${url}" target="_blank" class="hover-target"><i class="fas fa-link"></i></a>`;
+                const sContainer = document.getElementById('liaisonSocials');
+                sContainer.innerHTML = '';
+                const socialMap = {
+                    facebook: 'fab fa-facebook-f',
+                    instagram: 'fab fa-instagram',
+                    linkedin: 'fab fa-linkedin-in',
+                    twitter: 'fab fa-twitter',
+                    youtube: 'fab fa-youtube',
+                    tiktok: 'fab fa-tiktok',
+                    website: 'fas fa-globe'
+                };
+
+                Object.keys(r.social).forEach(key => {
+                    const url = r.social[key];
+                    if (url) {
+                        // Default to generic link if key not found
+                        const iconClass = socialMap[key.toLowerCase()] || 'fas fa-link';
+                        sContainer.innerHTML += `<a href="${url}" target="_blank" class="hover-target" style="color:var(--text); text-decoration:none;"><i class="${iconClass}"></i></a>`;
+                    }
                 });
             }
         }
@@ -459,17 +514,30 @@
                 scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
             });
 
-            // Text Reveals (SplitType)
-            const split = new SplitType('#heroSubtitle', { types: 'lines' });
-            gsap.from(split.lines, {
-                y: 20, opacity: 0, stagger: 0.1, duration: 1, ease: "power2.out",
-                scrollTrigger: { trigger: ".assets-section", start: "top 70%" }
-            });
+            // Animate subtitle (Fade Up + Blur)
+            gsap.fromTo('#heroSubtitle', 
+                { y: 30, opacity: 0, filter: "blur(10px)" },
+                {
+                    y: 0, opacity: 1, filter: "blur(0px)", duration: 1.2, ease: "power2.out",
+                    scrollTrigger: { 
+                        trigger: "#heroSubtitleContainer", 
+                        start: "top 90%" 
+                    }
+                }
+            );
             
-            // Asset Stagger
-            gsap.from('.asset-card', {
-                y: 50, stagger: 0.1, duration: 1, ease: "power2.out",
-                scrollTrigger: { trigger: ".asset-grid", start: "top 80%" }
+            // Asset Stagger (Moved to animateAssets)
+        }
+
+        function animateAssets() {
+            // Refresh ScrollTrigger to account for new DOM elements
+            ScrollTrigger.refresh();
+            
+            // Use Batch for robust grid animation
+            ScrollTrigger.batch(".asset-card", {
+                start: "top 85%",
+                onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out", overwrite: true }),
+                onEnterBack: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out", overwrite: true })
             });
         }
 

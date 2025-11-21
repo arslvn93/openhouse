@@ -99,7 +99,7 @@
             display: flex; align-items: center; justify-content: center;
             flex-direction: column;
         }
-        .curtain-logo { font-family: var(--font-disp); font-size: 3rem; overflow: hidden; }
+        .curtain-logo { font-family: var(--font-disp); font-size: clamp(1.5rem, 5vw, 3rem); overflow: hidden; text-align: center; padding: 0 1rem; }
 
         /* HERO */
         .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 0; }
@@ -151,9 +151,20 @@
         .host-img { width: 100%; display: block; filter: sepia(10%); }
         .signature { font-family: 'Italiana', cursive; font-size: 2rem; color: var(--gold); margin-top: 2rem; }
         
-        .contact-row { display: flex; gap: 2rem; margin-top: 2rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .contact-row { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 2rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
         .contact-row a { color: var(--text-muted); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
         .contact-row a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+        
+        /* SOCIAL ICONS */
+        #socialLinks { display: flex; gap: 1.5rem; margin-top: 1.5rem; justify-content: flex-start; }
+        #socialLinks a { 
+            font-size: 1.8rem; color: #dcdcdc; transition: 0.3s; display: inline-block; 
+        }
+        #socialLinks a:hover { color: var(--gold); transform: translateY(-3px); }
+        
+        @media(max-width: 768px) {
+            #socialLinks { justify-content: center; }
+        }
 
         /* FORM (The Guest List) */
         .registry-section { padding-bottom: 15vh; }
@@ -226,6 +237,21 @@
             .host-grid { grid-template-columns: 1fr; text-align: center; }
             .contact-row { justify-content: center; }
             .form-container { padding: 2rem; }
+
+            /* Compact Package Section on Mobile */
+            .card-stack { 
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin: 1.5rem auto 2rem;
+            }
+            .package-section { padding: 5vh 5vw; }
+            .info-card { 
+                height: auto; 
+                padding: 1.5rem; 
+                transform: none !important; /* Reset any inline rotation */
+                margin: 0 !important;
+            }
         }
     </style>
 </head>
@@ -293,7 +319,8 @@
                 </div>
                 <div>
                     <span class="eyebrow">Your Hostess</span>
-                    <h2 style="font-size: 3rem; margin-bottom: 1rem;" id="realtorName"></h2>
+                    <h2 style="font-size: 3rem; margin-bottom: 0.5rem;" id="realtorName"></h2>
+                    <div id="realtorTitle" style="font-family: var(--font-sub); font-size: 0.9rem; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; letter-spacing: 2px;"></div>
                     <p style="line-height: 1.8; color: var(--text-muted);" id="realtorBio"></p>
                     
                     <div class="signature" id="realtorSign"></div>
@@ -301,7 +328,7 @@
                     <div class="contact-row" id="realtorContactInfo">
                         <!-- Injected -->
                     </div>
-                    <div id="socialLinks" style="margin-top:1rem; font-size:1.2rem; color:#ccc;"></div>
+                    <div id="socialLinks"></div>
                 </div>
             </div>
         </section>
@@ -322,8 +349,8 @@
 
                     <div style="margin-top: 2rem;">
                         <input type="checkbox" id="consentCheckbox" required style="accent-color: var(--gold);">
-                        <label for="consentCheckbox" class="consent-text">
-                            I consent to receiving this material from <span id="consentBrokerage"></span>.
+                        <label for="consentCheckbox" class="consent-text" id="consentLabel">
+                            I consent to receiving this material.
                         </label>
                     </div>
 
@@ -337,6 +364,7 @@
         <footer>
             <div id="footerBrand" style="font-family:var(--font-sub); font-size:1.2rem; margin-bottom:10px; color:var(--text-charcoal);"></div>
             <div id="footerAddress"></div>
+            <div id="footerPrivacy" style="margin-top:10px;"></div>
             <div style="margin-top:20px; opacity:0.5;">© <span id="year"></span></div>
             <img src="" id="footerLogo" style="height:40px; margin-top:20px; display:none; opacity:0.5;">
         </footer>
@@ -383,19 +411,23 @@
 
         function populateData() {
             // Page Title
-            document.title = `${config.meta.titlePrefix} | Collection`;
+            document.title = `${config.meta.pageTitlePrefix || config.meta.titlePrefix} | Collection`;
 
             // Hero
             document.getElementById('propTitle').innerText = config.property.streetAddress;
             document.getElementById('heroSubtitle').innerText = config.property.heroSubtitle;
             document.getElementById('heroImg').src = config.property.backgroundImageUrl;
-            document.getElementById('loaderText').innerText = (config.brokerage.name || "MAISON").toUpperCase();
+            document.getElementById('loaderText').innerText = (config.realtor.fullName || "MAISON").toUpperCase();
 
             // The Package (Bundle Items) - Visualized as Cards
             const stack = document.getElementById('bundleStack');
             stack.innerHTML = ''; // Clear defaults
             if(config.openHouse && config.openHouse.bundleItems) {
+                // Remove manual rotation/transforms here so CSS can handle it responsively
+                // (The previous version hardcoded style="transform:..." which broke mobile layout)
                 config.openHouse.bundleItems.forEach((item, index) => {
+                    // Calculate desktop-only rotation if desired, or use nth-child in CSS
+                    // For now, we render clean elements and let CSS/GSAP handle it.
                     stack.innerHTML += `
                         <div class="info-card">
                             <i class="fas ${item.icon}"></i>
@@ -409,27 +441,50 @@
             // Host
             const r = config.realtor;
             document.getElementById('realtorName').innerText = r.fullName;
+            document.getElementById('realtorTitle').innerText = r.title || "";
             document.getElementById('realtorBio').innerHTML = r.bio;
             document.getElementById('realtorSign').innerText = r.fullName; // Pseudo signature
             document.getElementById('realtorPhoto').src = r.photoUrl;
             
             document.getElementById('realtorContactInfo').innerHTML = `
-                <a href="tel:${r.phone}">Call</a>
-                <a href="mailto:${r.email}">Email</a>
-                <a href="sms:${r.phone}">Text</a>
+                <a href="tel:${r.phone}" style="display:block; margin-bottom:0.5rem;">${r.phone}</a>
+                <a href="mailto:${r.email}" style="display:block;">${r.email}</a>
             `;
 
             if(r.social) {
                 const sBox = document.getElementById('socialLinks');
-                Object.values(r.social).forEach(link => {
-                    if(link) sBox.innerHTML += `<a href="${link}" target="_blank" style="margin-right:10px;"><i class="fas fa-share-alt"></i></a>`;
+                const iconMap = {
+                    facebook: "fab fa-facebook-f",
+                    instagram: "fab fa-instagram",
+                    linkedin: "fab fa-linkedin-in",
+                    twitter: "fab fa-twitter",
+                    youtube: "fab fa-youtube",
+                    tiktok: "fab fa-tiktok",
+                    pinterest: "fab fa-pinterest",
+                    website: "fas fa-globe"
+                };
+
+                Object.entries(r.social).forEach(([network, link]) => {
+                    if(link) {
+                        const iconClass = iconMap[network.toLowerCase()] || "fas fa-share-alt";
+                        sBox.innerHTML += `<a href="${link}" target="_blank"><i class="${iconClass}"></i></a>`;
+                    }
                 });
             }
 
             // Footer & Form
-            document.getElementById('consentBrokerage').innerText = config.brokerage.name;
+            const consentText = `I agree to be contacted by ${config.brokerage.name} via call, email, and text. To opt-out, you can reply ‘stop’ at any time or click the unsubscribe link in the emails. Message and data rates may apply. <a href="${config.meta.privacyPolicyLink}" target="_blank">Privacy Policy</a>`;
+            document.getElementById('consentLabel').innerHTML = consentText;
+
             document.getElementById('footerBrand').innerText = config.brokerage.name;
             document.getElementById('footerAddress').innerText = config.brokerage.address;
+            
+            if(config.meta.privacyPolicyLink) {
+                document.getElementById('footerPrivacy').innerHTML = `<a href="${config.meta.privacyPolicyLink}" target="_blank" style="text-decoration:none; color:inherit; border-bottom:1px solid transparent; transition:0.3s;">Privacy Policy</a>`;
+                document.getElementById('footerPrivacy').querySelector('a').addEventListener('mouseenter', function() { this.style.borderBottomColor = '#999'; });
+                document.getElementById('footerPrivacy').querySelector('a').addEventListener('mouseleave', function() { this.style.borderBottomColor = 'transparent'; });
+            }
+
             if(config.brokerage.logoUrl) {
                 const img = document.getElementById('footerLogo');
                 img.src = config.brokerage.logoUrl;
@@ -462,10 +517,20 @@
             });
 
             // Card Stack Animation
-            gsap.from(".info-card", {
-                y: 100, opacity: 0, stagger: 0.2, duration: 1, ease: "back.out(1.7)",
-                scrollTrigger: { trigger: ".package-section", start: "top 70%" }
-            });
+            if(window.innerWidth > 768) {
+                gsap.from(".info-card", {
+                    y: 100, opacity: 0, stagger: 0.2, duration: 1, ease: "back.out(1.7)",
+                    scrollTrigger: { trigger: ".package-section", start: "top 70%" }
+                });
+            } else {
+                // Simple mobile fade-in batch
+                ScrollTrigger.batch(".info-card", {
+                    start: "top 85%",
+                    onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 0.5, stagger: 0.1 })
+                });
+                // Ensure initial state for mobile batch
+                gsap.set(".info-card", { opacity: 0, y: 20 });
+            }
         }
 
         // --- FORM & LOGIC ---
