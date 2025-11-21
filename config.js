@@ -55,18 +55,18 @@ window.config = {
     "privacyPolicyLink": "https://driscollpeca.com/privacy.html"
   },
   "settings": {
-    "primaryColor": "#0a192f",
-    "secondaryColor": "#c5a059",
-    "accentColor": "#ffffff",
-    "neutralColor": "#e6e6e6",
+    "primaryColor": "#E9D5FF",
+    "secondaryColor": "#A78BFA",
+    "accentColor": "#C4B5FD",
+    "neutralColor": "#1E1B4B",
     "adminWebhookUrl": "https://n8n.salesgenius.co/webhook/openhouseupdate",
     "visitorWebhookUrl": "https://n8n.salesgenius.co/webhook/openhouse",
     "confettiColors": [
-      "#6187a7",
-      "#f0e9d6",
-      "#ffffff",
-      "#83a363",
-      "#d9ac68"
+      "#A78BFA",
+      "#C4B5FD",
+      "#E9D5FF",
+      "#8B5CF6",
+      "#7C3AED"
     ]
   },
   "modalQuestions": [

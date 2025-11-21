@@ -340,9 +340,10 @@
         function applyThemeColors() {
             if (config.settings) {
                 const root = document.documentElement;
-                if (config.settings.primaryColor) root.style.setProperty('--bg', config.settings.primaryColor);
+                if (config.settings.primaryColor) root.style.setProperty('--text', config.settings.primaryColor);
                 if (config.settings.secondaryColor) root.style.setProperty('--accent', config.settings.secondaryColor);
-                if (config.settings.accentColor) root.style.setProperty('--text', config.settings.accentColor);
+                if (config.settings.accentColor) root.style.setProperty('--line', config.settings.accentColor);
+                if (config.settings.neutralColor) root.style.setProperty('--bg', config.settings.neutralColor);
             }
         }
 

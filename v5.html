@@ -28,7 +28,7 @@
             --accent: #2727e6; /* International Klein Blue */
             --neon: #ccff00; /* Acid Green (Art Tech) */
             
-            --grid-line: 1px solid rgba(10, 10, 10, 0.15);
+            --grid-line: 1px solid rgba(10, 10, 10, 0.15); /* Overridden by applyThemeColors */
             --border-heavy: 2px solid var(--ink);
             
             --font-art: 'Syne', sans-serif;
@@ -485,9 +485,26 @@
                 const root = document.documentElement;
                 if (config.settings.primaryColor) root.style.setProperty('--ink', config.settings.primaryColor);
                 if (config.settings.secondaryColor) root.style.setProperty('--accent', config.settings.secondaryColor);
-                if (config.settings.accentColor) root.style.setProperty('--neon', config.settings.accentColor);
+                if (config.settings.accentColor) {
+                    root.style.setProperty('--neon', config.settings.accentColor);
+                    // Map grid-line to accentColor with opacity
+                    const accentRgb = hexToRgb(config.settings.accentColor);
+                    if (accentRgb) {
+                        root.style.setProperty('--grid-line', `1px solid rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.15)`);
+                    }
+                }
                 if (config.settings.neutralColor) root.style.setProperty('--bg-color', config.settings.neutralColor);
             }
+        }
+        
+        // Helper function to convert hex to RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
         }
 
         function populateV7Data() {

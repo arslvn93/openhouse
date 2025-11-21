@@ -137,7 +137,7 @@
         /* Initial State for Animation */
         .fade-up-entry { opacity: 0; transform: translateY(30px); }
         .asset-card:hover { background: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.05); z-index: 2; }
-        .asset-icon { font-size: 2rem; margin-bottom: 2rem; color: var(--text); opacity: 0.8; }
+        .asset-icon { font-size: 2rem; margin-bottom: 2rem; color: var(--border); opacity: 0.8; }
         .asset-title { font-family: var(--font-sans); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; }
         .asset-desc { font-size: 0.8rem; color: var(--text-grey); }
 
@@ -183,7 +183,7 @@
         .btn-lux {
             margin-top: 4rem;
             padding: 20px 60px;
-            background: var(--text); color: #fff;
+            background: var(--accent); color: #fff;
             font-family: var(--font-sans); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px;
             border: none; cursor: pointer; transition: 0.4s;
             position: relative; overflow: hidden;
@@ -393,14 +393,10 @@
         function applyThemeColors() {
             if (config.settings) {
                 const root = document.documentElement;
-                if (config.settings.primaryColor) {
-                    root.style.setProperty('--text', config.settings.primaryColor);
-                    root.style.setProperty('--accent', config.settings.primaryColor);
-                }
-                if (config.settings.accentColor) root.style.setProperty('--text-grey', config.settings.accentColor);
+                if (config.settings.primaryColor) root.style.setProperty('--text', config.settings.primaryColor);
+                if (config.settings.secondaryColor) root.style.setProperty('--accent', config.settings.secondaryColor);
+                if (config.settings.accentColor) root.style.setProperty('--border', config.settings.accentColor);
                 if (config.settings.neutralColor) root.style.setProperty('--bg', config.settings.neutralColor);
-                
-                // Secondary for specific highlights or buttons if needed, currently mapped to text/accent above or unused
             }
         }
 

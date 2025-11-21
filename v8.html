@@ -140,7 +140,7 @@
         .spec-card:hover { background: var(--surface); }
         .spec-card:hover .spec-icon { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
         
-        .spec-icon { font-size: 2rem; margin-bottom: 20px; color: var(--text-dim); transition: 0.3s; }
+        .spec-icon { font-size: 2rem; margin-bottom: 20px; color: var(--line); transition: 0.3s; }
         .spec-title { font-size: 1.2rem; margin-bottom: 10px; }
         .spec-code { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; color: var(--text-dim); }
 
@@ -424,10 +424,10 @@
         function applyThemeColors() {
             if (window.config && window.config.settings) {
                 const root = document.documentElement;
-                if (window.config.settings.primaryColor) root.style.setProperty('--bg', window.config.settings.primaryColor);
+                if (window.config.settings.primaryColor) root.style.setProperty('--text-main', window.config.settings.primaryColor);
                 if (window.config.settings.secondaryColor) root.style.setProperty('--accent', window.config.settings.secondaryColor);
-                if (window.config.settings.accentColor) root.style.setProperty('--text-main', window.config.settings.accentColor);
-                if (window.config.settings.neutralColor) root.style.setProperty('--text-dim', window.config.settings.neutralColor);
+                if (window.config.settings.accentColor) root.style.setProperty('--line', window.config.settings.accentColor);
+                if (window.config.settings.neutralColor) root.style.setProperty('--bg', window.config.settings.neutralColor);
             }
         }
 
