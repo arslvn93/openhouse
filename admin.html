@@ -366,6 +366,34 @@
                     <div id="settingsSection" class="content-panel">
                         <h2>Settings</h2>
                         <div class="form-group">
+                            <label for="settingsPrimaryColor">Primary Color (Hex):</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="text" id="settingsPrimaryColor" name="settingsPrimaryColor" placeholder="#0a192f">
+                                <div id="primaryColorPreview" style="width: 40px; height: 40px; border-radius: 4px; border: 1px solid #d1d5db; background-color: #fff;"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="settingsSecondaryColor">Secondary Color (Hex):</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="text" id="settingsSecondaryColor" name="settingsSecondaryColor" placeholder="#c5a059">
+                                <div id="secondaryColorPreview" style="width: 40px; height: 40px; border-radius: 4px; border: 1px solid #d1d5db; background-color: #fff;"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="settingsAccentColor">Accent Color (Hex):</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="text" id="settingsAccentColor" name="settingsAccentColor" placeholder="#ffffff">
+                                <div id="accentColorPreview" style="width: 40px; height: 40px; border-radius: 4px; border: 1px solid #d1d5db; background-color: #fff;"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="settingsNeutralColor">Neutral Color (Hex):</label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="text" id="settingsNeutralColor" name="settingsNeutralColor" placeholder="#e6e6e6">
+                                <div id="neutralColorPreview" style="width: 40px; height: 40px; border-radius: 4px; border: 1px solid #d1d5db; background-color: #fff;"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="settingsWebhookUrl">Webhook URL (read-only):</label>
                             <input type="url" id="settingsWebhookUrl" name="settingsWebhookUrl" readonly>
                         </div>
@@ -472,6 +500,23 @@
             // Removed setVal for metaTermsLink
 
             // Settings
+            setVal('settingsPrimaryColor', c.settings.primaryColor);
+            setVal('settingsSecondaryColor', c.settings.secondaryColor);
+            setVal('settingsAccentColor', c.settings.accentColor);
+            setVal('settingsNeutralColor', c.settings.neutralColor);
+
+            // Init color previews
+            updateColorPreview('settingsPrimaryColor', 'primaryColorPreview');
+            updateColorPreview('settingsSecondaryColor', 'secondaryColorPreview');
+            updateColorPreview('settingsAccentColor', 'accentColorPreview');
+            updateColorPreview('settingsNeutralColor', 'neutralColorPreview');
+
+            // Add event listeners for live updates
+            document.getElementById('settingsPrimaryColor').addEventListener('input', () => updateColorPreview('settingsPrimaryColor', 'primaryColorPreview'));
+            document.getElementById('settingsSecondaryColor').addEventListener('input', () => updateColorPreview('settingsSecondaryColor', 'secondaryColorPreview'));
+            document.getElementById('settingsAccentColor').addEventListener('input', () => updateColorPreview('settingsAccentColor', 'accentColorPreview'));
+            document.getElementById('settingsNeutralColor').addEventListener('input', () => updateColorPreview('settingsNeutralColor', 'neutralColorPreview'));
+
             setVal('settingsWebhookUrl', c.settings.adminWebhookUrl); // Use adminWebhookUrl
             setVal('settingsConfettiColors', c.settings.confettiColors.join('\n'));
 
@@ -543,6 +588,15 @@
             return val.split('\n').map(s => s.trim()).filter(s => s !== '');
         }
 
+        function updateColorPreview(inputId, previewId) {
+            const color = getVal(inputId);
+            const preview = document.getElementById(previewId);
+            if (preview) {
+                // Validate hex code roughly or let CSS handle it (invalid color won't apply)
+                preview.style.backgroundColor = color;
+            }
+        }
+
         async function handleFormSubmit(event) {
             event.preventDefault();
             messageDiv.textContent = '';
@@ -586,6 +640,10 @@
 
             // Settings
             // webhookUrl is readonly
+            updatedConfig.settings.primaryColor = getVal('settingsPrimaryColor');
+            updatedConfig.settings.secondaryColor = getVal('settingsSecondaryColor');
+            updatedConfig.settings.accentColor = getVal('settingsAccentColor');
+            updatedConfig.settings.neutralColor = getVal('settingsNeutralColor');
             if (updatedConfig.settings.hasOwnProperty('confettiColors')) updatedConfig.settings.confettiColors = arrayFromTextarea('settingsConfettiColors');
 // Deployment Info
             if (updatedConfig.hasOwnProperty('deploymentInfo') && updatedConfig.deploymentInfo) {

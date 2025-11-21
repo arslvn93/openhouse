@@ -1,20 +1,20 @@
 window.config = {
   "property": {
-    "streetAddress": "2677 County Road 16 ",
-    "city": "Merrickville",
-    "cityStateZip": "Merrickville, Ontario  K0G 1N0",
-    "heroSubtitle": "Prepare to be transformed by this stunning Detached that represents the pinnacle of residential design. With 4 carefully curated bedrooms, 2 luxurious bathrooms, and an expansive 1766 sq ft floor plan, this home is more than just a living space – it's a lifestyle statement. Every inch has been thoughtfully crafted to provide an exceptional living experience that balances aesthetic appeal with practical functionality, creating a harmonious environment that adapts to your most discerning needs.",
-    "backgroundImageUrl": "https://salesgenius.s3.ca-central-1.amazonaws.com/uploads/1762955760089-1-web-or-mls-7-print-DSC03510_twilight_6becd689-25ab-4fa5-8930-172c4a43db85.jpg"
+    "streetAddress": "114 Smith Road ",
+    "city": "Kemptville",
+    "cityStateZip": "Kemptville, Ontario  K0G 1T0",
+    "heroSubtitle": "Prepare to be transformed by this stunning Detached that represents the pinnacle of residential design. With 4 carefully curated bedrooms, 4 luxurious bathrooms, and an expansive 2200 sq ft floor plan, this home is more than just a living space – it's a lifestyle statement. Every inch has been thoughtfully crafted to provide an exceptional living experience that balances aesthetic appeal with practical functionality, creating a harmonious environment that adapts to your most discerning needs.",
+    "backgroundImageUrl": "https://salesgenius.s3.ca-central-1.amazonaws.com/uploads/1763578619337-24-web-or-mls-20.jpg"
   },
   "realtor": {
     "fullName": "Nicole Garrett",
     "title": "REALTOR®",
-    "phone": "(613) 451-0372",
     "email": "nicole@driscollpeca.com",
+    "phone": "613-258-2222",
     "photoUrl": "https://salesgenius.s3.ca-central-1.amazonaws.com/uploads/upload-1487654.jpg",
     "bio": "With years of real estate service under our belt, we can assure you that you are in good hands with our team. We are committed to listening to our clients, focusing on their needs and using keen negotiating skills to ensure a successful transaction for both buyers and sellers. With deep local knowledge and a true passion for real estate, we're committed to helping you find the perfect place to call home. Let's make your next move an exciting and rewarding one — we can't wait to work with you!",
     "social": {
-      "facebook": "https://www.facebook.com/driscollpecateam/",
+      "facebook": "https://www.facebook.com/driscollpecateam",
       "instagram": "https://www.instagram.com/driscollpecateam",
       "website": "https://www.driscollpeca.com"
     }
@@ -27,19 +27,27 @@ window.config = {
   "openHouse": {
     "eventDate": "",
     "bundleItems": [
-      {
-        "icon": "fas fa-home",
-        "text": "Full Property Listing"
-      },
-      {
-        "icon": "fas fa-ruler-combined",
-        "text": "Architectural Floor Plan"
-      },
-      {
-        "icon": "fas fa-video",
-        "text": "Video Tour"
-      }
-    ]
+            {
+                  "icon": "fas fa-home",
+                  "text": "Full Property Listing",
+                  "url": "https://www.realtor.ca/real-estate/29099863/114-smith-road-north-grenville-803-north-grenville-twp-kemptville-south"
+            },
+            {
+                  "icon": "fas fa-vr-cardboard",
+                  "text": "3D Virtual Tour",
+                  "url": "https://youtube.com/shorts/uwuZc_yULGI"
+            },
+            {
+                  "icon": "fas fa-video",
+                  "text": "Video Tour",
+                  "url": "https://youtube.com/shorts/uwuZc_yULGI"
+            },
+            {
+                  "icon": "fas fa-file-pdf",
+                  "text": "Feature Website ",
+                  "url": "https://sites.ground2airmedia.com/sites/xabmljb/unbranded"
+            }
+      ]
   },
   "meta": {
     "pageTitlePrefix": "🏡 Nicole Garrett Open House",
@@ -47,6 +55,10 @@ window.config = {
     "privacyPolicyLink": "https://driscollpeca.com/privacy.html"
   },
   "settings": {
+    "primaryColor": "#0a192f",
+    "secondaryColor": "#c5a059",
+    "accentColor": "#ffffff",
+    "neutralColor": "#e6e6e6",
     "adminWebhookUrl": "https://n8n.salesgenius.co/webhook/openhouseupdate",
     "visitorWebhookUrl": "https://n8n.salesgenius.co/webhook/openhouse",
     "confettiColors": [
@@ -62,81 +74,45 @@ window.config = {
       "id": "agent_status",
       "questionText": "Are you currently exploring homes with a real estate agent?",
       "options": [
-        {
-          "value": "committed",
-          "text": "Yes, I'm committed to an agent."
-        },
-        {
-          "value": "not_committed",
-          "text": "No, I'm not committed to an agent."
-        },
-        {
-          "value": "gathering_info",
-          "text": "Just gathering information at this stage."
-        }
+        { "value": "committed", "text": "Yes, I'm committed to an agent." },
+        { "value": "not_committed", "text": "No, I'm not committed to an agent." },
+        { "value": "gathering_info", "text": "Just gathering information at this stage." }
       ]
     },
     {
       "id": "interest_level",
       "questionText": "How interested are you in this Detached?",
       "options": [
-        {
-          "value": "very_interested",
-          "text": "Very interested, actively looking."
-        },
-        {
-          "value": "somewhat_interested",
-          "text": "Somewhat interested, keeping options open."
-        },
-        {
-          "value": "just_browsing",
-          "text": "Just browsing for now."
-        }
+        { "value": "very_interested", "text": "Very interested, actively looking." },
+        { "value": "somewhat_interested", "text": "Somewhat interested, keeping options open." },
+        { "value": "just_browsing", "text": "Just browsing for now." }
       ]
     },
     {
       "id": "neighborhood_engagement",
       "questionText": "How do you usually enjoy the neighborhood?",
       "options": [
-        {
-          "value": "resident_explorer",
-          "text": "I live here and love exploring locally."
-        },
-        {
-          "value": "considering_move",
-          "text": "I'm considering moving to this area."
-        },
-        {
-          "value": "just_visiting",
-          "text": "Just visiting for the open house."
-        }
+        { "value": "resident_explorer", "text": "I live here and love exploring locally." },
+        { "value": "considering_move", "text": "I'm considering moving to this area." },
+        { "value": "just_visiting", "text": "Just visiting for the open house." }
       ]
     },
     {
       "id": "feature_attraction",
       "questionText": "What feature attracted you to this home?",
       "options": [
-        {
-          "value": "design_layout",
-          "text": "The design and layout."
-        },
-        {
-          "value": "location_neighborhood",
-          "text": "The location and neighborhood."
-        },
-        {
-          "value": "home_price",
-          "text": "The price of the home."
-        }
+        { "value": "design_layout", "text": "The design and layout." },
+        { "value": "location_neighborhood", "text": "The location and neighborhood." },
+        { "value": "home_price", "text": "The price of the home." }
       ]
     }
   ],
   "deploymentInfo": {
-    "repoId": "1095032268",
-    "repoName": "Open-House-898",
-    "repoUrl": "https://github.com/arslvn93/Open-House-898",
-    "tag": "Open House 2677 County Road 16 ",
+    "repoId": "1100037723",
+    "repoName": "Open-House-138",
+    "repoUrl": "https://github.com/arslvn93/Open-House-138",
+    "tag": "Open House 114 Smith Road ",
     "netlifyUrl": "https://services.leadconnectorhq.com/hooks/KxSrsX5ZH2ZttFjyt9hW/webhook-trigger/723v7Nh8JC60wCn3aRmV",
-    "siteId": "8269e3ac-d1e9-41c7-acd2-bfc3bc0a89b7"
+    "siteId": "43088b8c-fd0a-42f9-8693-bfa1f4e4d49f"
   }
 };
