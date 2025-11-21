@@ -412,6 +412,7 @@
          * ==================================================================
          */
         document.addEventListener("DOMContentLoaded", () => {
+            applyThemeColors();
             populateData();
             initAnimations();
             setupForm();
@@ -419,6 +420,16 @@
             
             document.body.style.opacity = 1;
         });
+
+        function applyThemeColors() {
+            if (window.config && window.config.settings) {
+                const root = document.documentElement;
+                if (window.config.settings.primaryColor) root.style.setProperty('--bg', window.config.settings.primaryColor);
+                if (window.config.settings.secondaryColor) root.style.setProperty('--accent', window.config.settings.secondaryColor);
+                if (window.config.settings.accentColor) root.style.setProperty('--text-main', window.config.settings.accentColor);
+                if (window.config.settings.neutralColor) root.style.setProperty('--text-dim', window.config.settings.neutralColor);
+            }
+        }
 
         function populateData() {
             const cfg = window.config;

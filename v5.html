@@ -446,6 +446,7 @@
                 return;
             }
 
+            applyThemeColors();
             populateV7Data();
             
             // 1. Loader Sequence
@@ -478,6 +479,16 @@
                 });
             }
         });
+
+        function applyThemeColors() {
+            if (config.settings) {
+                const root = document.documentElement;
+                if (config.settings.primaryColor) root.style.setProperty('--ink', config.settings.primaryColor);
+                if (config.settings.secondaryColor) root.style.setProperty('--accent', config.settings.secondaryColor);
+                if (config.settings.accentColor) root.style.setProperty('--neon', config.settings.accentColor);
+                if (config.settings.neutralColor) root.style.setProperty('--bg-color', config.settings.neutralColor);
+            }
+        }
 
         function populateV7Data() {
             // Meta

@@ -383,11 +383,26 @@
                 return;
             }
 
+            applyThemeColors();
             populateContent();
             runPreloader();
             initAnimations();
             setupForm();
         });
+
+        function applyThemeColors() {
+            if (config.settings) {
+                const root = document.documentElement;
+                if (config.settings.primaryColor) {
+                    root.style.setProperty('--text', config.settings.primaryColor);
+                    root.style.setProperty('--accent', config.settings.primaryColor);
+                }
+                if (config.settings.accentColor) root.style.setProperty('--text-grey', config.settings.accentColor);
+                if (config.settings.neutralColor) root.style.setProperty('--bg', config.settings.neutralColor);
+                
+                // Secondary for specific highlights or buttons if needed, currently mapped to text/accent above or unused
+            }
+        }
 
         function populateContent() {
             const cfg = config;

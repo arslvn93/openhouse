@@ -454,11 +454,23 @@
          */
         document.addEventListener("DOMContentLoaded", () => {
             applyBranding();
+            applyThemeColors();
             populateContent();
             runLoader();
             initAnimations();
             setupForm();
         });
+
+        function applyThemeColors() {
+            const cfg = (typeof config !== 'undefined') ? config : window.config;
+            if (cfg && cfg.settings) {
+                const root = document.documentElement;
+                if (cfg.settings.primaryColor) root.style.setProperty('--bg', cfg.settings.primaryColor);
+                if (cfg.settings.secondaryColor) root.style.setProperty('--accent', cfg.settings.secondaryColor);
+                if (cfg.settings.accentColor) root.style.setProperty('--text-main', cfg.settings.accentColor);
+                if (cfg.settings.neutralColor) root.style.setProperty('--text-dim', cfg.settings.neutralColor);
+            }
+        }
 
         function populateContent() {
             const cfg = (typeof config !== 'undefined') ? config : window.config;

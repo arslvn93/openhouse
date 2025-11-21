@@ -404,10 +404,24 @@
          * ==================================================================
          */
         document.addEventListener("DOMContentLoaded", () => {
+            applyThemeColors();
             populateData();
             initAnimations();
             setupForm();
         });
+
+        function applyThemeColors() {
+            if (config.settings) {
+                const root = document.documentElement;
+                if (config.settings.primaryColor) root.style.setProperty('--text-charcoal', config.settings.primaryColor);
+                if (config.settings.secondaryColor) root.style.setProperty('--gold', config.settings.secondaryColor);
+                if (config.settings.accentColor) {
+                    root.style.setProperty('--blush', config.settings.accentColor);
+                    root.style.setProperty('--bg-rose', config.settings.accentColor); // Assuming bg-rose follows accent
+                }
+                if (config.settings.neutralColor) root.style.setProperty('--bg-warm', config.settings.neutralColor);
+            }
+        }
 
         function populateData() {
             // Page Title

@@ -327,6 +327,7 @@
          * ==================================================================
          */
         document.addEventListener("DOMContentLoaded", () => {
+            applyThemeColors();
             populateV3Data();
             
             // Start Preloader after data is set
@@ -335,6 +336,15 @@
             // Init Form Listeners
             setupForm();
         });
+
+        function applyThemeColors() {
+            if (config.settings) {
+                const root = document.documentElement;
+                if (config.settings.primaryColor) root.style.setProperty('--bg', config.settings.primaryColor);
+                if (config.settings.secondaryColor) root.style.setProperty('--accent', config.settings.secondaryColor);
+                if (config.settings.accentColor) root.style.setProperty('--text', config.settings.accentColor);
+            }
+        }
 
         function populateV3Data() {
             // META
